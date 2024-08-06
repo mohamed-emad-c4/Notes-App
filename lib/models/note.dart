@@ -39,7 +39,7 @@ class NoteModel {
         createdTime: (json[NoteFields.createdTime] as String),
       );
 
-  NoteModel copy({
+  NoteModel CopyWith({
     int? id,
     String? title,
     String? content,

@@ -2,7 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test1/cubit/update_cubit.dart';
 import 'package:test1/models/note.dart';
+
+import '../DB/database.dart';
 
 class RecordNotes extends StatelessWidget {
   RecordNotes({super.key, required this.index, required this.allNotes});
@@ -22,92 +26,114 @@ class RecordNotes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(3.0),
-      child: Card(
-        color: getColor(),
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.2,
-          width: MediaQuery.of(context).size.width,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.78,
-                      child: Text(
-                        allNotes[index].title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+    return Card(
+      color: getColor(),
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.2,
+        width: MediaQuery.of(context).size.width,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.78,
+                    child: Text(
+                      allNotes[index].title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                  ),
+                  const Spacer(),
+                  PopupMenuButton<String>(
+                    itemBuilder: (context) => [
+                      const PopupMenuItem<String>(
+                        value: 'Deleted',
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.delete,
+                              size: 20,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text('Deleted'),
+                          ],
+                        ),
                       ),
-                    ),
-                    const Spacer(),
-                    PopupMenuButton<String>(
-                      itemBuilder: (context) => [
-                        const PopupMenuItem<String>(
-                          value: 'Deleted',
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.delete,
-                                size: 20,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text('Deleted'),
-                            ],
-                          ),
+                      const PopupMenuItem<String>(
+                        value: 'Archived',
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.archive,
+                              size: 20,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text('Archived'),
+                          ],
                         ),
-                        const PopupMenuItem<String>(
-                          value: 'Archived',
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.archive,
-                                size: 20,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text('Archived'),
-                            ],
-                          ),
+                      ),
+                      const PopupMenuItem<String>(
+                        value: 'Favorites',
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.favorite,
+                              color: Colors.red,
+                              size: 20,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text('Favorites'),
+                          ],
                         ),
-                        const PopupMenuItem<String>(
-                          value: 'Favorites',
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.favorite,
-                                color: Colors.red,
-                                size: 20,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text('Favorites'),
-                            ],
-                          ),
-                        ),
-                      ],
-                      onSelected: (value) {
-                        if (value == 'Deleted') {
-                        } else if (value == 'Archived') {
-                        } else if (value == 'Favorites') {}
-                      },
-                    ),
-                  ],
-                ),
-                Text(
+                      ),
+                    ],
+                    onSelected: (value) {
+                      if (value == 'Deleted') {
+                        BlocProvider.of<UpdateCubit>(context)
+                            .AddNoteToDeleted(allNotes: allNotes, index: index);
+
+                        BlocProvider.of<UpdateCubit>(context).updateNotes();
+                      } else if (value == 'Archived') {
+                        BlocProvider.of<UpdateCubit>(context)
+                            .AddNoteToArchive(allNotes: allNotes, index: index);
+                        BlocProvider.of<UpdateCubit>(context).updateNotes();
+                      } else if (value == 'Favorites') {
+                        BlocProvider.of<UpdateCubit>(context)
+                            .AddNoteToFavorit(allNotes: allNotes, index: index);
+                        BlocProvider.of<UpdateCubit>(context).updateNotes();
+                      }
+                    },
+                  ),
+                ],
+              ),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text(
                   allNotes[index].content,
                   maxLines: 4,
                   overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 16, color: Colors.grey[200]),
                 ),
-              ],
-            ),
+              ),
+              const Spacer(),
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: Text(
+                  BlocProvider.of<UpdateCubit>(context)
+                      .formatDateTime(allNotes[index].createdTime),
+                  style: TextStyle(fontSize: 12, color: Colors.grey[300]),
+                ),
+              ),
+            ],
           ),
         ),
       ),

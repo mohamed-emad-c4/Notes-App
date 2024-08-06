@@ -1,122 +1,174 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
 
-class Deleted extends StatelessWidget {
-  const Deleted({super.key});
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:test1/DB/database.dart';
+import 'package:test1/models/note.dart';
+
+class DeletedNotes extends StatelessWidget {
+  const DeletedNotes({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // بيانات الملاحظات المحذوفة. يمكنك استبدالها ببيانات حقيقية من قاعدة البيانات.
-    final List<Map<String, dynamic>> deletedNotes = [
-      {
-        'title': 'Old Shopping List',
-        'content': 'Buy apples, bananas, and oranges.',
-        'date': '2024-07-25'
-      },
-      {
-        'title': 'Old Meeting Notes',
-        'content': 'Review past project deliverables.',
-        'date': '2024-07-28'
-      },
-      {
-        'title': 'Old Holiday Plan',
-        'content': 'Visit France, explore Paris, and enjoy the countryside.',
-        'date': '2024-07-30'
-      },
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Deleted Notes'),
         centerTitle: true,
         backgroundColor: Colors.redAccent, // تغيير لون AppBar
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: deletedNotes.length,
-        itemBuilder: (context, index) {
-          final note = deletedNotes[index];
-          return Dismissible(
-            key: Key(note['title']), // مفتاح مميز لكل عنصر
-            // تحديد اتجاه الحذف أو الأرشفة
-            direction: DismissDirection.horizontal,
-            onDismissed: (direction) {
-              if (direction == DismissDirection.endToStart) {
-                // حذف الملاحظة بشكل دائم
-                _deleteNotePermanently(context, note);
-                deletedNotes.removeAt(index);
-              } else if (direction == DismissDirection.startToEnd) {
-                // أرشفة الملاحظة
-                _archiveNote(context, note);
-                deletedNotes.removeAt(index);
-              }
-            },
-            background: Container(
-              color: Colors.green, // لون الأرشفة
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: const Icon(Icons.archive, color: Colors.white),
-            ),
-            secondaryBackground: Container(
-              color: Colors.red, // لون الحذف
-              alignment: Alignment.centerRight,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: const Icon(Icons.delete, color: Colors.white),
-            ),
-            child: Card(
-              elevation: 3, // إضافة ظل للكارد
-              margin: const EdgeInsets.symmetric(vertical: 8),
-              child: ListTile(
-                contentPadding: const EdgeInsets.all(16),
-                title: Text(
-                  note['title'],
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                subtitle: Text(
-                  note['content'],
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 16),
-                ),
-                trailing: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.delete,
-                      color: Colors.grey,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      note['date'],
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-                onTap: () {
-                  // الإجراء الذي يحدث عند الضغط على الملاحظة
-                  _showNoteDetails(context, note);
-                },
+      body: FutureBuilder<List<NoteModel>>(
+        future: NotesDatabase.instance
+            .getAllDeletedNotes(), // جلب الملاحظات المحذوفة
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                'Error: ${snapshot.error}',
+                style: const TextStyle(fontSize: 18),
               ),
-            ),
-          );
+            );
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(
+              child: Text(
+                'No Deleted Notes Available',
+                style: TextStyle(fontSize: 18),
+              ),
+            );
+          } else {
+            final deletedNotes = snapshot.data!;
+            return ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: deletedNotes.length,
+              itemBuilder: (context, index) {
+                final note = deletedNotes[index];
+                return Dismissible(
+                    key: Key(note.title), // مفتاح مميز لكل عنصر
+                    // تحديد اتجاه الحذف أو الأرشفة
+                    direction: DismissDirection.horizontal,
+                    onDismissed: (direction) async {
+                      if (direction == DismissDirection.endToStart) {
+                        // حذف الملاحظة بشكل دائم
+                        await _deleteNotePermanently(context, note);
+                        deletedNotes.removeAt(index);
+                      } else if (direction == DismissDirection.startToEnd) {
+                        // استعادة الملاحظة
+                        await _restoreNote(context, note);
+                        deletedNotes.removeAt(index);
+                      }
+                    },
+                    background: Container(
+                      color: Colors.green, // لون الاستعادة
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: const Icon(Icons.restore, color: Colors.white),
+                    ),
+                    secondaryBackground: Container(
+                      color: Colors.red, // لون الحذف
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: const Icon(Icons.delete, color: Colors.white),
+                    ),
+                    child: Card(
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.2,
+                        width: MediaQuery.of(context).size.width,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.68,
+                                    child: Text(
+                                      note.title,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  PopupMenuButton<String>(
+                                    itemBuilder: (context) => [
+                                      const PopupMenuItem<String>(
+                                        value: 'Deleted',
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.delete,
+                                              size: 20,
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text('Deleted'),
+                                          ],
+                                        ),
+                                      ),
+                                      const PopupMenuItem<String>(
+                                        value: 'Archived',
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.archive,
+                                              size: 20,
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text('Archived'),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                    onSelected: (value) {
+                                      if (value == 'Deleted') {
+                                      } else if (value == 'Archived') {
+                                      } else if (value == 'Favorites') {}
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Align(
+                                alignment: AlignmentDirectional.topStart,
+                                child: Text(
+                                  note.content,
+                                  maxLines: 4,
+                                  textAlign: TextAlign.start,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  Text('Date: ${note.createdTime}',
+                                      style: const TextStyle())
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ));
+              },
+            );
+          }
         },
       ),
     );
   }
 
   // نافذة منبثقة لعرض تفاصيل الملاحظة
-  void _showNoteDetails(BuildContext context, Map<String, dynamic> note) {
+  void _showNoteDetails(BuildContext context, NoteModel note) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(note['title']),
-          content: Text(note['content']),
+          title: Text(note.title),
+          content: Text(note.content),
           actions: [
             TextButton(
               onPressed: () {
@@ -128,10 +180,10 @@ class Deleted extends StatelessWidget {
               ),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop();
                 // استعادة الملاحظة
-                _restoreNote(context, note);
+                await _restoreNote(context, note);
               },
               child: const Text(
                 'Restore',
@@ -145,34 +197,25 @@ class Deleted extends StatelessWidget {
   }
 
   // استعادة الملاحظة
-  void _restoreNote(BuildContext context, Map<String, dynamic> note) {
-    // يمكنك إضافة منطق لاستعادة الملاحظة هنا
+  Future<void> _restoreNote(BuildContext context, NoteModel note) async {
+    final restoredNote = note.CopyWith(deleted: false);
+    await NotesDatabase.instance.update(restoredNote);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Note "${note['title']}" restored!'),
+        content: Text('Note "${note.title}" restored!'),
         backgroundColor: Colors.green,
       ),
     );
   }
 
   // حذف الملاحظة بشكل دائم
-  void _deleteNotePermanently(BuildContext context, Map<String, dynamic> note) {
-    // يمكنك إضافة منطق لحذف الملاحظة بشكل دائم هنا
+  Future<void> _deleteNotePermanently(
+      BuildContext context, NoteModel note) async {
+    await NotesDatabase.instance.delete(note.id!);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Note "${note['title']}" deleted permanently!'),
+        content: Text('Note "${note.title}" deleted permanently!'),
         backgroundColor: Colors.red,
-      ),
-    );
-  }
-
-  // أرشفة الملاحظة
-  void _archiveNote(BuildContext context, Map<String, dynamic> note) {
-    // يمكنك إضافة منطق لأرشفة الملاحظة هنا
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Note "${note['title']}" archived!'),
-        backgroundColor: Colors.blue, // لون الرسالة
       ),
     );
   }

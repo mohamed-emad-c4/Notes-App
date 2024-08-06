@@ -1,26 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:test1/DB/database.dart';
+import 'package:test1/models/note.dart';
 
-class Archived extends StatefulWidget {
-  const Archived({super.key});
-
-  @override
-  _ArchivedState createState() => _ArchivedState();
+Future<List<NoteModel>> getArchivedList() async {
+  List<NoteModel> list = await NotesDatabase.instance.getAllArchivedNotes();
+  return list;
 }
 
-class _ArchivedState extends State<Archived> {
-  // بيانات الملاحظات المؤرشفة. يمكنك استبدالها ببيانات حقيقية من قاعدة البيانات.
-  List<Map<String, dynamic>> archivedNotes = [
-    {
-      'title': 'Old Meeting Notes',
-      'content': 'Review the project goals and milestones.',
-      'date': '2024-07-15'
-    },
-    {
-      'title': 'Annual Report',
-      'content': 'Summary of the year\'s performance.',
-      'date': '2024-06-30'
-    },
-  ];
+class ArchivedList extends StatelessWidget {
+  const ArchivedList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,113 +19,163 @@ class _ArchivedState extends State<Archived> {
       appBar: AppBar(
         title: const Text('Archived Notes'),
         centerTitle: true,
-        backgroundColor: Colors.teal, // تغيير لون AppBar
+        backgroundColor: Colors.teal,
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: archivedNotes.length,
-        itemBuilder: (context, index) {
-          final note = archivedNotes[index];
-          return Dismissible(
-            key: Key(note['title']), // مفتاح مميز لكل عنصر
-            direction: DismissDirection.horizontal,
-            onDismissed: (direction) {
-              if (direction == DismissDirection.startToEnd) {
-                // إعادة الملاحظة إلى المفضلة
-                _addNoteToFavorites(index);
-              } else if (direction == DismissDirection.endToStart) {
-                // حذف الملاحظة
-                _deleteArchivedNote(index);
-              }
-            },
-            background: Container(
-              color: Colors.blue, // لون إعادة المفضلة
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: const Icon(Icons.favorite, color: Colors.white),
-            ),
-            secondaryBackground: Container(
-              color: Colors.red, // لون الحذف
-              alignment: Alignment.centerRight,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: const Icon(Icons.delete, color: Colors.white),
-            ),
-            child: Card(
-              elevation: 3, // إضافة ظل للكارد
-              margin: const EdgeInsets.symmetric(vertical: 8),
-              child: ListTile(
-                contentPadding: const EdgeInsets.all(16),
-                title: Text(
-                  note['title'],
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                subtitle: Text(
-                  note['content'],
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 16),
-                ),
-                trailing: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.archive,
-                      color: Colors.teal,
+      body: FutureBuilder<List<NoteModel>>(
+        future: getArchivedList(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                'Error: ${snapshot.error}',
+                style: const TextStyle(fontSize: 18),
+              ),
+            );
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(
+              child: Text(
+                'No Archived Notes Available',
+                style: TextStyle(fontSize: 18),
+              ),
+            );
+          } else {
+            final archivedNotes = snapshot.data!;
+            List<NoteModel> archivedNotesReversed =
+                archivedNotes.reversed.toList();
+
+            return ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: archivedNotesReversed.length,
+              itemBuilder: (context, index) {
+                final note = archivedNotesReversed[index];
+                return Dismissible(
+                  key: Key(note.title),
+                  direction: DismissDirection.horizontal,
+                  onDismissed: (direction) {
+                    if (direction == DismissDirection.startToEnd) {
+                      _addNoteToFavorites(note.toJson());
+                    } else if (direction == DismissDirection.endToStart) {
+                      _deleteArchivedNote(note.id!);
+                    }
+                  },
+                  background: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: Colors.blue, // لون لإعادة إلى المفضلة
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      note['date'],
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: const Icon(Icons.favorite, color: Colors.white),
+                  ),
+                  secondaryBackground: Container(
+                    alignment: Alignment.centerRight,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: Colors.red,
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: const Icon(Icons.delete, color: Colors.white),
+                  ),
+                  child: Card(
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.2,
+                      width: MediaQuery.of(context).size.width,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.68,
+                                  child: Text(
+                                    note.title,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                const Spacer(),
+                                PopupMenuButton<String>(
+                                  itemBuilder: (context) => [
+                                    const PopupMenuItem<String>(
+                                      value: 'Deleted',
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.delete,
+                                            size: 20,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text('Deleted'),
+                                        ],
+                                      ),
+                                    ),
+                                    const PopupMenuItem<String>(
+                                      value: 'Archived',
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.archive,
+                                            size: 20,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text('Archived'),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                  onSelected: (value) {
+                                    if (value == 'Deleted') {
+                                    } else if (value == 'Archived') {
+                                    } else if (value == 'Favorites') {}
+                                  },
+                                ),
+                              ],
+                            ),
+                            Align(
+                              alignment: AlignmentDirectional.topStart,
+                              child: Text(
+                                note.content,
+                                maxLines: 4,
+                                textAlign: TextAlign.start,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ],
-                ),
-                onTap: () {
-                  // الإجراء الذي يحدث عند الضغط على الملاحظة
-                  _showNoteDetails(context, note);
-                },
-              ),
-            ),
-          );
+                  ),
+                );
+              },
+            );
+          }
         },
       ),
     );
   }
 
-  // إضافة الملاحظة إلى المفضلة
-  void _addNoteToFavorites(int index) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content:
-            Text('Note "${archivedNotes[index]['title']}" added to favorites!'),
-        backgroundColor: Colors.blue,
-      ),
-    );
-    setState(() {
-      // يمكنك إضافة منطق لإعادة الملاحظة إلى المفضلة هنا
-      archivedNotes.removeAt(index);
-    });
+  void _addNoteToFavorites(Map<String, dynamic> note) async {
+    final newNote = NoteModel.fromJson(note);
+    newNote.isFavorite = !newNote.isFavorite;
+    await NotesDatabase.instance.update(newNote);
+    Get.snackbar("Done", "Added to favorites");
   }
 
-  // حذف الملاحظة
-  void _deleteArchivedNote(int index) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Note "${archivedNotes[index]['title']}" deleted!'),
-        backgroundColor: Colors.red,
-      ),
-    );
-    setState(() {
-      archivedNotes.removeAt(index);
-    });
+  void _deleteArchivedNote(int id) async {
+    await NotesDatabase.instance.delete(id);
+    Get.snackbar("Done", "Deleted from archive");
   }
 
-  // نافذة منبثقة لعرض تفاصيل الملاحظة
   void _showNoteDetails(BuildContext context, Map<String, dynamic> note) {
     showDialog(
       context: context,

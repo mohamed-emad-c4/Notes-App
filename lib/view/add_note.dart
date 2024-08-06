@@ -1,7 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:test1/cubit/update_cubit.dart';
 import 'package:test1/models/note.dart';
 
 import '../DB/database.dart';
@@ -113,6 +115,7 @@ class _AddNoteState extends State<AddNote> {
                     _saveNote();
                     widget.allNotes =
                         await NotesDatabase.instance.readAllNotes();
+                    BlocProvider.of<UpdateCubit>(context).updateNotes();
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
@@ -142,7 +145,7 @@ class _AddNoteState extends State<AddNote> {
   void _saveNote() async {
     final title = _titleController.text;
     final content = _contentController.text;
-    final createdTime = DateTime.now().toIso8601String();
+    final createdTime = DateTime.now().toString();
 
     if (title.isNotEmpty && content.isNotEmpty) {
       final newNote = NoteModel(
@@ -153,7 +156,6 @@ class _AddNoteState extends State<AddNote> {
         createdTime: createdTime,
       );
       await NotesDatabase.instance.create(newNote);
-      Navigator.of(context).pop();
       Get.snackbar(
         'Success',
         'Note saved successfully',

@@ -1,9 +1,9 @@
+import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:test1/models/note.dart';
 
 import '../models/note_dields.dart';
-
 
 class NotesDatabase {
   static final NotesDatabase instance = NotesDatabase._init();
@@ -20,11 +20,9 @@ class NotesDatabase {
   }
 
   Future<Database> _initDB(String filePath) async {
-    // الحصول على مسار قاعدة البيانات
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 
-    // فتح قاعدة البيانات أو إنشائها
     return await openDatabase(
       path,
       version: 1,
@@ -49,15 +47,18 @@ class NotesDatabase {
     )
     ''');
 
-    await db.execute('CREATE INDEX idx_title_content ON ${NoteFields.tableName}(${NoteFields.title}, ${NoteFields.content})');
+    await db.execute(
+        'CREATE INDEX idx_title_content ON ${NoteFields.tableName}(${NoteFields.title}, ${NoteFields.content})');
   }
 
   Future<NoteModel> create(NoteModel note) async {
     final db = await instance.database;
 
     final id = await db.insert(NoteFields.tableName, note.toJson());
-    return note.copy(id: id);
+    return note.CopyWith(id: id);
   }
+
+ 
 
   Future<List<NoteModel>> searchDatabase(String searchTerm) async {
     final db = await instance.database;
@@ -69,6 +70,13 @@ class NotesDatabase {
     );
 
     return results.map((json) => NoteModel.fromJson(json)).toList();
+  }
+
+  Future<List<NoteModel>> getAllDeletedNotes() async {
+    final db = await instance.database;
+    final result =
+        await db.query('notes', where: 'deleted = ?', whereArgs: [1]);
+    return result.map((json) => NoteModel.fromJson(json)).toList();
   }
 
   Future<List<NoteModel>> getAllFavoriteNotes() async {
@@ -85,7 +93,6 @@ class NotesDatabase {
   Future<NoteModel> readNote(int id) async {
     final db = await instance.database;
 
-    // استخدام try-catch للتعامل مع الأخطاء المحتملة
     try {
       final maps = await db.query(
         NoteFields.tableName,
@@ -107,8 +114,12 @@ class NotesDatabase {
   Future<List<NoteModel>> readAllNotes() async {
     final db = await instance.database;
 
-    // قراءة جميع الملاحظات مع الترتيب حسب الوقت المضاف حديثاً
-    final result = await db.query(NoteFields.tableName, orderBy: '${NoteFields.createdTime} DESC');
+    final result = await db.query(
+      NoteFields.tableName,
+      where: '${NoteFields.archived} = ? AND ${NoteFields.deleted} = ?',
+      whereArgs: [0, 0],
+      orderBy: '${NoteFields.createdTime} DESC',
+    );
 
     return result.map((json) => NoteModel.fromJson(json)).toList();
   }
@@ -134,16 +145,22 @@ class NotesDatabase {
     );
   }
 
+  Future<List<NoteModel>> getAllArchivedNotes() async {
+    final db = await instance.database;
+    final result =
+        await db.query('notes', where: 'archived = ?', whereArgs: [1]);
+    return result.map((json) => NoteModel.fromJson(json)).toList();
+  }
+
   Future<void> deleteAllNotes() async {
     final db = await instance.database;
 
-    // بدلاً من إسقاط الجدول، حذف جميع السجلات لتحسين الأداء
     await db.delete(NoteFields.tableName);
   }
 
   Future<void> close() async {
     final db = await instance.database;
     await db.close();
-    _database = null; // تأكيد عدم استخدام قاعدة بيانات مغلقة
+    _database = null;
   }
 }
