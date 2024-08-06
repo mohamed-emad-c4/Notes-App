@@ -1,9 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:test1/models/note.dart';
-import 'package:test1/models/note_dields.dart'; // Ensure the correct filename
+
+import '../DB/database.dart';
 
 class AddNote extends StatefulWidget {
-  const AddNote({super.key});
+  AddNote({super.key, required this.allNotes});
+  List<NoteModel> allNotes;
 
   @override
   _AddNoteState createState() => _AddNoteState();
@@ -104,8 +109,10 @@ class _AddNoteState extends State<AddNote> {
               const SizedBox(height: 24),
               Center(
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     _saveNote();
+                    widget.allNotes =
+                        await NotesDatabase.instance.readAllNotes();
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
@@ -132,10 +139,10 @@ class _AddNoteState extends State<AddNote> {
     );
   }
 
-  void _saveNote() {
+  void _saveNote() async {
     final title = _titleController.text;
     final content = _contentController.text;
-    final createdTime = DateTime.now().toIso8601String(); // Current time
+    final createdTime = DateTime.now().toIso8601String();
 
     if (title.isNotEmpty && content.isNotEmpty) {
       final newNote = NoteModel(
@@ -145,15 +152,20 @@ class _AddNoteState extends State<AddNote> {
         archived: _isArchived,
         createdTime: createdTime,
       );
-
-      // Add logic to save the note to database or state management
-      // Example: notesDatabase.create(newNote);
-
-      Navigator.of(context).pop(); // Return to previous screen
+      await NotesDatabase.instance.create(newNote);
+      Navigator.of(context).pop();
+      Get.snackbar(
+        'Success',
+        'Note saved successfully',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.green.withOpacity(0.3),
+      );
     } else {
-      // Show error if title or content is empty
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Title and Content cannot be empty')),
+      Get.snackbar(
+        'Error',
+        'Please enter a title and content',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red.withOpacity(0.3),
       );
     }
   }

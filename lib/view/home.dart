@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
+import 'package:test1/models/note.dart';
 import 'package:test1/view/add_note.dart';
 import 'package:test1/view/more_view/Favorite.dart';
 import 'package:test1/view/record_notes.dart';
 
+import '../DB/database.dart';
 import 'more_view/archive.dart';
 import 'more_view/deleted.dart';
 import 'more_view/setting.dart';
 
 class Home extends StatelessWidget {
-  const Home({super.key});
+  Home({super.key, required this.allNotes});
+  List<NoteModel> allNotes;
 
   @override
   Widget build(BuildContext context) {
@@ -95,8 +99,13 @@ class Home extends StatelessWidget {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) => RecordNotes(index: index),
-                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    return RecordNotes(
+                      index: index,
+                      allNotes: allNotes,
+                    );
+                  },
+                  itemCount: allNotes.length,
                 ),
               ],
             ),
@@ -109,7 +118,9 @@ class Home extends StatelessWidget {
               right: 16,
               child: FloatingActionButton(
                 onPressed: () {
-                  Get.to(const AddNote());
+                  Get.to(AddNote(
+                    allNotes: allNotes,
+                  ));
                 },
                 heroTag: 'addNoteButton',
                 child: const Icon(Icons.add), // Unique tag for this button
