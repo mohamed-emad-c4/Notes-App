@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:test1/DB/database.dart';
+import 'package:test1/cubit/update_cubit.dart';
 import 'package:test1/models/note.dart';
 
 class DeletedNotes extends StatelessWidget {
@@ -41,7 +43,7 @@ class DeletedNotes extends StatelessWidget {
           } else {
             final deletedNotes = snapshot.data!;
             return ListView.builder(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(3),
               itemCount: deletedNotes.length,
               itemBuilder: (context, index) {
                 final note = deletedNotes[index];
@@ -63,7 +65,7 @@ class DeletedNotes extends StatelessWidget {
                     background: Container(
                       color: Colors.green, // لون الاستعادة
                       alignment: Alignment.centerLeft,
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: const Icon(Icons.restore, color: Colors.white),
                     ),
                     secondaryBackground: Container(
@@ -73,8 +75,9 @@ class DeletedNotes extends StatelessWidget {
                       child: const Icon(Icons.delete, color: Colors.white),
                     ),
                     child: Card(
+                      color: Colors.redAccent.withOpacity(0.7),
                       child: SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.2,
+                        height: MediaQuery.of(context).size.height * 0.25,
                         width: MediaQuery.of(context).size.width,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -89,6 +92,7 @@ class DeletedNotes extends StatelessWidget {
                                       note.title,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(fontSize: 18),
                                     ),
                                   ),
                                   const Spacer(),
@@ -134,19 +138,24 @@ class DeletedNotes extends StatelessWidget {
                                 ],
                               ),
                               Align(
-                                alignment: AlignmentDirectional.topStart,
+                                alignment: Alignment.topLeft,
                                 child: Text(
                                   note.content,
                                   maxLines: 4,
-                                  textAlign: TextAlign.start,
                                   overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.grey[200]),
                                 ),
                               ),
-                              Row(
-                                children: [
-                                  Text('Date: ${note.createdTime}',
-                                      style: const TextStyle())
-                                ],
+                              const Spacer(),
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Text(
+                                  BlocProvider.of<UpdateCubit>(context)
+                                      .formatDateTime(note.createdTime),
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.grey[300]),
+                                ),
                               )
                             ],
                           ),

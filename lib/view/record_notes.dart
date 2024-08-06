@@ -29,7 +29,7 @@ class RecordNotes extends StatelessWidget {
     return Card(
       color: getColor(),
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.2,
+        height: MediaQuery.of(context).size.height * 0.22,
         width: MediaQuery.of(context).size.width,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5),

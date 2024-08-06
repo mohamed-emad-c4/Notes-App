@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:test1/DB/database.dart';
+import 'package:test1/cubit/update_cubit.dart';
 import 'package:test1/models/note.dart';
 
 Future<List<NoteModel>> getArchivedList() async {
@@ -48,7 +50,7 @@ class ArchivedList extends StatelessWidget {
                 archivedNotes.reversed.toList();
 
             return ListView.builder(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(3),
               itemCount: archivedNotesReversed.length,
               itemBuilder: (context, index) {
                 final note = archivedNotesReversed[index];
@@ -68,7 +70,7 @@ class ArchivedList extends StatelessWidget {
                       color: Colors.blue, // لون لإعادة إلى المفضلة
                     ),
                     alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 3),
                     child: const Icon(Icons.favorite, color: Colors.white),
                   ),
                   secondaryBackground: Container(
@@ -77,12 +79,13 @@ class ArchivedList extends StatelessWidget {
                       borderRadius: BorderRadius.circular(30),
                       color: Colors.red,
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: const Icon(Icons.delete, color: Colors.white),
                   ),
                   child: Card(
+                    color: Colors.green.withOpacity(0.7),
                     child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.2,
+                      height: MediaQuery.of(context).size.height * 0.25,
                       width: MediaQuery.of(context).size.width,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -97,6 +100,7 @@ class ArchivedList extends StatelessWidget {
                                     note.title,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontSize: 18),
                                   ),
                                 ),
                                 const Spacer(),
@@ -142,14 +146,25 @@ class ArchivedList extends StatelessWidget {
                               ],
                             ),
                             Align(
-                              alignment: AlignmentDirectional.topStart,
+                              alignment: Alignment.topLeft,
                               child: Text(
                                 note.content,
                                 maxLines: 4,
-                                textAlign: TextAlign.start,
                                 overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.grey[200]),
                               ),
                             ),
+                            const Spacer(),
+                            Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Text(
+                                BlocProvider.of<UpdateCubit>(context)
+                                    .formatDateTime(note.createdTime),
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.grey[300]),
+                              ),
+                            )
                           ],
                         ),
                       ),

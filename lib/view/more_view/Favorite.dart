@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:test1/DB/database.dart';
+import 'package:test1/cubit/update_cubit.dart';
 import 'package:test1/models/note.dart';
 
 Future<List<NoteModel>> getFavoriteList() async {
@@ -19,7 +21,6 @@ class FavoriteList extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Favorite Notes'),
         centerTitle: true,
-        backgroundColor: Colors.teal,
       ),
       body: FutureBuilder<List<NoteModel>>(
         future: getFavoriteList(),
@@ -44,10 +45,10 @@ class FavoriteList extends StatelessWidget {
             );
           } else {
             final favoriteNotes = snapshot.data!;
-         List<NoteModel>   favoriteNotes2 =favoriteNotes.reversed.toList();
+            List<NoteModel> favoriteNotes2 = favoriteNotes.reversed.toList();
 
             return ListView.builder(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(3),
               itemCount: favoriteNotes2.length,
               itemBuilder: (context, index) {
                 final note = favoriteNotes2[index];
@@ -80,8 +81,9 @@ class FavoriteList extends StatelessWidget {
                     child: const Icon(Icons.delete, color: Colors.white),
                   ),
                   child: Card(
+                    color: const Color.fromARGB(255, 172, 41, 54),
                     child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.2,
+                      height: MediaQuery.of(context).size.height * 0.25,
                       width: MediaQuery.of(context).size.width,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -96,6 +98,7 @@ class FavoriteList extends StatelessWidget {
                                     note.title,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontSize: 18),
                                   ),
                                 ),
                                 const Spacer(),
@@ -141,12 +144,23 @@ class FavoriteList extends StatelessWidget {
                               ],
                             ),
                             Align(
-                              alignment: AlignmentDirectional.topStart,
+                              alignment: Alignment.topLeft,
                               child: Text(
                                 note.content,
                                 maxLines: 4,
-                                textAlign: TextAlign.start,
                                 overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.grey[200]),
+                              ),
+                            ),
+                            const Spacer(),
+                            Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Text(
+                                BlocProvider.of<UpdateCubit>(context)
+                                    .formatDateTime(note.createdTime),
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.grey[300]),
                               ),
                             ),
                           ],
