@@ -1,12 +1,16 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:test1/cubit/cubit/setting_cubit.dart';
+import 'package:test1/cubit/hide_notes_cubit.dart';
 import 'package:test1/cubit/update_cubit.dart';
 import 'package:test1/models/note.dart';
 import 'package:test1/view/add_note.dart';
 import 'package:test1/view/more_view/Favorite.dart';
 import 'package:test1/view/more_view/creat_PIN.dart';
+import 'package:test1/view/more_view/enter_PIN.dart';
 import 'package:test1/view/more_view/hide_notes.dart';
 import 'package:test1/view/record_notes.dart';
 
@@ -28,6 +32,9 @@ class Home extends StatelessWidget {
         BlocProvider(
           create: (context) => SettingCubit(),
         ),
+        BlocProvider(
+          create: (context) => HideNotesCubit(),
+        ),
       ],
       child: BlocConsumer<UpdateCubit, UpdateState>(
         listener: (context, state) {
@@ -36,29 +43,44 @@ class Home extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          return GetMaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Notes Recorder',
-            theme: isDarkMode ? ThemeData.dark() : ThemeData.light(),
-            home: BlocBuilder<UpdateCubit, UpdateState>(
-              builder: (context, state) {
-                if (state is UpdateInitial) {
-                  return Notes(allNotes: allNotes);
-                }
-                if (state is AddNoteState) {
-                  return AddNote(allNotes: allNotes);
-                } else if (state is UpdateNotes) {
-                  return Notes(allNotes: state.allNotes);
-                } else {
-                  const Scaffold(
-                    body: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
+          return BlocListener<HideNotesCubit, HideNotesState>(
+            listener:(context, hideNotesState) {
+              if (hideNotesState is HideNotesCreatPIN) {
+                Get.to(const CreatePinScreen());
+              } else if (hideNotesState is HideNotesEnterPIN) {
+                Get.to(const EnterPinScreen());
+              }
+            },
+            child: GetMaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Notes Recorder',
+              theme: isDarkMode ? ThemeData.dark() : ThemeData.light(),
+              home: BlocBuilder<UpdateCubit, UpdateState>(
+                builder: (context, state) {
+                  if (state is UpdateInitial) {
+                    return Notes(allNotes: allNotes);
+                  }
+                  if (state is AddNoteState) {
+                    return AddNote(allNotes: allNotes);
+                  } else if (state is UpdateNotes) {
+                    return Notes(allNotes: state.allNotes);
+                  } else if (state is HideNotesCreatPIN) {
+                    Get.to(const CreatePinScreen());
+                    return const CreatePinScreen();
+                  } else if (state is HideNotesEnterPIN) {
+                    Get.to(const EnterPinScreen());
+                    return const EnterPinScreen();
+                  } else {
+                    const Scaffold(
+                      body: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
 
-                  return Container();
-                }
-              },
+                    return Container();
+                  }
+                },
+              ),
             ),
           );
         },
@@ -89,12 +111,13 @@ class Notes extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onDoubleTap: () {
-                        
+                        log('home');
+                        BlocProvider.of<HideNotesCubit>(context).chechPIN();
                       },
                       child: const Text(
                         'Not',
-                        style:
-                            TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold),
                       ),
                     ),
                     const Text(
@@ -227,8 +250,7 @@ class Notes extends StatelessWidget {
             bottom: 170, // Adjust positioning as needed
             right: 16,
             child: FloatingActionButton(
-              onPressed: () {
-              },
+              onPressed: () {},
               heroTag: 'micButton',
               child: const Icon(Icons.mic), // Unique tag for this button
             ),

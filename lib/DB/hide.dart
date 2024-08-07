@@ -67,11 +67,10 @@ class Hide {
 
     return result.map((json) => NoteModel.fromJson(json)).toList();
   }
-    Future<void> close() async {
+
+  Future<void> close() async {
     final db = await instance.database;
     await db.close();
     _database = null;
   }
 }
-
-

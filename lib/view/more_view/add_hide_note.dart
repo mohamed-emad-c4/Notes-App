@@ -4,16 +4,16 @@ import 'package:get/get.dart';
 import 'package:test1/cubit/update_cubit.dart';
 import 'package:test1/models/note.dart';
 
-import '../DB/database.dart';
+import '../../DB/hide.dart';
 
-class AddNote extends StatefulWidget {
-  AddNote({super.key, required this.allNotes});
+class AddHideNote extends StatefulWidget {
+  AddHideNote({super.key, required this.allNotes});
   List<NoteModel> allNotes;
   @override
-  _AddNoteState createState() => _AddNoteState();
+  _AddHideNoteState createState() => _AddHideNoteState();
 }
 
-class _AddNoteState extends State<AddNote> {
+class _AddHideNoteState extends State<AddHideNote> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
   bool _isFavorite = false;
@@ -106,10 +106,10 @@ class _AddNoteState extends State<AddNote> {
                 child: ElevatedButton(
                   onPressed: () async {
                     _saveNote();
-                    // widget.allNotes =
-                    //     await NotesDatabase.instance.readAllNotes();
+                    
                     BlocProvider.of<UpdateCubit>(context).updateNotes();
                     Get.back();
+                    Get.forceAppUpdate();
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
@@ -149,7 +149,7 @@ class _AddNoteState extends State<AddNote> {
         archived: _isArchived,
         createdTime: createdTime,
       );
-      await NotesDatabase.instance.create(newNote);
+      await Hide.instance.create(newNote);
       Get.snackbar(
         'Success',
         'Note saved successfully',

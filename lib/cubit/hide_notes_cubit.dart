@@ -9,11 +9,12 @@ SharePrefrenceClass sharePrefrenceClass = SharePrefrenceClass();
 class HideNotesCubit extends Cubit<HideNotesState> {
   HideNotesCubit() : super(HideNotesInitial());
   
-  void creatPIN()async {
-    bool isCreatPIN= await sharePrefrenceClass.getVlue(key: 'isCreatPIN') ?? false;
+  void chechPIN()async {
+    bool isCreatPIN= await sharePrefrenceClass.getVlue(key: 'CreatPIN');
+    
 
  if (isCreatPIN==false) {
-   await sharePrefrenceClass.saveValue(value: true, key: 'isCreatPIN');
+   await sharePrefrenceClass.saveValuebool(value: true, key: 'CreatPIN');
    emit(HideNotesCreatPIN()); 
  }else{
   emit(HideNotesEnterPIN());
