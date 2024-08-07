@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:test1/models/note.dart';

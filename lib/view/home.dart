@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 import 'package:test1/cubit/cubit/setting_cubit.dart';
 import 'package:test1/cubit/update_cubit.dart';
 import 'package:test1/models/note.dart';
 import 'package:test1/view/add_note.dart';
 import 'package:test1/view/more_view/Favorite.dart';
+import 'package:test1/view/more_view/creat_PIN.dart';
+import 'package:test1/view/more_view/hide_notes.dart';
 import 'package:test1/view/record_notes.dart';
 
-import '../DB/database.dart';
 import 'more_view/archive.dart';
 import 'more_view/deleted.dart';
 import 'more_view/setting.dart';
@@ -87,8 +87,18 @@ class Notes extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 child: Row(
                   children: [
+                    GestureDetector(
+                      onDoubleTap: () {
+                        
+                      },
+                      child: const Text(
+                        'Not',
+                        style:
+                            TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                      ),
+                    ),
                     const Text(
-                      'Notes Recorder',
+                      'es Recorder',
                       style:
                           TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                     ),
@@ -217,7 +227,8 @@ class Notes extends StatelessWidget {
             bottom: 170, // Adjust positioning as needed
             right: 16,
             child: FloatingActionButton(
-              onPressed: () {},
+              onPressed: () {
+              },
               heroTag: 'micButton',
               child: const Icon(Icons.mic), // Unique tag for this button
             ),

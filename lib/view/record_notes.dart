@@ -1,12 +1,9 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test1/cubit/update_cubit.dart';
 import 'package:test1/models/note.dart';
 
-import '../DB/database.dart';
 
 class RecordNotes extends StatelessWidget {
   RecordNotes({super.key, required this.index, required this.allNotes});

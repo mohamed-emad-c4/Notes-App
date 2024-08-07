@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:test1/DB/database.dart';
 import 'package:test1/cubit/update_cubit.dart';
 import 'package:test1/models/note.dart';

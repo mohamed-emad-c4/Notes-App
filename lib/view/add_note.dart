@@ -1,11 +1,9 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:test1/cubit/update_cubit.dart';
 import 'package:test1/models/note.dart';
-import 'package:test1/view/home.dart';
 
 import '../DB/database.dart';
 
