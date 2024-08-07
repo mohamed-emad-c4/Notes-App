@@ -15,4 +15,6 @@ final class UpdateNotes extends UpdateState {
 }
 
 final class DeleteNote extends UpdateState {}
+final class ChangeTheme extends UpdateState {}
+
 

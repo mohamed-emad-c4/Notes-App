@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:test1/cubit/update_cubit.dart';
 import 'package:test1/models/note.dart';
+import 'package:test1/view/home.dart';
 
 import '../DB/database.dart';
 
@@ -49,8 +50,6 @@ class _AddNoteState extends State<AddNote> {
                   ),
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                  filled: true,
-                  fillColor: Colors.grey[100],
                 ),
                 maxLength: 100,
                 style: const TextStyle(fontSize: 18),
@@ -65,8 +64,6 @@ class _AddNoteState extends State<AddNote> {
                   ),
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                  filled: true,
-                  fillColor: Colors.grey[100],
                 ),
                 maxLines: 6,
                 style: const TextStyle(fontSize: 16),
@@ -113,9 +110,10 @@ class _AddNoteState extends State<AddNote> {
                 child: ElevatedButton(
                   onPressed: () async {
                     _saveNote();
-                    widget.allNotes =
-                        await NotesDatabase.instance.readAllNotes();
+                    // widget.allNotes =
+                    //     await NotesDatabase.instance.readAllNotes();
                     BlocProvider.of<UpdateCubit>(context).updateNotes();
+                    Get.back();
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(

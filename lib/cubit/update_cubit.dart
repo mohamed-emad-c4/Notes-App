@@ -74,6 +74,9 @@ String formatDateTime(String input) {
       allNotes: allNotes,
     ));
   }
+  void ChangeThemefunction()  {
+    
+    emit(ChangeTheme());}
 
   void deleteNote() => emit(DeleteNote());
   void AddNoteStateFunction() => emit(AddNoteState());

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
+import 'package:test1/cubit/cubit/setting_cubit.dart';
 import 'package:test1/cubit/update_cubit.dart';
 import 'package:test1/models/note.dart';
 import 'package:test1/view/add_note.dart';
@@ -16,34 +17,51 @@ import 'more_view/setting.dart';
 class Home extends StatelessWidget {
   Home({super.key, required this.allNotes});
   List<NoteModel> allNotes;
-
+  bool isDarkMode = false;
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => UpdateCubit(),
-      child: GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Notes Recorder',
-        home: BlocBuilder<UpdateCubit, UpdateState>(
-          builder: (context, state) {
-            if (state is UpdateInitial) {
-              return Notes(allNotes: allNotes);
-            }
-            if (state is AddNoteState) {
-              return AddNote(allNotes: allNotes);
-            } else if (state is UpdateNotes) {
-              return Notes(allNotes: state.allNotes);
-            } else {
-              const Scaffold(
-                body: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-
-              return Container();
-            }
-          },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => UpdateCubit(),
         ),
+        BlocProvider(
+          create: (context) => SettingCubit(),
+        ),
+      ],
+      child: BlocConsumer<UpdateCubit, UpdateState>(
+        listener: (context, state) {
+          if (state is ChangeTheme) {
+            isDarkMode = !isDarkMode;
+          }
+        },
+        builder: (context, state) {
+          return GetMaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Notes Recorder',
+            theme: isDarkMode ? ThemeData.dark() : ThemeData.light(),
+            home: BlocBuilder<UpdateCubit, UpdateState>(
+              builder: (context, state) {
+                if (state is UpdateInitial) {
+                  return Notes(allNotes: allNotes);
+                }
+                if (state is AddNoteState) {
+                  return AddNote(allNotes: allNotes);
+                } else if (state is UpdateNotes) {
+                  return Notes(allNotes: state.allNotes);
+                } else {
+                  const Scaffold(
+                    body: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+
+                  return Container();
+                }
+              },
+            ),
+          );
+        },
       ),
     );
   }
@@ -149,7 +167,6 @@ class Notes extends StatelessWidget {
                       } else if (direction == DismissDirection.endToStart) {
                         BlocProvider.of<UpdateCubit>(context)
                             .AddNoteToDeleted(allNotes: allNotes, index: index);
-                        BlocProvider.of<UpdateCubit>(context).updateNotes();
                       }
                     },
                     background: Container(
@@ -190,7 +207,7 @@ class Notes extends StatelessWidget {
             right: 16,
             child: FloatingActionButton(
               onPressed: () {
-                BlocProvider.of<UpdateCubit>(context).AddNoteStateFunction();
+                Get.to(AddNote(allNotes: allNotes));
               },
               heroTag: 'addNoteButton',
               child: const Icon(Icons.add), // Unique tag for this button
