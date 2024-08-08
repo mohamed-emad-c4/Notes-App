@@ -8,6 +8,7 @@ import 'package:test1/cubit/cubit/cubit/archive_update_cubit.dart';
 import 'package:test1/cubit/cubit/cubit/deleted%20cubit/deleted_update_cubit.dart';
 import 'package:test1/cubit/cubit/setting_cubit.dart';
 import 'package:test1/cubit/favorit_update_cubit.dart';
+import 'package:test1/cubit/hide_cubit_cubit.dart';
 import 'package:test1/cubit/hide_notes_cubit.dart';
 import 'package:test1/cubit/update_cubit.dart';
 import 'package:test1/models/note.dart';
@@ -46,6 +47,9 @@ class Home extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => FavoritUpdateCubit(),
+        ),
+         BlocProvider(
+          create: (context) => HideCubitCubit(),
         ),
       ],
       child: BlocConsumer<UpdateCubit, UpdateState>(

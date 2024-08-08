@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:test1/DB/hide.dart'; // Import your database class
+import 'package:test1/cubit/hide_cubit_cubit.dart';
 import 'package:test1/models/note.dart';
 import 'package:test1/view/more_view/add_hide_note.dart';
 
@@ -16,7 +18,11 @@ class HiddenNotesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocBuilder(
+        bloc: BlocProvider.of<HideCubitCubit>(context),
+        builder: (context, state) {
+          if (state is HideCubitInitial|| state is HideCubitUpdated) {
+             return Scaffold(
       appBar: AppBar(
         title: const Text('Hidden Notes'),
       ),
@@ -39,7 +45,7 @@ class HiddenNotesScreen extends StatelessWidget {
             return ListView.builder(
               itemCount: notes.length,
               itemBuilder: (context, index) {
-                return RecordNotes(
+                return RecordNotesHide(
                   allNotes: notes,
                   index: index,
                 );
@@ -59,22 +65,15 @@ class HiddenNotesScreen extends StatelessWidget {
         child: const Icon(Icons.add),
       ),
     );
-  }
-
-  void showNoteDetails(BuildContext context, NoteModel note) {
-    // Show note details or navigate to a detail screen
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(note.title),
-        content: Text(note.content),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
-          ),
-        ],
+  }else{
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
       ),
     );
+  }
+
+ 
+        });
   }
 }

@@ -67,7 +67,15 @@ class Hide {
 
     return result.map((json) => NoteModel.fromJson(json)).toList();
   }
+ Future<int> delete(int id) async {
+    final db = await instance.database;
 
+    return await db.delete(
+      NoteFields.tableName,
+      where: '${NoteFields.id} = ?',
+      whereArgs: [id],
+    );
+  }
   Future<void> close() async {
     final db = await instance.database;
     await db.close();

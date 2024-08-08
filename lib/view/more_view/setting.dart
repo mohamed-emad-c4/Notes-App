@@ -2,9 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:test1/cubit/cubit/setting_cubit.dart';
 import 'package:test1/cubit/update_cubit.dart';
 import 'package:test1/shared_prefrence.dart';
+import 'package:test1/view/setting_views/about_us.dart';
+import 'package:test1/view/setting_views/help_and_support.dart';
+import 'package:test1/view/setting_views/privacy_and_security.dart';
 
 class Setting extends StatelessWidget {
   final bool isDarkMode;
@@ -210,6 +214,7 @@ class _SettingsListStateState extends State<SettingsListState> {
       title: const Text('Privacy and Security'),
       onTap: () {
         // Add your navigation logic here
+         Get.to(const PrivacyAndSecurityPage());
       },
     );
   }
@@ -221,6 +226,7 @@ class _SettingsListStateState extends State<SettingsListState> {
       title: const Text('Help & Support'),
       onTap: () {
         // Add your navigation logic here
+         Get.to(const HelpAndSupportPage());
       },
     );
   }
@@ -231,7 +237,7 @@ class _SettingsListStateState extends State<SettingsListState> {
       leading: const Icon(Icons.info),
       title: const Text('About Us'),
       onTap: () {
-        // Add your navigation logic here
+        Get.to(const AboutUsPage());
       },
     );
   }

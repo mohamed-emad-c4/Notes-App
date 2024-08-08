@@ -35,10 +35,12 @@ dependencies:
   flutter_secure_storage: ^9.2.2
   font_awesome_flutter: ^10.7.0
   get: ^4.6.6
+  icons_plus: ^5.0.0
   intl: ^0.19.0
   path: ^1.9.0
   shared_preferences: ^2.3.1
   sqflite: ^2.3.3+1
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_lints: ^3.0.0

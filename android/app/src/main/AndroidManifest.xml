@@ -1,8 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+ <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+
     <application
-        android:label="test1"
+        android:label="Record notes"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+         
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -38,8 +43,10 @@
          In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
     <queries>
         <intent>
-            <action android:name="android.intent.action.PROCESS_TEXT"/>
-            <data android:mimeType="text/plain"/>
+            <!-- <action android:name="android.intent.action.PROCESS_TEXT"/>
+            <data android:mimeType="text/plain"/> -->
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="mailto" />
         </intent>
     </queries>
 </manifest>
