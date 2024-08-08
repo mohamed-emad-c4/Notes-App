@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:test1/cubit/hide_notes_cubit.dart';
 
 import 'DB/database.dart';
 import 'DB/hide.dart';

@@ -3,6 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:test1/DB/database.dart';
+import 'package:test1/cubit/cubit/cubit/archive_update_cubit.dart';
+import 'package:test1/cubit/cubit/cubit/deleted%20cubit/deleted_update_cubit.dart';
 import 'package:test1/cubit/cubit/setting_cubit.dart';
 import 'package:test1/cubit/hide_notes_cubit.dart';
 import 'package:test1/cubit/update_cubit.dart';
@@ -11,7 +14,6 @@ import 'package:test1/view/add_note.dart';
 import 'package:test1/view/more_view/Favorite.dart';
 import 'package:test1/view/more_view/creat_PIN.dart';
 import 'package:test1/view/more_view/enter_PIN.dart';
-import 'package:test1/view/more_view/hide_notes.dart';
 import 'package:test1/view/record_notes.dart';
 
 import 'more_view/archive.dart';
@@ -35,6 +37,12 @@ class Home extends StatelessWidget {
         BlocProvider(
           create: (context) => HideNotesCubit(),
         ),
+        BlocProvider(
+          create: (context) => ArchiveUpdateCubit(),
+        ),
+        BlocProvider(
+          create: (context) => DeletedUpdateCubit(),
+        ),
       ],
       child: BlocConsumer<UpdateCubit, UpdateState>(
         listener: (context, state) {
@@ -44,7 +52,7 @@ class Home extends StatelessWidget {
         },
         builder: (context, state) {
           return BlocListener<HideNotesCubit, HideNotesState>(
-            listener:(context, hideNotesState) {
+            listener: (context, hideNotesState) {
               if (hideNotesState is HideNotesCreatPIN) {
                 Get.to(const CreatePinScreen());
               } else if (hideNotesState is HideNotesEnterPIN) {
@@ -190,16 +198,30 @@ class Notes extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return Dismissible(
-                    key: const Key("notes"), // مفتاح مميز لكل عنصر
+                    key:  Key("$index"), // مفتاح مميز لكل عنصر
                     direction: DismissDirection.horizontal,
                     onDismissed: (direction) {
                       if (direction == DismissDirection.startToEnd) {
-                        BlocProvider.of<UpdateCubit>(context)
-                            .AddNoteToArchive(allNotes: allNotes, index: index);
-                        BlocProvider.of<UpdateCubit>(context).updateNotes();
+                        try {
+                          BlocProvider.of<UpdateCubit>(context)
+                              .AddNoteToArchive(
+                                  allNotes: allNotes, index: index);
+                          BlocProvider.of<UpdateCubit>(context).updateNotes();
+                          Get.snackbar("Done", "Added to archive");
+                          BlocProvider.of<UpdateCubit>(context).updateNotes();
+                        } catch (e) {
+                          Get.snackbar("Error", "Failed to add note");
+                        }
                       } else if (direction == DismissDirection.endToStart) {
-                        BlocProvider.of<UpdateCubit>(context)
-                            .AddNoteToDeleted(allNotes: allNotes, index: index);
+                        try {
+                          BlocProvider.of<UpdateCubit>(context)
+                              .AddNoteToDeleted(
+                                  allNotes: allNotes, index: index);
+                          BlocProvider.of<UpdateCubit>(context).updateNotes();
+                          Get.snackbar("Done", "Deleted ");
+                        } catch (e) {
+                          Get.snackbar("Error", "Failed to delete note");
+                        }
                       }
                     },
                     background: Container(

@@ -74,10 +74,23 @@ String formatDateTime(String input) {
       allNotes: allNotes,
     ));
   }
+  void updateAchiveIntial() => emit(UpdateAchiveIntial());
+  void updateAchive() => emit(UpdateAchive());
   void ChangeThemefunction()  {
     
     emit(ChangeTheme());}
-
+  void removeNoteFromArchive({required List<NoteModel> allNotes, required int index}) async {
+    final note = allNotes[index];
+    final newNote = NoteModel(
+      id: note.id,
+      title: note.title,
+      content: note.content,
+      isFavorite: note.isFavorite,
+      archived: false,
+      createdTime: note.createdTime, // Retain original creation time
+    );
+    await NotesDatabase.instance.update(newNote);
+  }
   void deleteNote() => emit(DeleteNote());
   void AddNoteStateFunction() => emit(AddNoteState());
 }
