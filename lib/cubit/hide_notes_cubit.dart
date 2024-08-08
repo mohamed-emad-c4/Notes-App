@@ -9,7 +9,7 @@ class HideNotesCubit extends Cubit<HideNotesState> {
   HideNotesCubit() : super(HideNotesInitial());
   
   void chechPIN()async {
-    bool isCreatPIN= await sharePrefrenceClass.getVlue(key: 'CreatPIN');
+    bool isCreatPIN= await sharePrefrenceClass.getVlue(key: 'CreatPIN', defaultValue: false);
     
 
  if (isCreatPIN==false) {

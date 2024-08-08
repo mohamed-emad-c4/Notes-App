@@ -42,7 +42,7 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
             TextField(
               controller: _pinController,
               decoration: const InputDecoration(
-                  labelText: 'Enter 6-digit PIN',
+                  labelText: 'Enter 12-digit PIN',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                   )),

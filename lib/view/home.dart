@@ -22,9 +22,9 @@ import 'more_view/deleted.dart';
 import 'more_view/setting.dart';
 
 class Home extends StatelessWidget {
-  Home({super.key, required this.allNotes});
+  Home({super.key, required this.allNotes, required this.isDarkMode});
   List<NoteModel> allNotes;
-  bool isDarkMode = false;
+  bool isDarkMode ;
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -50,7 +50,7 @@ class Home extends StatelessWidget {
       ],
       child: BlocConsumer<UpdateCubit, UpdateState>(
         listener: (context, state) {
-          if (state is ChangeTheme) {
+          if (state is ChangeTheme)  {
             isDarkMode = !isDarkMode;
           }
         },
@@ -70,12 +70,12 @@ class Home extends StatelessWidget {
               home: BlocBuilder<UpdateCubit, UpdateState>(
                 builder: (context, state) {
                   if (state is UpdateInitial) {
-                    return Notes(allNotes: allNotes);
+                    return Notes(allNotes: allNotes, isDarkMode: isDarkMode);
                   }
                   if (state is AddNoteState) {
                     return AddNote(allNotes: allNotes);
                   } else if (state is UpdateNotes) {
-                    return Notes(allNotes: state.allNotes);
+                    return Notes(allNotes: state.allNotes, isDarkMode: isDarkMode);
                   } else if (state is HideNotesCreatPIN) {
                     Get.to(const CreatePinScreen());
                     return const CreatePinScreen();
@@ -102,12 +102,14 @@ class Home extends StatelessWidget {
 }
 
 class Notes extends StatelessWidget {
-  const Notes({
+   Notes({
     super.key,
     required this.allNotes,
+    required this.isDarkMode,
   });
 
   final List<NoteModel> allNotes;
+  bool isDarkMode ;
 
   @override
   Widget build(BuildContext context) {
@@ -190,7 +192,7 @@ class Notes extends StatelessWidget {
                         } else if (value == 'Favorites') {
                           Get.to(const FavoriteList());
                         } else if (value == 'Settings') {
-                          Get.to(const Setting());
+                          Get.to( Setting(isDarkMode: isDarkMode ,));
                         }
                       },
                     ),
