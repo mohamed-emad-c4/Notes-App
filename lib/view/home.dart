@@ -7,6 +7,7 @@ import 'package:test1/DB/database.dart';
 import 'package:test1/cubit/cubit/cubit/archive_update_cubit.dart';
 import 'package:test1/cubit/cubit/cubit/deleted%20cubit/deleted_update_cubit.dart';
 import 'package:test1/cubit/cubit/setting_cubit.dart';
+import 'package:test1/cubit/favorit_update_cubit.dart';
 import 'package:test1/cubit/hide_notes_cubit.dart';
 import 'package:test1/cubit/update_cubit.dart';
 import 'package:test1/models/note.dart';
@@ -42,6 +43,9 @@ class Home extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => DeletedUpdateCubit(),
+        ),
+        BlocProvider(
+          create: (context) => FavoritUpdateCubit(),
         ),
       ],
       child: BlocConsumer<UpdateCubit, UpdateState>(
@@ -198,7 +202,7 @@ class Notes extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return Dismissible(
-                    key:  Key("$index"), // مفتاح مميز لكل عنصر
+                    key: Key("$index"), // مفتاح مميز لكل عنصر
                     direction: DismissDirection.horizontal,
                     onDismissed: (direction) {
                       if (direction == DismissDirection.startToEnd) {
