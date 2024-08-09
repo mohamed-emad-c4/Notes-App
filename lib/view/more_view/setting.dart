@@ -135,10 +135,7 @@ class _SettingsListStateState extends State<SettingsListState> {
               await SharePrefrenceClass().saveValueString(
                   value: selectedLanguage, key: 'selectedLanguage');
               // Change the locale in GetX
-              Get.updateLocale(Locale(
-                selectedLanguage == 'English' ? 'en' : 'ar',
-                selectedLanguage == 'English' ? 'US' : 'SA',
-              ));
+             
             },
             items: <String>['English', 'Arabic', 'French']
                 .map<DropdownMenuItem<String>>((String value) {

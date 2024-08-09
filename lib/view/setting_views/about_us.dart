@@ -74,7 +74,7 @@ class AboutUsPage extends StatelessWidget {
                     icon: Icons.facebook,
                     label: 'Facebook',
                     onTap: () {
-                      _launchURL('https://facebook.com');
+                      _launchURL('https://www.facebook.com/profile.php?id=61563607514517');
                     },
                   ),
                   const SizedBox(width: 20),
@@ -83,7 +83,7 @@ class AboutUsPage extends StatelessWidget {
                     icon: AntDesign.twitter_circle_fill,
                     label: 'Twitter',
                     onTap: () {
-                      _launchURL('https://twitter.com');
+                      _launchURL('https://x.com/zemax_c4');
                     },
                   ),
                   const SizedBox(width: 20),
@@ -92,7 +92,7 @@ class AboutUsPage extends StatelessWidget {
                     icon: AntDesign.instagram_fill,
                     label: 'Instagram',
                     onTap: () {
-                      _launchURL('https://instagram.com');
+                      _launchURL('https://www.instagram.com/flutternexus/');
                     },
                   ),
                 ],
@@ -144,20 +144,7 @@ class AboutUsPage extends StatelessWidget {
   }
 
   // Phone call method
-  void _makePhoneCall() async {
-    const String phoneNumber =
-        '+201099312476'; // Replace with your phone number
-    final Uri phoneUri = Uri(
-      scheme: 'tel',
-      path: phoneNumber,
-    );
-    if (await canLaunch(phoneUri.toString())) {
-      await launch(phoneUri.toString());
-    } else {
-      // Could not make the call
-      print('Could not make the phone call');
-    }
-  }
+
 
   // Send email method
   void _sendEmail() async {

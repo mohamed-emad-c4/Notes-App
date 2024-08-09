@@ -188,26 +188,36 @@ class HelpAndSupportPage extends StatelessWidget {
     }
   }
 
-  void _contactViaWhatsApp() async {
-    const String phoneNumber =
-        '+201099312476'; // Replace with your WhatsApp number
-    const String message = 'Hello, I need some assistance.';
-    final Uri whatsappUri = Uri(
-      scheme: 'https',
-      host: 'api.whatsapp.com',
-      path: '/send',
-      queryParameters: {
-        'phone': phoneNumber,
-        'text': message,
-      },
-    );
-    if (await canLaunch(whatsappUri.toString())) {
-      await launch(whatsappUri.toString());
+
+
+void _contactViaWhatsApp() async {
+  const String phoneNumber = '201099312476'; // رقم الهاتف بدون +
+  const String message = 'Hello, I need some assistance.';
+
+  final Uri whatsappUri = Uri(
+    scheme: 'https',
+    host: 'wa.me',
+    path: '/$phoneNumber',
+    queryParameters: {
+      'text': message,
+    },
+  );
+
+  String whatsappLink = whatsappUri.toString();
+  print('WhatsApp Link: $whatsappLink');
+
+  try {
+    if (await canLaunch(whatsappLink)) {
+      await launch(whatsappLink);
     } else {
-      // Could not launch WhatsApp
       print('Could not launch WhatsApp');
     }
+  } catch (e) {
+    print('Error launching WhatsApp: $e');
   }
+}
+
+
 
   void _contactViaMessenger() async {
     // Replace with your Facebook page URL or Messenger link
