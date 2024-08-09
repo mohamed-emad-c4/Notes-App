@@ -17,7 +17,7 @@ import 'package:test1/view/more_view/Favorite.dart';
 import 'package:test1/view/more_view/creat_PIN.dart';
 import 'package:test1/view/more_view/enter_PIN.dart';
 import 'package:test1/view/record_notes.dart';
-
+import 'package:flutter_localization/flutter_localization.dart';
 import 'more_view/archive.dart';
 import 'more_view/deleted.dart';
 import 'more_view/setting.dart';
@@ -25,7 +25,7 @@ import 'more_view/setting.dart';
 class Home extends StatelessWidget {
   Home({super.key, required this.allNotes, required this.isDarkMode});
   List<NoteModel> allNotes;
-  bool isDarkMode ;
+  bool isDarkMode;
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -48,13 +48,13 @@ class Home extends StatelessWidget {
         BlocProvider(
           create: (context) => FavoritUpdateCubit(),
         ),
-         BlocProvider(
+        BlocProvider(
           create: (context) => HideCubitCubit(),
         ),
       ],
       child: BlocConsumer<UpdateCubit, UpdateState>(
         listener: (context, state) {
-          if (state is ChangeTheme)  {
+          if (state is ChangeTheme) {
             isDarkMode = !isDarkMode;
           }
         },
@@ -70,6 +70,7 @@ class Home extends StatelessWidget {
             child: GetMaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'Notes Recorder',
+              
               theme: isDarkMode ? ThemeData.dark() : ThemeData.light(),
               home: BlocBuilder<UpdateCubit, UpdateState>(
                 builder: (context, state) {
@@ -79,7 +80,8 @@ class Home extends StatelessWidget {
                   if (state is AddNoteState) {
                     return AddNote(allNotes: allNotes);
                   } else if (state is UpdateNotes) {
-                    return Notes(allNotes: state.allNotes, isDarkMode: isDarkMode);
+                    return Notes(
+                        allNotes: state.allNotes, isDarkMode: isDarkMode);
                   } else if (state is HideNotesCreatPIN) {
                     Get.to(const CreatePinScreen());
                     return const CreatePinScreen();
@@ -106,14 +108,14 @@ class Home extends StatelessWidget {
 }
 
 class Notes extends StatelessWidget {
-   Notes({
+  Notes({
     super.key,
     required this.allNotes,
     required this.isDarkMode,
   });
 
   final List<NoteModel> allNotes;
-  bool isDarkMode ;
+  bool isDarkMode;
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +198,9 @@ class Notes extends StatelessWidget {
                         } else if (value == 'Favorites') {
                           Get.to(const FavoriteList());
                         } else if (value == 'Settings') {
-                          Get.to( Setting(isDarkMode: isDarkMode ,));
+                          Get.to(Setting(
+                            isDarkMode: isDarkMode,
+                          ));
                         }
                       },
                     ),

@@ -118,7 +118,7 @@ class _SettingsListStateState extends State<SettingsListState> {
   ListTile _buildLanguageTile(BuildContext context) {
     return ListTile(
       leading: const Icon(Icons.language),
-      title: const Text('Language'),
+      title: Text('Language'.tr), // Use translation
       trailing: BlocConsumer<SettingCubit, SettingState>(
         listener: (context, state) {
           if (state is UpdateSettingS) {
@@ -129,11 +129,16 @@ class _SettingsListStateState extends State<SettingsListState> {
           return DropdownButton<String>(
             value: selectedLanguage,
             onChanged: (String? newValue) async {
-              selectedLanguage = newValue!;
-              await SharePrefrenceClass()
-                  .saveValueString(value: selectedLanguage, key: 'selectedLanguage');
-              setState(() {});
-              BlocProvider.of<SettingCubit>(context).UpdateSettingF();
+              setState(() {
+                selectedLanguage = newValue!;
+              });
+              await SharePrefrenceClass().saveValueString(
+                  value: selectedLanguage, key: 'selectedLanguage');
+              // Change the locale in GetX
+              Get.updateLocale(Locale(
+                selectedLanguage == 'English' ? 'en' : 'ar',
+                selectedLanguage == 'English' ? 'US' : 'SA',
+              ));
             },
             items: <String>['English', 'Arabic', 'French']
                 .map<DropdownMenuItem<String>>((String value) {
@@ -214,7 +219,7 @@ class _SettingsListStateState extends State<SettingsListState> {
       title: const Text('Privacy and Security'),
       onTap: () {
         // Add your navigation logic here
-         Get.to(const PrivacyAndSecurityPage());
+        Get.to(const PrivacyAndSecurityPage());
       },
     );
   }
@@ -226,7 +231,7 @@ class _SettingsListStateState extends State<SettingsListState> {
       title: const Text('Help & Support'),
       onTap: () {
         // Add your navigation logic here
-         Get.to(const HelpAndSupportPage());
+        Get.to(const HelpAndSupportPage());
       },
     );
   }
