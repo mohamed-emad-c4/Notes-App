@@ -282,15 +282,7 @@ class Notes extends StatelessWidget {
               child: const Icon(Icons.add), // Unique tag for this button
             ),
           ),
-          Positioned(
-            bottom: 170, // Adjust positioning as needed
-            right: 16,
-            child: FloatingActionButton(
-              onPressed: () {},
-              heroTag: 'micButton',
-              child: const Icon(Icons.mic), // Unique tag for this button
-            ),
-          ),
+          
         ],
       ),
     );

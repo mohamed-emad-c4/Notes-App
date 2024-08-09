@@ -62,8 +62,10 @@ class DeletedNotes extends StatelessWidget {
                                     allNotes: deletedNotes, index: index);
                           } else if (direction == DismissDirection.startToEnd) {
                             // استعادة الملاحظة
-
-                            deletedNotes.removeAt(index);
+                            BlocProvider.of<DeletedUpdateCubit>(context)
+                                .RemoveNoteFromDeleted(
+                                    allNotes: deletedNotes, index: index);
+                            BlocProvider.of<UpdateCubit>(context).updateNotes();
                           }
                         },
                         background: Container(

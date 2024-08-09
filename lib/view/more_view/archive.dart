@@ -71,17 +71,18 @@ class ArchivedList extends StatelessWidget {
                         onDismissed: (direction) {
                           if (direction == DismissDirection.startToEnd) {
                             BlocProvider.of<ArchiveUpdateCubit>(context)
+                                .AddNoteToFavorit(
+                                    allNotes: archivedNotesReversed,
+                                    index: index);
+                            Get.snackbar('Added to favorites', 'Successfully');
+                          } else if (direction == DismissDirection.endToStart) {
+                            BlocProvider.of<ArchiveUpdateCubit>(context)
                                 .AddNoteToDeleted(
                                     allNotes: archivedNotesReversed,
                                     index: index);
 
                             BlocProvider.of<UpdateCubit>(context).updateNotes();
-                          } else if (direction == DismissDirection.endToStart) {
-                            BlocProvider.of<ArchiveUpdateCubit>(context)
-                                .AddNoteToFavorit(
-                                    allNotes: archivedNotesReversed,
-                                    index: index);
-                            Get.snackbar('Added to favorites', 'Successfully');
+                            Get.snackbar('Added to deleted', 'Successfully');
                           }
                         },
                         background: Container(

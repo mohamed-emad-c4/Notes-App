@@ -20,7 +20,7 @@ class _EnterPinScreenState extends State<EnterPinScreen> {
     final savedPin = await _storage.read(key: 'user_pin');
 
     if (enteredPin == savedPin) {
-      Get.to(const HiddenNotesScreen());
+      Get.off(const HiddenNotesScreen());
       // Navigate to hidden notes screen
       // Navigator.push(context, MaterialPageRoute(builder: (context) => HiddenNotesScreen()));
     } else {
