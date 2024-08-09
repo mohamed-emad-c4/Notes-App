@@ -22,7 +22,7 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
       // Navigate to another screen or show success message
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('PIN Saved')));
-      Get.to(const EnterPinScreen());
+      Get.off(const EnterPinScreen());
     } else {
       // Show error
       ScaffoldMessenger.of(context)

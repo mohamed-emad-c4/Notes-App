@@ -21,59 +21,57 @@ class HiddenNotesScreen extends StatelessWidget {
     return BlocBuilder(
         bloc: BlocProvider.of<HideCubitCubit>(context),
         builder: (context, state) {
-          if (state is HideCubitInitial|| state is HideCubitUpdated) {
-             return Scaffold(
-      appBar: AppBar(
-        title: const Text('Hidden Notes'),
-      ),
-      body: FutureBuilder<List<NoteModel>>(
-        future:
-            _fetchHiddenNotes(), // Call the async function to fetch hidden notes
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // While the data is loading
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            // If an error occurred
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            // If no data is returned or the list is empty
-            return const Center(child: Text('No hidden notes found.'));
+          if (state is HideCubitInitial || state is HideCubitUpdated) {
+            return Scaffold(
+              appBar: AppBar(
+                title: const Text('Hidden Notes 🤫'),
+              ),
+              body: FutureBuilder<List<NoteModel>>(
+                future:
+                    _fetchHiddenNotes(), // Call the async function to fetch hidden notes
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // While the data is loading
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    // If an error occurred
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    // If no data is returned or the list is empty
+                    return const Center(child: Text('No hidden notes found.'));
+                  } else {
+                    // If the data is successfully loaded
+                    final notes = snapshot.data!;
+                    return ListView.builder(
+                      itemCount: notes.length,
+                      itemBuilder: (context, index) {
+                        return RecordNotesHide(
+                          allNotes: notes,
+                          index: index,
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () async {
+                  Get.to(AddHideNote(allNotes: const []));
+                  // Optionally, show a success message
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Note added successfully!')),
+                  );
+                },
+                child: const Icon(Icons.add),
+              ),
+            );
           } else {
-            // If the data is successfully loaded
-            final notes = snapshot.data!;
-            return ListView.builder(
-              itemCount: notes.length,
-              itemBuilder: (context, index) {
-                return RecordNotesHide(
-                  allNotes: notes,
-                  index: index,
-                );
-              },
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
             );
           }
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          Get.to(AddHideNote(allNotes: const []));
-          // Optionally, show a success message
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Note added successfully!')),
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
-    );
-  }else{
-    return const Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-  }
-
- 
         });
   }
 }
