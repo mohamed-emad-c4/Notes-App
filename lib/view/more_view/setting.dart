@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:test1/cubit/cubit/change_lan_cubit.dart';
 import 'package:test1/cubit/cubit/setting_cubit.dart';
 import 'package:test1/cubit/update_cubit.dart';
 import 'package:test1/shared_prefrence.dart';
@@ -30,7 +31,7 @@ class Setting extends StatelessWidget {
 class SettingsListState extends StatefulWidget {
   final bool isDarkMode;
 
-  const SettingsListState({super.key, required this.isDarkMode});
+  const SettingsListState({super.key, required this.isDarkMode, required});
 
   @override
   _SettingsListStateState createState() => _SettingsListStateState();
@@ -39,7 +40,7 @@ class SettingsListState extends StatefulWidget {
 class _SettingsListStateState extends State<SettingsListState> {
   late bool isDarkMode;
   bool notificationsEnabled = true;
-  String selectedLanguage = 'English';
+  String selectedLanguage = 'en';
   int volume = 50;
 
   @override
@@ -55,7 +56,7 @@ class _SettingsListStateState extends State<SettingsListState> {
     notificationsEnabled = await SharePrefrenceClass()
         .getVlue(key: 'notificationsEnabled', defaultValue: true);
     selectedLanguage = await SharePrefrenceClass()
-        .getVlue(key: 'selectedLanguage', defaultValue: 'English');
+        .getVlue(key: 'selectedLanguage', defaultValue: 'en');
     volume =
         await SharePrefrenceClass().getVlue(key: 'volume', defaultValue: 50);
     setState(() {});
@@ -71,8 +72,8 @@ class _SettingsListStateState extends State<SettingsListState> {
         _buildLanguageTile(context),
         const Divider(),
         _buildNotificationsTile(context),
-        const Divider(),
-        _buildVolumeTile(context),
+        // const Divider(),
+        // _buildVolumeTile(context),
         const Divider(),
         _buildPrivacyTile(context),
         const Divider(),
@@ -115,6 +116,7 @@ class _SettingsListStateState extends State<SettingsListState> {
   }
 
   // Language Dropdown Tile
+  // Language Dropdown Tile
   ListTile _buildLanguageTile(BuildContext context) {
     return ListTile(
       leading: const Icon(Icons.language),
@@ -134,10 +136,9 @@ class _SettingsListStateState extends State<SettingsListState> {
               });
               await SharePrefrenceClass().saveValueString(
                   value: selectedLanguage, key: 'selectedLanguage');
-              // Change the locale in GetX
-             
-            },
-            items: <String>['English', 'Arabic', 'French']
+
+ BlocProvider.of<ChangeLanCubit>(context).changeLan();            },
+            items: <String>['en', 'ar', 'fr']
                 .map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
@@ -168,8 +169,9 @@ class _SettingsListStateState extends State<SettingsListState> {
               notificationsEnabled = value;
               await SharePrefrenceClass().saveValuebool(
                   value: notificationsEnabled, key: 'notificationsEnabled');
+                  
               setState(() {});
-              BlocProvider.of<SettingCubit>(context).UpdateSettingF();
+             
             },
           );
         },
@@ -178,36 +180,36 @@ class _SettingsListStateState extends State<SettingsListState> {
   }
 
   // Volume Slider Tile
-  ListTile _buildVolumeTile(BuildContext context) {
-    return ListTile(
-      leading: const Icon(Icons.volume_up),
-      title: const Text('Volume'),
-      subtitle: BlocConsumer<SettingCubit, SettingState>(
-        listener: (context, state) {
-          if (state is UpdateSettingS) {
-            // Handle any updates here if needed
-          }
-        },
-        builder: (context, state) {
-          return Slider(
-            value: volume.toDouble(),
-            min: 0,
-            max: 100,
-            divisions: 10,
-            label: '$volume',
-            onChanged: (value) async {
-              volume = value.toInt();
-              await SharePrefrenceClass()
-                  .saveValueint(value: volume, key: 'volume');
-              log(value.toString());
-              setState(() {});
-              BlocProvider.of<SettingCubit>(context).UpdateSettingF();
-            },
-          );
-        },
-      ),
-    );
-  }
+  // ListTile _buildVolumeTile(BuildContext context) {
+  //   return ListTile(
+  //     leading: const Icon(Icons.volume_up),
+  //     title: const Text('Volume'),
+  //     subtitle: BlocConsumer<SettingCubit, SettingState>(
+  //       listener: (context, state) {
+  //         if (state is UpdateSettingS) {
+  //           // Handle any updates here if needed
+  //         }
+  //       },
+  //       builder: (context, state) {
+  //         return Slider(
+  //           value: volume.toDouble(),
+  //           min: 0,
+  //           max: 100,
+  //           divisions: 10,
+  //           label: '$volume',
+  //           onChanged: (value) async {
+  //             volume = value.toInt();
+  //             await SharePrefrenceClass()
+  //                 .saveValueint(value: volume, key: 'volume');
+  //             log(value.toString());
+  //             setState(() {});
+  //             BlocProvider.of<SettingCubit>(context).UpdateSettingF();
+  //           },
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
 
   // Privacy and Security Tile
   ListTile _buildPrivacyTile(BuildContext context) {

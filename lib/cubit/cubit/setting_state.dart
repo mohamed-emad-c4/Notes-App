@@ -6,3 +6,5 @@ sealed class SettingState {}
 final class SettingInitial extends SettingState {}
 
 final class UpdateSettingS extends SettingState {}
+final class UpdateLang extends SettingState {}
+

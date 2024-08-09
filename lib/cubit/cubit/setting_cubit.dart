@@ -6,4 +6,6 @@ part 'setting_state.dart';
 class SettingCubit extends Cubit<SettingState> {
   SettingCubit() : super(SettingInitial());
   void UpdateSettingF() => emit(UpdateSettingS());
+    void UpdateLangF() => emit(UpdateLang());
+
 }

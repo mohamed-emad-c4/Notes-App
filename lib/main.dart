@@ -15,9 +15,13 @@ void main() async {
   SharePrefrenceClass pref=SharePrefrenceClass();
   bool isDark =
       await pref.getVlue(key: 'isDarkMode', defaultValue: false);
+      String SelectLang =
+      await pref.getVlue(key: 'selectedLanguage', defaultValue: 'en');
   List<NoteModel> allHideNotes = await Hide.instance.readAllNotes();
+
   runApp(Home(
     allNotes: allNotes,
     isDarkMode: isDark,
+    SelectLang: SelectLang,
   ));
 }
