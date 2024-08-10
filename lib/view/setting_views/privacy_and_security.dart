@@ -1,6 +1,5 @@
-// privacy_and_security.dart
-
 import 'package:flutter/material.dart';
+import 'package:test1/generated/l10n.dart';
 
 class PrivacyAndSecurityPage extends StatelessWidget {
   const PrivacyAndSecurityPage({super.key});
@@ -9,44 +8,34 @@ class PrivacyAndSecurityPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Privacy and Security'),
+        title: Text(S.of(context).PrivacyAndSecurity),
       ),
-      body: const Padding(
-        padding: EdgeInsets.all(16.0),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Privacy and Security',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                S.of(context).PrivacyAndSecurity,
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Text(
-                'Your privacy and security are important to us. We take the following measures to ensure that your data is protected:',
-                style: TextStyle(fontSize: 16),
+                S.of(context).YourPrivacyAndSecurity,
+                style: const TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 12),
-              BulletPoint(
-                
-                  text:
-                      'Data Encryption: We use industry-standard encryption to protect your data.'),
-              BulletPoint(
-                  text: 'Access Control: No personnel can access your data.'),
-              BulletPoint(
-                  text:
-                      'Regular Audits: We conduct regular security audits to identify and fix vulnerabilities.'),
-              BulletPoint(
-                  text:
-                      'User Control: You have control over your data and can manage your settings at any time.'),
-              SizedBox(height: 20),
-              BulletPoint(
-                  text:
-                      'PIN: We use PIN codes to protect your notes and ensure that only you can access them.'),
-              SizedBox(height: 20),
+              const SizedBox(height: 12),
+              BulletPoint(text: S.of(context).DataEncryption),
+              BulletPoint(text: S.of(context).AccessControl),
+              BulletPoint(text: S.of(context).RegularAudits),
+              BulletPoint(text: S.of(context).UserControl),
+              const SizedBox(height: 20),
+              BulletPoint(text: S.of(context).PIN),
+              const SizedBox(height: 20),
               Text(
-                'For any questions or concerns, please contact our support team.',
-                style: TextStyle(fontSize: 16),
+                S.of(context).ForAnyQuestions,
+                style: const TextStyle(fontSize: 16),
               ),
             ],
           ),

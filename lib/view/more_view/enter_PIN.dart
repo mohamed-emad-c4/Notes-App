@@ -1,7 +1,7 @@
-// enter_PIN.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:test1/generated/l10n.dart';
 import 'package:test1/view/more_view/hide_notes.dart';
 
 class EnterPinScreen extends StatefulWidget {
@@ -25,15 +25,16 @@ class _EnterPinScreenState extends State<EnterPinScreen> {
       // Navigator.push(context, MaterialPageRoute(builder: (context) => HiddenNotesScreen()));
     } else {
       // Show error
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Incorrect PIN')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(S.of(context).IncorrectPIN)), // Text translated
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Enter PIN')),
+      appBar: AppBar(title: Text(S.of(context).Enter)), // Text translated
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -42,9 +43,11 @@ class _EnterPinScreenState extends State<EnterPinScreen> {
             TextField(
               controller: _pinController,
               decoration: InputDecoration(
-                  labelText: 'Enter your PIN',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8))),
+                labelText: S.of(context).EnterPIN, // Text translated
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
               keyboardType: TextInputType.number,
               obscureText: true,
               maxLength: 12,
@@ -52,7 +55,7 @@ class _EnterPinScreenState extends State<EnterPinScreen> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _checkPin,
-              child: const Text('Enter'),
+              child: Text(S.of(context).Enter), // Text translated
             ),
           ],
         ),

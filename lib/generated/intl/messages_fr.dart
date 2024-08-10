@@ -67,6 +67,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "HelpSupport": MessageLookupByLibrary.simpleMessage("Aide et Support"),
         "HiddenNotes": MessageLookupByLibrary.simpleMessage("Notes cachées 🤫"),
         "Instagram": MessageLookupByLibrary.simpleMessage("Instagram"),
+        "LableContentAdd": MessageLookupByLibrary.simpleMessage("Content"),
+        "LableTittleAdd": MessageLookupByLibrary.simpleMessage("Title"),
         "Language": MessageLookupByLibrary.simpleMessage("Langue"),
         "Messenger": MessageLookupByLibrary.simpleMessage("Messenger"),
         "NoHiddenNotesFound":

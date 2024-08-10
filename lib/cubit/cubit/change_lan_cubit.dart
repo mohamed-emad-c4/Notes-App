@@ -6,9 +6,8 @@ part 'change_lan_state.dart';
 
 class ChangeLanCubit extends Cubit<ChangeLanState> {
   ChangeLanCubit() : super(ChangeLanInitial(
-    SelectLang: 'en',
   ));
-  static String SelectLang = 'en';
+   String SelectLang = 'en';
   void changeLan() async {
     final pref = SharePrefrenceClass();
     SelectLang =

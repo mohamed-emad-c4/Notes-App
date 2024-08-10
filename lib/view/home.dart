@@ -33,7 +33,6 @@ class Home extends StatelessWidget {
   List<NoteModel> allNotes;
   bool isDarkMode;
   String SelectLang;
-  String SelectLang1 = 'en';
 
   @override
   Widget build(BuildContext context) {
@@ -82,8 +81,8 @@ class Home extends StatelessWidget {
             child: BlocBuilder<ChangeLanCubit, ChangeLanState>(
               builder: (context, state) {
                 if (state is ChangeLanSuccess) {
-                  SelectLang1 = state.SelectLang;
-                  log('${SelectLang1}');
+                  SelectLang = state.SelectLang;
+                  log(SelectLang);
                   log("$state");
                   return GetMaterialApp(
                     debugShowCheckedModeBanner: false,
@@ -94,7 +93,7 @@ class Home extends StatelessWidget {
                       GlobalCupertinoLocalizations.delegate,
                     ],
                     supportedLocales: S.delegate.supportedLocales,
-                    locale: Locale(SelectLang1),
+                    locale: Locale(state.SelectLang),
                     title: 'Notes Recorder',
                     theme: isDarkMode ? ThemeData.dark() : ThemeData.light(),
                     home: BlocBuilder<UpdateCubit, UpdateState>(
@@ -127,8 +126,7 @@ class Home extends StatelessWidget {
                     ),
                   );
                 } else if (state is ChangeLanInitial) {
-                  SelectLang1 = state.SelectLang;
-                  log('${SelectLang1}');
+                  log(SelectLang);
                   return GetMaterialApp(
                     debugShowCheckedModeBanner: false,
                     localizationsDelegates: const [
@@ -138,7 +136,7 @@ class Home extends StatelessWidget {
                       GlobalCupertinoLocalizations.delegate,
                     ],
                     supportedLocales: S.delegate.supportedLocales,
-                    locale: Locale(SelectLang1),
+                    locale: Locale(SelectLang),
                     title: 'Notes Recorder',
                     theme: isDarkMode ? ThemeData.dark() : ThemeData.light(),
                     home: BlocBuilder<UpdateCubit, UpdateState>(
@@ -209,16 +207,16 @@ class Notes extends StatelessWidget {
                         log('home');
                         BlocProvider.of<HideNotesCubit>(context).chechPIN();
                       },
-                      child: const Text(
-                        'Notes',
-                        style: TextStyle(
+                      child: Text(
+                        S.of(context).Notes,
+                        style: const TextStyle(
                             fontSize: 25, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    const Text(
-                      'Recorder',
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    Text(
+                      S.of(context).Recorder,
+                      style: const TextStyle(
+                          fontSize: 25, fontWeight: FontWeight.bold),
                     ),
                     const Spacer(),
                     const SizedBox(width: 10),
@@ -230,37 +228,38 @@ class Notes extends StatelessWidget {
                             children: [
                               const Icon(Icons.delete, size: 20),
                               const SizedBox(width: 10),
-                              Text("S.of(context).Delete"),
+                              Text(S.of(context).Deleted),
                             ],
                           ),
                         ),
-                        const PopupMenuItem<String>(
+                        PopupMenuItem<String>(
                           value: 'Archived',
                           child: Row(
                             children: [
-                              Icon(Icons.archive, size: 20),
-                              SizedBox(width: 10),
-                              Text('Archived'),
+                              const Icon(Icons.archive, size: 20),
+                              const SizedBox(width: 10),
+                              Text(S.of(context).Archived),
                             ],
                           ),
                         ),
-                        const PopupMenuItem<String>(
+                        PopupMenuItem<String>(
                           value: 'Favorites',
                           child: Row(
                             children: [
-                              Icon(Icons.favorite, color: Colors.red, size: 20),
-                              SizedBox(width: 10),
-                              Text('Favorites'),
+                              const Icon(Icons.favorite,
+                                  color: Colors.red, size: 20),
+                              const SizedBox(width: 10),
+                              Text(S.of(context).Favorites),
                             ],
                           ),
                         ),
-                        const PopupMenuItem<String>(
+                        PopupMenuItem<String>(
                           value: 'Settings',
                           child: Row(
                             children: [
-                              Icon(Icons.settings, size: 20),
-                              SizedBox(width: 10),
-                              Text('Settings'),
+                              const Icon(Icons.settings, size: 20),
+                              const SizedBox(width: 10),
+                              Text(S.of(context).Settings),
                             ],
                           ),
                         )

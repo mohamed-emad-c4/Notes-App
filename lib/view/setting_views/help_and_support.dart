@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:icons_plus/icons_plus.dart';
+import 'package:test1/generated/l10n.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -10,7 +18,7 @@ class HelpAndSupportPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Help & Support'),
+        title: Text(S.of(context).HelpSupport),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -18,28 +26,28 @@ class HelpAndSupportPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Help & Support',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              Text(
+                S.of(context).HelpSupport,
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
-              const Text(
-                'We are here to help! Whether you have a question, encounter an issue, or need further assistance, our support team is ready to assist you.',
-                style: TextStyle(fontSize: 16),
+              Text(
+                S.of(context).WeAreHereToHelp,
+                style: const TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 12),
-              const Text(
-                'Frequently Asked Questions:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Text(
+                S.of(context).FAQ,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              const BulletPoint(text: 'How can I reset my password?'),
-              const BulletPoint(text: 'How to change my email address?'),
-              const BulletPoint(text: 'How to contact customer support?'),
+              BulletPoint(text: S.of(context).ResetPassword),
+              BulletPoint(text: S.of(context).ChangeEmail),
+              BulletPoint(text: S.of(context).ContactSupport),
               const SizedBox(height: 20),
-              const Text(
-                'If you didn\'t find the answer you\'re looking for, feel free to contact us directly:',
-                style: TextStyle(fontSize: 16),
+              Text(
+                S.of(context).DidntFindAnswer,
+                style: const TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 20),
               Row(
@@ -48,15 +56,15 @@ class HelpAndSupportPage extends StatelessWidget {
                   _buildCircleButton(
                     context,
                     icon: Icons.email,
-                    label: 'Email Us',
+                    label: S.of(context).EmailUs,
                     onTap: _sendEmail,
                   ),
                 ],
               ),
               const SizedBox(height: 30),
-              const Text(
-                'Connect with us on social media:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Text(
+                S.of(context).ConnectWithUs,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 20),
               SingleChildScrollView(
@@ -67,7 +75,7 @@ class HelpAndSupportPage extends StatelessWidget {
                     _buildSocialMediaButton(
                       context,
                       icon: AntDesign.whats_app_outline,
-                      label: 'WhatsApp',
+                      label: S.of(context).WhatsApp,
                       color: Colors.green,
                       onTap: _contactViaWhatsApp,
                     ),
@@ -75,7 +83,7 @@ class HelpAndSupportPage extends StatelessWidget {
                     _buildSocialMediaButton(
                       context,
                       icon: Icons.facebook,
-                      label: 'Messenger',
+                      label: S.of(context).Messenger,
                       color: Colors.blue,
                       onTap: _contactViaMessenger,
                     ),
@@ -83,7 +91,7 @@ class HelpAndSupportPage extends StatelessWidget {
                     _buildSocialMediaButton(
                       context,
                       icon: AntDesign.twitter_circle_fill,
-                      label: 'Twitter',
+                      label: S.of(context).Twitter,
                       color: Colors.lightBlue,
                       onTap: _contactViaTwitter,
                     ),
@@ -91,7 +99,7 @@ class HelpAndSupportPage extends StatelessWidget {
                     _buildSocialMediaButton(
                       context,
                       icon: AntDesign.instagram_fill,
-                      label: 'Instagram',
+                      label: S.of(context).Instagram,
                       color: Colors.purple,
                       onTap: _contactViaInstagram,
                     ),
@@ -99,9 +107,9 @@ class HelpAndSupportPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 30),
-              const Text(
-                'We appreciate your feedback and strive to improve our service continuously.',
-                style: TextStyle(fontSize: 16),
+              Text(
+                S.of(context).WeAppreciateFeedback,
+                style: const TextStyle(fontSize: 16),
               ),
             ],
           ),
@@ -109,6 +117,10 @@ class HelpAndSupportPage extends StatelessWidget {
       ),
     );
   }
+
+  // بقية الأكواد كما هي بدون تغيير
+}
+
 
   // Widget for creating circular buttons
   Widget _buildCircleButton(
@@ -184,7 +196,7 @@ class HelpAndSupportPage extends StatelessWidget {
       await launchUrl(emailUri);
     } else {
       // Could not launch the email app
-      print('Could not launch email app');
+       Get.snackbar("Error", "'Could not launch Email \n $emailUri");
     }
   }
 
@@ -213,7 +225,7 @@ void _contactViaWhatsApp() async {
       print('Could not launch WhatsApp');
     }
   } catch (e) {
-    print('Error launching WhatsApp: $e');
+       Get.snackbar("Error", "'Could not launch Instagram \n $e");
   }
 }
 
@@ -226,7 +238,7 @@ void _contactViaWhatsApp() async {
       await launch(messengerUri.toString());
     } else {
       // Could not launch Messenger
-      print('Could not launch Messenger');
+       Get.snackbar("Error", "'Could not launch Messenger");
     }
   }
 
@@ -237,7 +249,8 @@ void _contactViaWhatsApp() async {
       await launch(twitterUri.toString());
     } else {
       // Could not launch Twitter
-      print('Could not launch Twitter');
+             Get.snackbar("Error", "'Could not launch Twitter");
+
     }
   }
 
@@ -246,10 +259,11 @@ void _contactViaWhatsApp() async {
     if (await canLaunch(instagramUri.toString())) {
       await launch(instagramUri.toString());
     } else {
-      print('Could not launch Instagram');
+       Get.snackbar("Error", "'Could not launch Instagram");
+     
     }
   }
-}
+
 
 class BulletPoint extends StatelessWidget {
   final String text;

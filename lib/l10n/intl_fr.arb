@@ -6,6 +6,8 @@
     "Favorites": "Favoris",
     "Settings": "Paramètres",
     "AddNote": "Ajouter une note",
+    "LableTittleAdd": "Title",
+    "LableContentAdd": "Content",
     "Done": "Fait",
     "AddedToArchive": "Ajouté à l''archive",
     "Error": "Erreur",

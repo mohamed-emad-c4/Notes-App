@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:test1/generated/l10n.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutUsPage extends StatelessWidget {
@@ -9,7 +11,7 @@ class AboutUsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('About Us'),
+        title: Text(S.of(context).AboutUs),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -17,33 +19,33 @@ class AboutUsPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'About Us',
+              Text(
+                S.of(context).AboutUs,
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Welcome to our app! We are dedicated to providing you with the best service and experience. Our team is committed to continuous improvement and innovation to meet your needs.',
+              Text(
+                S.of(context).WelcomeMessage,
                 style: TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 20),
-              const Text(
-                'Our Mission:',
+              Text(
+                S.of(context).OurMission,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Our mission is to deliver high-quality solutions that improve your daily life and provide a seamless user experience.',
+              Text(
+                S.of(context).OurMission,
                 style: TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 20),
-              const Text(
-                'Contact Us:',
+              Text(
+                S.of(context).ContactUs,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'If you have any questions, feedback, or just want to get in touch, feel free to contact us.',
+              Text(
+                S.of(context).QuestionsFeedback,
                 style: TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 20),
@@ -53,7 +55,7 @@ class AboutUsPage extends StatelessWidget {
                   _buildSocialMediaButton(
                     context,
                     icon: Icons.email,
-                    label: 'Email Us',
+                    label: S.of(context).EmailUs,
                     onTap: () {
                       _sendEmail();
                     },
@@ -61,8 +63,8 @@ class AboutUsPage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 30),
-              const Text(
-                'Follow us on social media:',
+              Text(
+                S.of(context).FollowUs,
                 style: TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 20),
@@ -72,7 +74,7 @@ class AboutUsPage extends StatelessWidget {
                   _buildSocialMediaButton(
                     context,
                     icon: Icons.facebook,
-                    label: 'Facebook',
+                    label: S.of(context).Facebook,
                     onTap: () {
                       _launchURL('https://www.facebook.com/profile.php?id=61563607514517');
                     },
@@ -81,7 +83,7 @@ class AboutUsPage extends StatelessWidget {
                   _buildSocialMediaButton(
                     context,
                     icon: AntDesign.twitter_circle_fill,
-                    label: 'Twitter',
+                    label: S.of(context).Twitter,
                     onTap: () {
                       _launchURL('https://x.com/zemax_c4');
                     },
@@ -90,7 +92,7 @@ class AboutUsPage extends StatelessWidget {
                   _buildSocialMediaButton(
                     context,
                     icon: AntDesign.instagram_fill,
-                    label: 'Instagram',
+                    label: S.of(context).Instagram,
                     onTap: () {
                       _launchURL('https://www.instagram.com/flutternexus/');
                     },
@@ -104,7 +106,6 @@ class AboutUsPage extends StatelessWidget {
     );
   }
 
-  // Widget for creating circular buttons
   Widget _buildSocialMediaButton(BuildContext context,
       {required IconData icon,
       required String label,
@@ -132,33 +133,25 @@ class AboutUsPage extends StatelessWidget {
     );
   }
 
-  // Launch URL method
   void _launchURL(String url) async {
     final Uri uri = Uri.parse(url);
     if (await canLaunch(uri.toString())) {
       await launch(uri.toString());
     } else {
-      // Could not launch URL
-      print('Could not launch $url');
+     Get.snackbar("Error", "Could not launch");
     }
   }
 
-  // Phone call method
-
-
-  // Send email method
   void _sendEmail() async {
     final Uri emailUri = Uri(
       scheme: 'mailto',
       path: 'zemax.c4@gmail.com',
       query:
-          'subject=Help%20Needed&body=Hi%20there,%0D%0A%0D%0A', // Add more query parameters as needed
+          'subject=Help%20Needed&body=Hi%20there,%0D%0A%0D%0A',
     );
     if (await canLaunch(emailUri.toString())) {
       await launch(emailUri.toString());
     } else {
-      // Could not launch the email app
-      print('Could not launch email app');
-    }
+ Get.snackbar("Error", "Could not launch");    }
   }
 }

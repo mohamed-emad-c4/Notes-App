@@ -50,10 +50,10 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `Notes`
+  /// `Notes `
   String get Notes {
     return Intl.message(
-      'Notes',
+      'Notes ',
       name: 'Notes',
       desc: '',
       args: [],
@@ -115,6 +115,36 @@ class S {
     return Intl.message(
       'Add Note',
       name: 'AddNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Title`
+  String get LableTittleAdd {
+    return Intl.message(
+      'Title',
+      name: 'LableTittleAdd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Content`
+  String get LableContentAdd {
+    return Intl.message(
+      'Content',
+      name: 'LableContentAdd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Note`
+  String get EditNote {
+    return Intl.message(
+      'Edit Note',
+      name: 'EditNote',
       desc: '',
       args: [],
     );

@@ -4,8 +4,7 @@ part of 'change_lan_cubit.dart';
 sealed class ChangeLanState {}
 
 final class ChangeLanInitial extends ChangeLanState {
-  ChangeLanInitial({ required this.SelectLang});
-  String SelectLang ;
+  ChangeLanInitial();
 }
 final class ChangeLanSuccess extends ChangeLanState {
   ChangeLanSuccess({ required this.SelectLang});

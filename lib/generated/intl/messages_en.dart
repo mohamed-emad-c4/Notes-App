@@ -57,6 +57,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "If you didn\'t find the answer you\'re looking for, feel free to contact us directly:"),
         "Dislike": MessageLookupByLibrary.simpleMessage("Dislike"),
         "Done": MessageLookupByLibrary.simpleMessage("Done"),
+        "EditNote": MessageLookupByLibrary.simpleMessage("Edit Note"),
         "EmailUs": MessageLookupByLibrary.simpleMessage("Email Us"),
         "EnableNotifications":
             MessageLookupByLibrary.simpleMessage("Enable Notifications"),
@@ -84,6 +85,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "HiddenNotes": MessageLookupByLibrary.simpleMessage("Hidden Notes 🤫"),
         "IncorrectPIN": MessageLookupByLibrary.simpleMessage("Incorrect PIN"),
         "Instagram": MessageLookupByLibrary.simpleMessage("Instagram"),
+        "LableContentAdd": MessageLookupByLibrary.simpleMessage("Content"),
+        "LableTittleAdd": MessageLookupByLibrary.simpleMessage("Title"),
         "Language": MessageLookupByLibrary.simpleMessage("Language"),
         "Messenger": MessageLookupByLibrary.simpleMessage("Messenger"),
         "NoArchivedNotesAvailable":
@@ -100,7 +103,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Note added successfully!"),
         "NoteSavedSuccessfully":
             MessageLookupByLibrary.simpleMessage("Note saved successfully"),
-        "Notes": MessageLookupByLibrary.simpleMessage("Notes"),
+        "Notes": MessageLookupByLibrary.simpleMessage("Notes "),
         "OurMission": MessageLookupByLibrary.simpleMessage(
             "Our mission is to deliver high-quality solutions that improve your daily life and provide a seamless user experience."),
         "PIN": MessageLookupByLibrary.simpleMessage(

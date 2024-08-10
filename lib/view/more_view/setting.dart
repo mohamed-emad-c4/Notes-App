@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:test1/cubit/cubit/change_lan_cubit.dart';
 import 'package:test1/cubit/cubit/setting_cubit.dart';
 import 'package:test1/cubit/update_cubit.dart';
+import 'package:test1/generated/l10n.dart';
 import 'package:test1/shared_prefrence.dart';
 import 'package:test1/view/setting_views/about_us.dart';
 import 'package:test1/view/setting_views/help_and_support.dart';
@@ -20,7 +21,7 @@ class Setting extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text(S.of(context).Settings),
         centerTitle: true,
       ),
       body: SettingsListState(isDarkMode: isDarkMode),
@@ -31,7 +32,7 @@ class Setting extends StatelessWidget {
 class SettingsListState extends StatefulWidget {
   final bool isDarkMode;
 
-  const SettingsListState({super.key, required this.isDarkMode, required});
+  const SettingsListState({super.key, required this.isDarkMode});
 
   @override
   _SettingsListStateState createState() => _SettingsListStateState();
@@ -51,8 +52,6 @@ class _SettingsListStateState extends State<SettingsListState> {
   }
 
   Future<void> _loadSettings() async {
-    // Load settings from shared preferences or another source if needed
-    // For example, you can load the previous state of notifications, language, etc.
     notificationsEnabled = await SharePrefrenceClass()
         .getVlue(key: 'notificationsEnabled', defaultValue: true);
     selectedLanguage = await SharePrefrenceClass()
@@ -72,8 +71,6 @@ class _SettingsListStateState extends State<SettingsListState> {
         _buildLanguageTile(context),
         const Divider(),
         _buildNotificationsTile(context),
-        // const Divider(),
-        // _buildVolumeTile(context),
         const Divider(),
         _buildPrivacyTile(context),
         const Divider(),
@@ -88,7 +85,7 @@ class _SettingsListStateState extends State<SettingsListState> {
   ListTile _buildDarkModeTile(BuildContext context) {
     return ListTile(
       leading: const Icon(Icons.brightness_6),
-      title: const Text('Dark Mode'),
+      title: Text(S.of(context).DarkMode),
       trailing: BlocConsumer<SettingCubit, SettingState>(
         listener: (context, state) {
           if (state is UpdateSettingS) {
@@ -116,11 +113,10 @@ class _SettingsListStateState extends State<SettingsListState> {
   }
 
   // Language Dropdown Tile
-  // Language Dropdown Tile
   ListTile _buildLanguageTile(BuildContext context) {
     return ListTile(
       leading: const Icon(Icons.language),
-      title: Text('Language'.tr), // Use translation
+      title: Text(S.of(context).Language), // Use translation
       trailing: BlocConsumer<SettingCubit, SettingState>(
         listener: (context, state) {
           if (state is UpdateSettingS) {
@@ -136,8 +132,9 @@ class _SettingsListStateState extends State<SettingsListState> {
               });
               await SharePrefrenceClass().saveValueString(
                   value: selectedLanguage, key: 'selectedLanguage');
-
- BlocProvider.of<ChangeLanCubit>(context).changeLan();            },
+              Get.snackbar("changed", "Restart app to see changes");
+              BlocProvider.of<ChangeLanCubit>(context).changeLan();
+            },
             items: <String>['en', 'ar', 'fr']
                 .map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
@@ -155,7 +152,7 @@ class _SettingsListStateState extends State<SettingsListState> {
   ListTile _buildNotificationsTile(BuildContext context) {
     return ListTile(
       leading: const Icon(Icons.notifications),
-      title: const Text('Enable Notifications'),
+      title: Text(S.of(context).EnableNotifications),
       trailing: BlocConsumer<SettingCubit, SettingState>(
         listener: (context, state) {
           if (state is UpdateSettingS) {
@@ -169,9 +166,8 @@ class _SettingsListStateState extends State<SettingsListState> {
               notificationsEnabled = value;
               await SharePrefrenceClass().saveValuebool(
                   value: notificationsEnabled, key: 'notificationsEnabled');
-                  
+
               setState(() {});
-             
             },
           );
         },
@@ -179,45 +175,12 @@ class _SettingsListStateState extends State<SettingsListState> {
     );
   }
 
-  // Volume Slider Tile
-  // ListTile _buildVolumeTile(BuildContext context) {
-  //   return ListTile(
-  //     leading: const Icon(Icons.volume_up),
-  //     title: const Text('Volume'),
-  //     subtitle: BlocConsumer<SettingCubit, SettingState>(
-  //       listener: (context, state) {
-  //         if (state is UpdateSettingS) {
-  //           // Handle any updates here if needed
-  //         }
-  //       },
-  //       builder: (context, state) {
-  //         return Slider(
-  //           value: volume.toDouble(),
-  //           min: 0,
-  //           max: 100,
-  //           divisions: 10,
-  //           label: '$volume',
-  //           onChanged: (value) async {
-  //             volume = value.toInt();
-  //             await SharePrefrenceClass()
-  //                 .saveValueint(value: volume, key: 'volume');
-  //             log(value.toString());
-  //             setState(() {});
-  //             BlocProvider.of<SettingCubit>(context).UpdateSettingF();
-  //           },
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
-
   // Privacy and Security Tile
   ListTile _buildPrivacyTile(BuildContext context) {
     return ListTile(
       leading: const Icon(Icons.lock),
-      title: const Text('Privacy and Security'),
+      title: Text(S.of(context).PrivacyAndSecurity),
       onTap: () {
-        // Add your navigation logic here
         Get.to(const PrivacyAndSecurityPage());
       },
     );
@@ -227,9 +190,8 @@ class _SettingsListStateState extends State<SettingsListState> {
   ListTile _buildHelpTile(BuildContext context) {
     return ListTile(
       leading: const Icon(Icons.help),
-      title: const Text('Help & Support'),
+      title: Text(S.of(context).HelpSupport),
       onTap: () {
-        // Add your navigation logic here
         Get.to(const HelpAndSupportPage());
       },
     );
@@ -239,7 +201,7 @@ class _SettingsListStateState extends State<SettingsListState> {
   ListTile _buildAboutTile(BuildContext context) {
     return ListTile(
       leading: const Icon(Icons.info),
-      title: const Text('About Us'),
+      title: Text(S.of(context).AboutUs),
       onTap: () {
         Get.to(const AboutUsPage());
       },

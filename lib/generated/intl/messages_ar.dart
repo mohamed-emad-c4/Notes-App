@@ -44,7 +44,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "DidntFindAnswer": MessageLookupByLibrary.simpleMessage(
             "لو مش لاقي الإجابة اللي بتدور عليها، تواصل معانا مباشرة:"),
         "Done": MessageLookupByLibrary.simpleMessage("تم"),
-        "EmailUs": MessageLookupByLibrary.simpleMessage("بعتلنا إيميل"),
+        "EmailUs": MessageLookupByLibrary.simpleMessage("ابعتلنا اميل"),
         "EnableNotifications":
             MessageLookupByLibrary.simpleMessage("تفعيل الإشعارات"),
         "Error": MessageLookupByLibrary.simpleMessage("خطأ"),
@@ -63,6 +63,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "HelpSupport": MessageLookupByLibrary.simpleMessage("المساعدة والدعم"),
         "HiddenNotes": MessageLookupByLibrary.simpleMessage("ملاحظات مخفية 🤫"),
         "Instagram": MessageLookupByLibrary.simpleMessage("إنستجرام"),
+        "LableContentAdd": MessageLookupByLibrary.simpleMessage("المحتوى"),
+        "LableTittleAdd": MessageLookupByLibrary.simpleMessage("العنوان"),
         "Language": MessageLookupByLibrary.simpleMessage("اللغة"),
         "Messenger": MessageLookupByLibrary.simpleMessage("ماسنجر"),
         "NoHiddenNotesFound":
@@ -71,7 +73,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تم إضافة الملاحظة بنجاح!"),
         "NoteSavedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم حفظ الملاحظة بنجاح"),
-        "Notes": MessageLookupByLibrary.simpleMessage("الملاحظات"),
+        "Notes": MessageLookupByLibrary.simpleMessage("  مسجل"),
         "OurMission": MessageLookupByLibrary.simpleMessage(
             "مهمتنا هي تقديم حلول عالية الجودة لتحسين حياتك اليومية وتوفير تجربة مستخدم سلسة."),
         "PIN": MessageLookupByLibrary.simpleMessage(
@@ -82,7 +84,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("الخصوصية والأمان"),
         "QuestionsFeedback": MessageLookupByLibrary.simpleMessage(
             "لو عندك أي أسئلة، ملاحظات، أو حابب تتواصل معانا، ما تترددش تتصل بينا."),
-        "Recorder": MessageLookupByLibrary.simpleMessage("مسجل"),
+        "Recorder": MessageLookupByLibrary.simpleMessage(" الملاحظات "),
         "RegularAudits": MessageLookupByLibrary.simpleMessage(
             "التدقيق المنتظم: بنقوم بإجراء تدقيق أمني بانتظام علشان نحدد ونصلح الثغرات."),
         "ResetPassword": MessageLookupByLibrary.simpleMessage(

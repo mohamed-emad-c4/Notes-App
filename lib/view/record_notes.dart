@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test1/cubit/hide_cubit_cubit.dart';
 import 'package:test1/cubit/update_cubit.dart';
+import 'package:test1/generated/l10n.dart';
 import 'package:test1/models/note.dart';
 
 class RecordNotes extends StatelessWidget {
   RecordNotes({super.key, required this.index, required this.allNotes});
   int index;
   List<NoteModel> allNotes;
+
   Color getColor() {
     if (allNotes[index].isFavorite && allNotes[index].archived) {
       return Colors.amber.withOpacity(0.7);
@@ -45,7 +47,7 @@ class RecordNotes extends StatelessWidget {
                   const Spacer(),
                   PopupMenuButton<String>(
                     itemBuilder: (context) => [
-                      const PopupMenuItem<String>(
+                      PopupMenuItem<String>(
                         value: 'Deleted',
                         child: Row(
                           children: [
@@ -56,11 +58,11 @@ class RecordNotes extends StatelessWidget {
                             SizedBox(
                               width: 10,
                             ),
-                            Text('Deleted'),
+                            Text(S.of(context).Deleted),
                           ],
                         ),
                       ),
-                      const PopupMenuItem<String>(
+                      PopupMenuItem<String>(
                         value: 'Archived',
                         child: Row(
                           children: [
@@ -71,11 +73,11 @@ class RecordNotes extends StatelessWidget {
                             SizedBox(
                               width: 10,
                             ),
-                            Text('Archived'),
+                            Text(S.of(context).Archived),
                           ],
                         ),
                       ),
-                      const PopupMenuItem<String>(
+                      PopupMenuItem<String>(
                         value: 'Favorites',
                         child: Row(
                           children: [
@@ -87,7 +89,7 @@ class RecordNotes extends StatelessWidget {
                             SizedBox(
                               width: 10,
                             ),
-                            Text('Favorites'),
+                            Text(S.of(context).Favorites),
                           ],
                         ),
                       ),
@@ -96,7 +98,6 @@ class RecordNotes extends StatelessWidget {
                       if (value == 'Deleted') {
                         BlocProvider.of<UpdateCubit>(context)
                             .AddNoteToDeleted(allNotes: allNotes, index: index);
-
                         BlocProvider.of<UpdateCubit>(context).updateNotes();
                       } else if (value == 'Archived') {
                         BlocProvider.of<UpdateCubit>(context)
@@ -141,6 +142,7 @@ class RecordNotesHide extends StatelessWidget {
   RecordNotesHide({super.key, required this.index, required this.allNotes});
   int index;
   List<NoteModel> allNotes;
+
   Color getColor() {
     if (allNotes[index].isFavorite && allNotes[index].archived) {
       return Colors.amber.withOpacity(0.7);
@@ -178,7 +180,7 @@ class RecordNotesHide extends StatelessWidget {
                   const Spacer(),
                   PopupMenuButton<String>(
                     itemBuilder: (context) => [
-                      const PopupMenuItem<String>(
+                      PopupMenuItem<String>(
                         value: 'Deleted',
                         child: Row(
                           children: [
@@ -189,7 +191,7 @@ class RecordNotesHide extends StatelessWidget {
                             SizedBox(
                               width: 10,
                             ),
-                            Text('Deleted'),
+                            Text(S.of(context).Deleted),
                           ],
                         ),
                       ),
@@ -197,9 +199,7 @@ class RecordNotesHide extends StatelessWidget {
                     onSelected: (value) {
                       if (value == 'Deleted') {
                         BlocProvider.of<HideCubitCubit>(context)
-                            .deletNote( allNotes[index].id!);
-
-                       
+                            .deletNote(allNotes[index].id!);
                       }
                     },
                   ),
