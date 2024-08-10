@@ -62,9 +62,8 @@ class HiddenNotesScreen extends StatelessWidget {
                 onPressed: () async {
                   Get.to(AddHideNote(allNotes: const []));
                   // Optionally, show a success message
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(S.of(context).NoteAddedSuccessfully)),
-                  );
+                
+                  
                 },
                 child: const Icon(Icons.add),
               ),

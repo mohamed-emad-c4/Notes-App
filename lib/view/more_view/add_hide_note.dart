@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:test1/cubit/update_cubit.dart';
+import 'package:test1/generated/l10n.dart';
 import 'package:test1/models/note.dart';
 
 import '../../DB/hide.dart';
@@ -23,7 +24,7 @@ class _AddHideNoteState extends State<AddHideNote> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Note'),
+        title: Text(S.of(context).AddNote), // Text translated
         centerTitle: true,
         backgroundColor: Colors.teal,
         elevation: 0,
@@ -40,7 +41,7 @@ class _AddHideNoteState extends State<AddHideNote> {
               TextField(
                 controller: _titleController,
                 decoration: InputDecoration(
-                  labelText: 'Title',
+                  labelText: S.of(context).LableTittleAdd, // Text translated
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -54,7 +55,7 @@ class _AddHideNoteState extends State<AddHideNote> {
               TextField(
                 controller: _contentController,
                 decoration: InputDecoration(
-                  labelText: 'Content',
+                  labelText: S.of(context).LableContentAdd, // Text translated
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -64,8 +65,6 @@ class _AddHideNoteState extends State<AddHideNote> {
                 maxLines: 6,
                 style: const TextStyle(fontSize: 16),
               ),
-              const SizedBox(height: 24),
-           
               const SizedBox(height: 24),
               Center(
                 child: ElevatedButton(
@@ -85,11 +84,11 @@ class _AddHideNoteState extends State<AddHideNote> {
                   ),
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.5,
-                    child: const Text(
-                      'Save',
+                    child: Text(
+                      S.of(context).Save, // Text translated
                       textAlign: TextAlign.center,
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -116,15 +115,15 @@ class _AddHideNoteState extends State<AddHideNote> {
       );
       await Hide.instance.create(newNote);
       Get.snackbar(
-        'Success',
-        'Note saved successfully',
+        S.of(context).Success, // Text translated
+        S.of(context).NoteSavedSuccessfully, // Text translated
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.green.withOpacity(0.3),
       );
     } else {
       Get.snackbar(
-        'Error',
-        'Please enter a title and content',
+        S.of(context).Error, // Text translated
+        S.of(context).PleaseEnterTitleAndContent, // Text translated
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.red.withOpacity(0.3),
       );

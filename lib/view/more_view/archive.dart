@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:test1/DB/database.dart';
 import 'package:test1/cubit/cubit/cubit/archive_update_cubit.dart';
 import 'package:test1/cubit/update_cubit.dart';
+import 'package:test1/generated/l10n.dart';
 import 'package:test1/models/note.dart';
 
 // Function to get the list of archived notes
@@ -29,7 +30,7 @@ class ArchivedList extends StatelessWidget {
         if (state is ArchiveUpdate || state is ArchiveUpdateInitial) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Archived Notes'),
+              title: Text(S.of(context).ArchivedNotes), // Text translated
               centerTitle: true,
               backgroundColor: Colors.teal,
             ),
@@ -43,15 +44,15 @@ class ArchivedList extends StatelessWidget {
                 } else if (snapshot.hasError) {
                   return Center(
                     child: Text(
-                      'Error: ${snapshot.error}',
+                      '${S.of(context).Error}: ${snapshot.error}', // Text translated
                       style: const TextStyle(fontSize: 18),
                     ),
                   );
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(
+                  return Center(
                     child: Text(
-                      'No Archived Notes Available',
-                      style: TextStyle(fontSize: 18),
+                      S.of(context).NoArchivedNotesAvailable, // Text translated
+                      style: const TextStyle(fontSize: 18),
                     ),
                   );
                 } else {
@@ -65,8 +66,7 @@ class ArchivedList extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final note = archivedNotesReversed[index];
                       return Dismissible(
-                        key:
-                            Key(note.id.toString()), // Unique key for each note
+                        key: Key(note.id.toString()), // Unique key for each note
                         direction: DismissDirection.horizontal,
                         onDismissed: (direction) {
                           if (direction == DismissDirection.startToEnd) {
@@ -74,7 +74,7 @@ class ArchivedList extends StatelessWidget {
                                 .AddNoteToFavorit(
                                     allNotes: archivedNotesReversed,
                                     index: index);
-                            Get.snackbar('Added to favorites', 'Successfully');
+                            Get.snackbar(S.of(context).AddedToFavorites, S.of(context).NoteAddedSuccessfully); // Translated
                           } else if (direction == DismissDirection.endToStart) {
                             BlocProvider.of<ArchiveUpdateCubit>(context)
                                 .AddNoteToDeleted(
@@ -82,7 +82,7 @@ class ArchivedList extends StatelessWidget {
                                     index: index);
 
                             BlocProvider.of<UpdateCubit>(context).updateNotes();
-                            Get.snackbar('Added to deleted', 'Successfully');
+                            Get.snackbar(S.of(context).AddedToDeleted, S.of(context).NoteAddedSuccessfully); // Translated
                           }
                         },
                         background: Container(
@@ -92,8 +92,7 @@ class ArchivedList extends StatelessWidget {
                           ),
                           alignment: Alignment.centerLeft,
                           padding: const EdgeInsets.symmetric(horizontal: 3),
-                          child:
-                              const Icon(Icons.favorite, color: Colors.white),
+                          child: Icon(Icons.favorite, color: Colors.white),
                         ),
                         secondaryBackground: Container(
                           alignment: Alignment.centerRight,
@@ -102,7 +101,7 @@ class ArchivedList extends StatelessWidget {
                             color: Colors.red,
                           ),
                           padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: const Icon(Icons.delete, color: Colors.white),
+                          child: Icon(Icons.delete, color: Colors.white),
                         ),
                         child: Card(
                           color: Colors.green.withOpacity(0.7),
@@ -129,7 +128,7 @@ class ArchivedList extends StatelessWidget {
                                       const Spacer(),
                                       PopupMenuButton<String>(
                                         itemBuilder: (context) => [
-                                          const PopupMenuItem<String>(
+                                          PopupMenuItem<String>(
                                             value: 'Deleted',
                                             child: Row(
                                               children: [
@@ -140,11 +139,11 @@ class ArchivedList extends StatelessWidget {
                                                 SizedBox(
                                                   width: 10,
                                                 ),
-                                                Text('Deleted'),
+                                                Text(S.of(context).Deleted), // Translated
                                               ],
                                             ),
                                           ),
-                                          const PopupMenuItem<String>(
+                                          PopupMenuItem<String>(
                                             value: 'Favorites',
                                             child: Row(
                                               children: [
@@ -155,11 +154,11 @@ class ArchivedList extends StatelessWidget {
                                                 SizedBox(
                                                   width: 10,
                                                 ),
-                                                Text('Favorites'),
+                                                Text(S.of(context).Favorite), // Translated
                                               ],
                                             ),
                                           ),
-                                          const PopupMenuItem<String>(
+                                          PopupMenuItem<String>(
                                             value: 'Unarchived',
                                             child: Row(
                                               children: [
@@ -170,7 +169,7 @@ class ArchivedList extends StatelessWidget {
                                                 SizedBox(
                                                   width: 10,
                                                 ),
-                                                Text('Unarchived'),
+                                                Text(S.of(context).Unarchived), // Translated
                                               ],
                                             ),
                                           ),
@@ -187,6 +186,7 @@ class ArchivedList extends StatelessWidget {
                                             BlocProvider.of<UpdateCubit>(
                                                     context)
                                                 .updateNotes();
+                                            Get.snackbar(S.of(context).AddedToDeleted, S.of(context).NoteAddedSuccessfully); // Translated
                                           } else if (value == 'Unarchived') {
                                             BlocProvider.of<ArchiveUpdateCubit>(
                                                     context)
@@ -197,6 +197,7 @@ class ArchivedList extends StatelessWidget {
                                             BlocProvider.of<UpdateCubit>(
                                                     context)
                                                 .updateNotes();
+                                            Get.snackbar("", S.of(context).NoteAddedSuccessfully); // Translated
                                           } else if (value == 'Favorites') {
                                             BlocProvider.of<ArchiveUpdateCubit>(
                                                     context)
@@ -207,6 +208,7 @@ class ArchivedList extends StatelessWidget {
                                             BlocProvider.of<UpdateCubit>(
                                                     context)
                                                 .updateNotes();
+                                            Get.snackbar(S.of(context).AddedToFavorites, S.of(context).NoteAddedSuccessfully); // Translated
                                           }
                                         },
                                       ),
@@ -247,59 +249,13 @@ class ArchivedList extends StatelessWidget {
             ),
           );
         } else {
-          return const Center(
+          return Center(
             child: Text(
-              'No Archived Notes Available',
-              style: TextStyle(fontSize: 18),
+              S.of(context).NoArchivedNotesAvailable, // Translated
+              style: const TextStyle(fontSize: 18),
             ),
           );
         }
-      },
-    );
-  }
-
-  // Add a note to favorites
-  void _addNoteToFavorites(Map<String, dynamic> note) async {
-    try {
-      final newNote = NoteModel.fromJson(note);
-      newNote.isFavorite = !newNote.isFavorite;
-      await NotesDatabase.instance.update(newNote);
-      Get.snackbar("Done", "Added to favorites");
-    } catch (e) {
-      Get.snackbar("Error", "Failed to add to favorites");
-    }
-  }
-
-  // Delete an archived note
-  void _deleteArchivedNote(int id) async {
-    try {
-      await NotesDatabase.instance.delete(id);
-      Get.snackbar("Done", "Deleted from archive");
-    } catch (e) {
-      Get.snackbar("Error", "Failed to delete note");
-    }
-  }
-
-  // Show note details in a dialog
-  void _showNoteDetails(BuildContext context, Map<String, dynamic> note) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(note['title']),
-          content: Text(note['content']),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                'Close',
-                style: TextStyle(color: Colors.teal),
-              ),
-            ),
-          ],
-        );
       },
     );
   }

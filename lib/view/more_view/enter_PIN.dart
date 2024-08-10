@@ -43,7 +43,7 @@ class _EnterPinScreenState extends State<EnterPinScreen> {
             TextField(
               controller: _pinController,
               decoration: InputDecoration(
-                labelText: S.of(context).EnterPIN, // Text translated
+                labelText: S.of(context).Enter12DigitPIN, // Text translated
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),

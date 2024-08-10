@@ -80,6 +80,16 @@ class S {
     );
   }
 
+  /// `Premanent Delete`
+  String get Deletedf {
+    return Intl.message(
+      'Premanent Delete',
+      name: 'Deletedf',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Archived`
   String get Archived {
     return Intl.message(

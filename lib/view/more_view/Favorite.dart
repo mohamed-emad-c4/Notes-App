@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:test1/DB/database.dart';
 import 'package:test1/cubit/favorit_update_cubit.dart';
 import 'package:test1/cubit/update_cubit.dart';
+import 'package:test1/generated/l10n.dart';
 import 'package:test1/models/note.dart';
 
 Future<List<NoteModel>> getFavoriteList() async {
@@ -24,7 +25,7 @@ class FavoriteList extends StatelessWidget {
       if (state is FavoritUpdate || state is FavoritUpdateInitial) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Favorite Notes'),
+            title: Text(S.of(context).FavoriteNotes), // Text translated
             centerTitle: true,
           ),
           body: FutureBuilder<List<NoteModel>>(
@@ -37,15 +38,15 @@ class FavoriteList extends StatelessWidget {
               } else if (snapshot.hasError) {
                 return Center(
                   child: Text(
-                    'Error: ${snapshot.error}',
+                    '${S.of(context).Error}: ${snapshot.error}', // Text translated
                     style: const TextStyle(fontSize: 18),
                   ),
                 );
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(
+                return Center(
                   child: Text(
-                    'No Favorite Notes Available',
-                    style: TextStyle(fontSize: 18),
+                    S.of(context).NoFavoriteNotesAvailable, // Text translated
+                    style: const TextStyle(fontSize: 18),
                   ),
                 );
               } else {
@@ -63,7 +64,10 @@ class FavoriteList extends StatelessWidget {
                       direction: DismissDirection.horizontal,
                       onDismissed: (direction) {
                         if (direction == DismissDirection.startToEnd) {
-                        } else if (direction == DismissDirection.endToStart) {}
+                          // Archive action
+                        } else if (direction == DismissDirection.endToStart) {
+                          // Delete action
+                        }
                       },
                       background: Container(
                         decoration: BoxDecoration(
@@ -72,7 +76,7 @@ class FavoriteList extends StatelessWidget {
                         ),
                         alignment: Alignment.centerLeft,
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: const Icon(Icons.archive, color: Colors.white),
+                        child: Icon(Icons.archive, color: Colors.white),
                       ),
                       secondaryBackground: Container(
                         alignment: Alignment.centerRight,
@@ -81,7 +85,7 @@ class FavoriteList extends StatelessWidget {
                           color: Colors.red,
                         ),
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: const Icon(Icons.delete, color: Colors.white),
+                        child: Icon(Icons.delete, color: Colors.white),
                       ),
                       child: Card(
                         color: const Color.fromARGB(255, 172, 41, 54),
@@ -107,7 +111,7 @@ class FavoriteList extends StatelessWidget {
                                     const Spacer(),
                                     PopupMenuButton<String>(
                                       itemBuilder: (context) => [
-                                        const PopupMenuItem<String>(
+                                        PopupMenuItem<String>(
                                           value: 'Deleted',
                                           child: Row(
                                             children: [
@@ -118,11 +122,11 @@ class FavoriteList extends StatelessWidget {
                                               SizedBox(
                                                 width: 10,
                                               ),
-                                              Text('Deleted'),
+                                              Text(S.of(context).Deleted), // Text translated
                                             ],
                                           ),
                                         ),
-                                        const PopupMenuItem<String>(
+                                        PopupMenuItem<String>(
                                           value: 'Archived',
                                           child: Row(
                                             children: [
@@ -133,11 +137,11 @@ class FavoriteList extends StatelessWidget {
                                               SizedBox(
                                                 width: 10,
                                               ),
-                                              Text('Archived'),
+                                              Text(S.of(context).Archived), // Text translated
                                             ],
                                           ),
                                         ),
-                                        const PopupMenuItem<String>(
+                                        PopupMenuItem<String>(
                                           value: 'Disliked',
                                           child: Row(
                                             children: [
@@ -146,7 +150,7 @@ class FavoriteList extends StatelessWidget {
                                               SizedBox(
                                                 width: 10,
                                               ),
-                                              Text('Dislike'),
+                                              Text(S.of(context).Dislike), // Text translated
                                             ],
                                           ),
                                         ),
@@ -168,7 +172,6 @@ class FavoriteList extends StatelessWidget {
                                                   index: index);
                                           BlocProvider.of<UpdateCubit>(context)
                                               .updateNotes();
-                                        } else if (value == 'Favorites') {
                                         } else if (value == 'Disliked') {
                                           BlocProvider.of<FavoritUpdateCubit>(
                                                   context)

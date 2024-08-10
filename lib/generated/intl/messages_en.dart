@@ -53,6 +53,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "DeletedFromArchive":
             MessageLookupByLibrary.simpleMessage("Deleted from archive"),
         "DeletedNotes": MessageLookupByLibrary.simpleMessage("Deleted Notes"),
+        "Deletedf": MessageLookupByLibrary.simpleMessage("Premanent Delete"),
         "DidntFindAnswer": MessageLookupByLibrary.simpleMessage(
             "If you didn\'t find the answer you\'re looking for, feel free to contact us directly:"),
         "Dislike": MessageLookupByLibrary.simpleMessage("Dislike"),

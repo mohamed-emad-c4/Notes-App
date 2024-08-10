@@ -68,42 +68,42 @@ class _AddNoteState extends State<AddNote> {
                 style: const TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 24),
-              Row(
-                children: [
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Checkbox(
-                          value: _isFavorite,
-                          onChanged: (value) {
-                            setState(() {
-                              _isFavorite = value ?? false;
-                            });
-                          },
-                          activeColor: Colors.teal,
-                        ),
-                        Text(S.of(context).Favorite, style: const TextStyle(fontSize: 16)),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Checkbox(
-                          value: _isArchived,
-                          onChanged: (value) {
-                            setState(() {
-                              _isArchived = value ?? false;
-                            });
-                          },
-                          activeColor: Colors.teal,
-                        ),
-                        Text(S.of(context).Archive, style: const TextStyle(fontSize: 16)),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: Row(
+              //         children: [
+              //           Checkbox(
+              //             value: _isFavorite,
+              //             onChanged: (value) {
+              //               setState(() {
+              //                 _isFavorite = value ?? false;
+              //               });
+              //             },
+              //             activeColor: Colors.teal,
+              //           ),
+              //           Text(S.of(context).Favorite, style: const TextStyle(fontSize: 16)),
+              //         ],
+              //       ),
+              //     ),
+              //     Expanded(
+              //       child: Row(
+              //         children: [
+              //           Checkbox(
+              //             value: _isArchived,
+              //             onChanged: (value) {
+              //               setState(() {
+              //                 _isArchived = value ?? false;
+              //               });
+              //             },
+              //             activeColor: Colors.teal,
+              //           ),
+              //           Text(S.of(context).Archive, style: const TextStyle(fontSize: 16)),
+              //         ],
+              //       ),
+              //     ),
+              //   ],
+              // ),
               const SizedBox(height: 24),
               Center(
                 child: ElevatedButton(

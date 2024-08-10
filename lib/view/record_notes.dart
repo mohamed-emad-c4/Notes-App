@@ -191,7 +191,7 @@ class RecordNotesHide extends StatelessWidget {
                             SizedBox(
                               width: 10,
                             ),
-                            Text(S.of(context).Deleted),
+                            Text(S.of(context).Deletedf),
                           ],
                         ),
                       ),

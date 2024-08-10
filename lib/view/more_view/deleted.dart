@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test1/DB/database.dart';
 import 'package:test1/cubit/cubit/cubit/deleted%20cubit/deleted_update_cubit.dart';
 import 'package:test1/cubit/update_cubit.dart';
+import 'package:test1/generated/l10n.dart';
 import 'package:test1/models/note.dart';
 
 class DeletedNotes extends StatelessWidget {
@@ -17,7 +18,7 @@ class DeletedNotes extends StatelessWidget {
       if (state is DeletedUpdate || state is DeletedUpdateInitial) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Deleted Notes'),
+            title: Text(S.of(context).DeletedNotes), // Text translated
             centerTitle: true,
             backgroundColor: Colors.redAccent, // تغيير لون AppBar
           ),
@@ -32,15 +33,15 @@ class DeletedNotes extends StatelessWidget {
               } else if (snapshot.hasError) {
                 return Center(
                   child: Text(
-                    'Error: ${snapshot.error}',
+                    '${S.of(context).Error}: ${snapshot.error}', // Text translated
                     style: const TextStyle(fontSize: 18),
                   ),
                 );
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(
+                return Center(
                   child: Text(
-                    'No Deleted Notes Available',
-                    style: TextStyle(fontSize: 18),
+                    S.of(context).NoDeletedNotesAvailable, // Text translated
+                    style: const TextStyle(fontSize: 18),
                   ),
                 );
               } else {
@@ -52,7 +53,6 @@ class DeletedNotes extends StatelessWidget {
                     final note = deletedNotes[index];
                     return Dismissible(
                         key: Key(note.title), // مفتاح مميز لكل عنصر
-                        // تحديد اتجاه الحذف أو الأرشفة
                         direction: DismissDirection.horizontal,
                         onDismissed: (direction) async {
                           if (direction == DismissDirection.endToStart) {
@@ -72,13 +72,13 @@ class DeletedNotes extends StatelessWidget {
                           color: Colors.green, // لون الاستعادة
                           alignment: Alignment.centerLeft,
                           padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: const Icon(Icons.restore, color: Colors.white),
+                          child: Icon(Icons.restore, color: Colors.white),
                         ),
                         secondaryBackground: Container(
                           color: Colors.red, // لون الحذف
                           alignment: Alignment.centerRight,
                           padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: const Icon(Icons.delete, color: Colors.white),
+                          child: Icon(Icons.delete, color: Colors.white),
                         ),
                         child: Card(
                           color: Colors.redAccent.withOpacity(0.7),
@@ -105,7 +105,7 @@ class DeletedNotes extends StatelessWidget {
                                       const Spacer(),
                                       PopupMenuButton<String>(
                                         itemBuilder: (context) => [
-                                          const PopupMenuItem<String>(
+                                          PopupMenuItem<String>(
                                             value: 'Premanent Delete',
                                             child: Row(
                                               children: [
@@ -116,11 +116,11 @@ class DeletedNotes extends StatelessWidget {
                                                 SizedBox(
                                                   width: 10,
                                                 ),
-                                                Text('Premanent Delete'),
+                                                Text(S.of(context).Deletedf), // Text translated
                                               ],
                                             ),
                                           ),
-                                          const PopupMenuItem<String>(
+                                          PopupMenuItem<String>(
                                             value: 'Archived',
                                             child: Row(
                                               children: [
@@ -131,11 +131,11 @@ class DeletedNotes extends StatelessWidget {
                                                 SizedBox(
                                                   width: 10,
                                                 ),
-                                                Text('Archived'),
+                                                Text(S.of(context).Archived), // Text translated
                                               ],
                                             ),
                                           ),
-                                          const PopupMenuItem<String>(
+                                          PopupMenuItem<String>(
                                             value: 'Favorites',
                                             child: Row(
                                               children: [
@@ -146,11 +146,11 @@ class DeletedNotes extends StatelessWidget {
                                                 SizedBox(
                                                   width: 10,
                                                 ),
-                                                Text('Favorites'),
+                                                Text(S.of(context).Favorite), // Text translated
                                               ],
                                             ),
                                           ),
-                                          const PopupMenuItem<String>(
+                                          PopupMenuItem<String>(
                                             value: 'Restore',
                                             child: Row(
                                               children: [
@@ -161,7 +161,7 @@ class DeletedNotes extends StatelessWidget {
                                                 SizedBox(
                                                   width: 10,
                                                 ),
-                                                Text('Restore'),
+                                                Text(S.of(context).Restore), // Text translated
                                               ],
                                             ),
                                           )
@@ -239,6 +239,4 @@ class DeletedNotes extends StatelessWidget {
       }
     });
   }
-
-  // نافذة منبثقة لعرض تفاصيل الملاحظة
 }

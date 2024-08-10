@@ -22,87 +22,129 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "AboutUs": MessageLookupByLibrary.simpleMessage("معلومات عنا"),
+        "AboutUs": MessageLookupByLibrary.simpleMessage("من نحن"),
         "AccessControl": MessageLookupByLibrary.simpleMessage(
-            "التحكم في الوصول: مفيش حد يقدر يوصل لبياناتك."),
-        "AddNote": MessageLookupByLibrary.simpleMessage("أضف ملاحظة"),
-        "AddedToArchive": MessageLookupByLibrary.simpleMessage("اتضاف للأرشيف"),
-        "Archive": MessageLookupByLibrary.simpleMessage("أرشيف"),
-        "Archived": MessageLookupByLibrary.simpleMessage("أرشيف"),
-        "ChangeEmail":
-            MessageLookupByLibrary.simpleMessage("إزاي أقدر أغير إيميلي؟"),
+            "التحكم في الوصول: لا يمكن لأي شخص الوصول إلى بياناتك."),
+        "AddNote": MessageLookupByLibrary.simpleMessage("إضافة ملاحظة"),
+        "AddedToArchive":
+            MessageLookupByLibrary.simpleMessage("تمت الإضافة إلى الأرشيف"),
+        "AddedToDeleted":
+            MessageLookupByLibrary.simpleMessage("تمت الإضافة إلى المحذوفات"),
+        "AddedToFavorites":
+            MessageLookupByLibrary.simpleMessage("تمت الإضافة إلى المفضلة"),
+        "Archive": MessageLookupByLibrary.simpleMessage("الأرشيف"),
+        "Archived": MessageLookupByLibrary.simpleMessage("المؤرشفة"),
+        "ArchivedNotes":
+            MessageLookupByLibrary.simpleMessage("الملاحظات المؤرشفة"),
+        "ChangeEmail": MessageLookupByLibrary.simpleMessage(
+            "كيف أغير عنوان البريد الإلكتروني الخاص بي؟"),
+        "Close": MessageLookupByLibrary.simpleMessage("إغلاق"),
         "ConnectWithUs": MessageLookupByLibrary.simpleMessage(
-            "اتواصل معانا على السوشيال ميديا:"),
-        "ContactSupport": MessageLookupByLibrary.simpleMessage(
-            "إزاي أقدر أتواصل مع دعم العملاء؟"),
-        "ContactUs": MessageLookupByLibrary.simpleMessage("اتصل بينا"),
-        "CouldNotLaunch": MessageLookupByLibrary.simpleMessage("مقدرناش نشغل"),
-        "DarkMode": MessageLookupByLibrary.simpleMessage("الوضع الداكن"),
+            "تواصل معنا على وسائل التواصل الاجتماعي:"),
+        "ContactSupport":
+            MessageLookupByLibrary.simpleMessage("كيف أتواصل مع دعم العملاء؟"),
+        "ContactUs": MessageLookupByLibrary.simpleMessage("اتصل بنا"),
+        "CouldNotLaunch": MessageLookupByLibrary.simpleMessage("تعذر الفتح"),
+        "CreatePIN": MessageLookupByLibrary.simpleMessage("إنشاء رمز سري"),
+        "DarkMode": MessageLookupByLibrary.simpleMessage("الوضع الليلي"),
         "DataEncryption": MessageLookupByLibrary.simpleMessage(
-            "تشفير البيانات: بنستخدم تشفير قياسي في الصناعة لحماية بياناتك."),
-        "Deleted": MessageLookupByLibrary.simpleMessage("محذوف"),
+            "تشفير البيانات: نستخدم التشفير المعتمد لحماية بياناتك."),
+        "Deleted": MessageLookupByLibrary.simpleMessage("محذف"),
+        "DeletedFromArchive":
+            MessageLookupByLibrary.simpleMessage("تم الحذف من الأرشيف"),
+        "DeletedNotes":
+            MessageLookupByLibrary.simpleMessage("الملاحظات المحذوفة"),
+        "Deletedf": MessageLookupByLibrary.simpleMessage(" محذف نهائي"),
         "DidntFindAnswer": MessageLookupByLibrary.simpleMessage(
-            "لو مش لاقي الإجابة اللي بتدور عليها، تواصل معانا مباشرة:"),
+            "إذا لم تجد الإجابة التي تبحث عنها، لا تتردد في الاتصال بنا مباشرة:"),
+        "Dislike": MessageLookupByLibrary.simpleMessage("عدم الإعجاب"),
         "Done": MessageLookupByLibrary.simpleMessage("تم"),
-        "EmailUs": MessageLookupByLibrary.simpleMessage("ابعتلنا اميل"),
+        "EditNote": MessageLookupByLibrary.simpleMessage("تعديل الملاحظة"),
+        "EmailUs": MessageLookupByLibrary.simpleMessage(
+            "راسلنا عبر البريد الإلكتروني"),
         "EnableNotifications":
-            MessageLookupByLibrary.simpleMessage("تفعيل الإشعارات"),
+            MessageLookupByLibrary.simpleMessage("تمكين الإشعارات"),
+        "Enter": MessageLookupByLibrary.simpleMessage("أدخل"),
+        "Enter12DigitPIN": MessageLookupByLibrary.simpleMessage(
+            "أدخل رمز سري مكون من 12 رقمًا"),
+        "EnterPIN": MessageLookupByLibrary.simpleMessage("أدخل الرمز السري"),
+        "EnterYourPIN":
+            MessageLookupByLibrary.simpleMessage("أدخل الرمز السري الخاص بك"),
         "Error": MessageLookupByLibrary.simpleMessage("خطأ"),
-        "FAQ": MessageLookupByLibrary.simpleMessage("الأسئلة الشائعة:"),
+        "FAQ": MessageLookupByLibrary.simpleMessage("الأسئلة المتكررة:"),
         "Facebook": MessageLookupByLibrary.simpleMessage("فيسبوك"),
         "FailedToAddNote":
             MessageLookupByLibrary.simpleMessage("فشل في إضافة الملاحظة"),
         "FailedToDeleteNote":
             MessageLookupByLibrary.simpleMessage("فشل في حذف الملاحظة"),
-        "Favorite": MessageLookupByLibrary.simpleMessage("مفضل"),
+        "Favorite": MessageLookupByLibrary.simpleMessage("المفضلة"),
+        "FavoriteNotes":
+            MessageLookupByLibrary.simpleMessage("الملاحظات المفضلة"),
         "Favorites": MessageLookupByLibrary.simpleMessage("المفضلة"),
-        "FollowUs":
-            MessageLookupByLibrary.simpleMessage("تابعنا على السوشيال ميديا:"),
+        "FollowUs": MessageLookupByLibrary.simpleMessage(
+            "تابعنا على وسائل التواصل الاجتماعي:"),
         "ForAnyQuestions": MessageLookupByLibrary.simpleMessage(
-            "لو عندك أي استفسارات أو مخاوف، اتواصل مع فريق الدعم بتاعنا."),
+            "لأي استفسارات أو مخاوف، يرجى الاتصال بفريق الدعم الخاص بنا."),
         "HelpSupport": MessageLookupByLibrary.simpleMessage("المساعدة والدعم"),
-        "HiddenNotes": MessageLookupByLibrary.simpleMessage("ملاحظات مخفية 🤫"),
-        "Instagram": MessageLookupByLibrary.simpleMessage("إنستجرام"),
+        "HiddenNotes":
+            MessageLookupByLibrary.simpleMessage("الملاحظات المخفية 🤫"),
+        "IncorrectPIN":
+            MessageLookupByLibrary.simpleMessage("الرمز السري غير صحيح"),
+        "Instagram": MessageLookupByLibrary.simpleMessage("إنستغرام"),
         "LableContentAdd": MessageLookupByLibrary.simpleMessage("المحتوى"),
         "LableTittleAdd": MessageLookupByLibrary.simpleMessage("العنوان"),
         "Language": MessageLookupByLibrary.simpleMessage("اللغة"),
         "Messenger": MessageLookupByLibrary.simpleMessage("ماسنجر"),
-        "NoHiddenNotesFound":
-            MessageLookupByLibrary.simpleMessage("مفيش ملاحظات مخفية."),
+        "NoArchivedNotesAvailable": MessageLookupByLibrary.simpleMessage(
+            "لا توجد ملاحظات مؤرشفة متاحة"),
+        "NoDeletedNotesAvailable": MessageLookupByLibrary.simpleMessage(
+            "لا توجد ملاحظات محذوفة متاحة"),
+        "NoFavoriteNotesAvailable":
+            MessageLookupByLibrary.simpleMessage("لا توجد ملاحظات مفضلة متاحة"),
+        "NoHiddenNotesFound": MessageLookupByLibrary.simpleMessage(
+            "لم يتم العثور على ملاحظات مخفية."),
+        "NoNotesAvailable":
+            MessageLookupByLibrary.simpleMessage("لا توجد ملاحظات متاحة"),
         "NoteAddedSuccessfully":
-            MessageLookupByLibrary.simpleMessage("تم إضافة الملاحظة بنجاح!"),
+            MessageLookupByLibrary.simpleMessage("تمت إضافة الملاحظة بنجاح!"),
         "NoteSavedSuccessfully":
             MessageLookupByLibrary.simpleMessage("تم حفظ الملاحظة بنجاح"),
-        "Notes": MessageLookupByLibrary.simpleMessage("  مسجل"),
+        "Notes": MessageLookupByLibrary.simpleMessage("ملاحظات"),
         "OurMission": MessageLookupByLibrary.simpleMessage(
             "مهمتنا هي تقديم حلول عالية الجودة لتحسين حياتك اليومية وتوفير تجربة مستخدم سلسة."),
         "PIN": MessageLookupByLibrary.simpleMessage(
-            "رمز التعريف الشخصي: بنستخدم رموز PIN لحماية ملاحظاتك وضمان إنك بس اللي تقدر توصلها."),
+            "الرمز السري: نستخدم الرموز السرية لحماية ملاحظاتك والتأكد من أنه لا يمكن لأحد الوصول إليها غيرك."),
+        "PINMustBe12Digits": MessageLookupByLibrary.simpleMessage(
+            "يجب أن يكون الرمز السري مكونًا من 12 رقمًا"),
+        "PINSaved": MessageLookupByLibrary.simpleMessage("تم حفظ الرمز السري"),
         "PleaseEnterTitleAndContent":
-            MessageLookupByLibrary.simpleMessage("من فضلك ادخل عنوان والمحتوى"),
+            MessageLookupByLibrary.simpleMessage("يرجى إدخال العنوان والمحتوى"),
+        "PremanentDelete": MessageLookupByLibrary.simpleMessage("حذف دائم"),
         "PrivacyAndSecurity":
             MessageLookupByLibrary.simpleMessage("الخصوصية والأمان"),
         "QuestionsFeedback": MessageLookupByLibrary.simpleMessage(
-            "لو عندك أي أسئلة، ملاحظات، أو حابب تتواصل معانا، ما تترددش تتصل بينا."),
-        "Recorder": MessageLookupByLibrary.simpleMessage(" الملاحظات "),
+            "إذا كان لديك أي استفسارات أو ملاحظات أو ترغب في التواصل معنا، فلا تتردد في الاتصال بنا."),
+        "Recorder": MessageLookupByLibrary.simpleMessage("  "),
         "RegularAudits": MessageLookupByLibrary.simpleMessage(
-            "التدقيق المنتظم: بنقوم بإجراء تدقيق أمني بانتظام علشان نحدد ونصلح الثغرات."),
+            "المراجعات الدورية: نقوم بإجراء مراجعات أمنية دورية لتحديد وإصلاح الثغرات."),
         "ResetPassword": MessageLookupByLibrary.simpleMessage(
-            "إزاي أقدر أغير كلمة السر بتاعتي؟"),
+            "كيف يمكنني إعادة تعيين كلمة المرور الخاصة بي؟"),
+        "Restore": MessageLookupByLibrary.simpleMessage("استعادة"),
         "Save": MessageLookupByLibrary.simpleMessage("حفظ"),
         "Settings": MessageLookupByLibrary.simpleMessage("الإعدادات"),
         "Success": MessageLookupByLibrary.simpleMessage("نجاح"),
         "Twitter": MessageLookupByLibrary.simpleMessage("تويتر"),
+        "Unarchived": MessageLookupByLibrary.simpleMessage("تم إلغاء الأرشفة"),
         "UserControl": MessageLookupByLibrary.simpleMessage(
-            "تحكم المستخدم: عندك السيطرة على بياناتك وتقدر تدير إعداداتك في أي وقت."),
+            "تحكم المستخدم: لديك التحكم الكامل في بياناتك ويمكنك إدارة إعداداتك في أي وقت."),
         "WeAppreciateFeedback": MessageLookupByLibrary.simpleMessage(
-            "إحنا بنقدر ملاحظاتك ونسعى دايمًا لتحسين خدمتنا."),
+            "نحن نقدر ملاحظاتك ونسعى لتحسين خدمتنا باستمرار."),
         "WeAreHereToHelp": MessageLookupByLibrary.simpleMessage(
-            "إحنا هنا لمساعدتك! سواء عندك سؤال، بتواجه مشكلة، أو محتاج مساعدة إضافية، فريق الدعم عندنا جاهز يساعدك."),
+            "نحن هنا للمساعدة! سواء كان لديك سؤال أو واجهت مشكلة أو تحتاج إلى مساعدة إضافية، فريق الدعم لدينا جاهز لمساعدتك."),
         "WelcomeMessage": MessageLookupByLibrary.simpleMessage(
-            "أهلاً بيك في تطبيقنا! إحنا ملتزمين بتقديم أفضل خدمة وتجربة ليك. فريقنا بيعمل على التحسين المستمر والابتكار علشان يلبي احتياجاتك."),
+            "مرحبًا بك في تطبيقنا! نحن ملتزمون بتقديم أفضل خدمة وتجربة. فريقنا يسعى دائماً للتحسين المستمر والابتكار لتلبية احتياجاتك."),
         "WhatsApp": MessageLookupByLibrary.simpleMessage("واتساب"),
         "YourPrivacyAndSecurity": MessageLookupByLibrary.simpleMessage(
-            "خصوصيتك وأمانك مهمين لينا. إحنا بناخد التدابير دي علشان نحمي بياناتك:")
+            "خصوصيتك وأمانك مهمان بالنسبة لنا. نتخذ الإجراءات التالية لضمان حماية بياناتك:")
       };
 }
