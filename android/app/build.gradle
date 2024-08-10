@@ -3,7 +3,7 @@ plugins {
     id "kotlin-android"
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
-    id "org.jetbrains.kotlin.android" version "2.0.10" apply false
+    // id "org.jetbrains.kotlin.android" version "1.8.0" apply false
 }
 
 def localProperties = new Properties()
@@ -54,6 +54,8 @@ android {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
+             shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig = signingConfigs.debug
         }
     }

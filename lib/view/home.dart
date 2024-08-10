@@ -19,7 +19,6 @@ import 'package:test1/view/more_view/Favorite.dart';
 import 'package:test1/view/more_view/creat_PIN.dart';
 import 'package:test1/view/more_view/enter_PIN.dart';
 import 'package:test1/view/record_notes.dart';
-import 'package:flutter_localization/flutter_localization.dart';
 import 'more_view/archive.dart';
 import 'more_view/deleted.dart';
 import 'more_view/setting.dart';

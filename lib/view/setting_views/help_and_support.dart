@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:icons_plus/icons_plus.dart';
 import 'package:test1/generated/l10n.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:icons_plus/icons_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HelpAndSupportPage extends StatelessWidget {
@@ -55,7 +53,7 @@ class HelpAndSupportPage extends StatelessWidget {
                 children: [
                   _buildCircleButton(
                     context,
-                    icon: Icons.email,
+                    icon: FaIcon(FontAwesomeIcons.envelope),
                     label: S.of(context).EmailUs,
                     onTap: _sendEmail,
                   ),
@@ -74,7 +72,7 @@ class HelpAndSupportPage extends StatelessWidget {
                   children: [
                     _buildSocialMediaButton(
                       context,
-                      icon: AntDesign.whats_app_outline,
+                      icon:   FaIcon(FontAwesomeIcons.whatsapp),
                       label: S.of(context).WhatsApp,
                       color: Colors.green,
                       onTap: _contactViaWhatsApp,
@@ -82,7 +80,7 @@ class HelpAndSupportPage extends StatelessWidget {
                     const SizedBox(width: 20),
                     _buildSocialMediaButton(
                       context,
-                      icon: Icons.facebook,
+                      icon: FaIcon(FontAwesomeIcons.facebook),
                       label: S.of(context).Messenger,
                       color: Colors.blue,
                       onTap: _contactViaMessenger,
@@ -90,7 +88,7 @@ class HelpAndSupportPage extends StatelessWidget {
                     const SizedBox(width: 20),
                     _buildSocialMediaButton(
                       context,
-                      icon: AntDesign.twitter_circle_fill,
+                      icon: FaIcon(FontAwesomeIcons.twitter),
                       label: S.of(context).Twitter,
                       color: Colors.lightBlue,
                       onTap: _contactViaTwitter,
@@ -98,7 +96,7 @@ class HelpAndSupportPage extends StatelessWidget {
                     const SizedBox(width: 20),
                     _buildSocialMediaButton(
                       context,
-                      icon: AntDesign.instagram_fill,
+                      icon: FaIcon(FontAwesomeIcons.instagram),
                       label: S.of(context).Instagram,
                       color: Colors.purple,
                       onTap: _contactViaInstagram,
@@ -125,7 +123,7 @@ class HelpAndSupportPage extends StatelessWidget {
   // Widget for creating circular buttons
   Widget _buildCircleButton(
     BuildContext context, {
-    required IconData icon,
+    required FaIcon icon,
     required String label,
     required VoidCallback onTap,
   }) {
@@ -136,11 +134,7 @@ class HelpAndSupportPage extends StatelessWidget {
           CircleAvatar(
             radius: 30,
             backgroundColor: Theme.of(context).primaryColor,
-            child: Icon(
-              icon,
-              color: Colors.white,
-              size: 30,
-            ),
+            child: icon,
           ),
           const SizedBox(height: 8),
           Text(
@@ -155,7 +149,7 @@ class HelpAndSupportPage extends StatelessWidget {
   // Widget for creating social media buttons
   Widget _buildSocialMediaButton(
     BuildContext context, {
-    required IconData icon,
+    required FaIcon icon,
     required String label,
     required Color color,
     required VoidCallback onTap,
@@ -167,11 +161,7 @@ class HelpAndSupportPage extends StatelessWidget {
           CircleAvatar(
             radius: 30,
             backgroundColor: color,
-            child: Icon(
-              icon,
-              color: Colors.white,
-              size: 30,
-            ),
+            child: icon
           ),
           const SizedBox(height: 8),
           Text(
