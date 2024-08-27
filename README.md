@@ -1,8 +1,8 @@
 
 # Notes Record
 
-![Notes Record Banner](![notes](https://github.com/user-attachments/assets/a29fc8c2-28af-4ceb-8eda-95f55e70661a)
-)
+
+![notes](https://github.com/user-attachments/assets/01b601d7-9d41-4d60-8d58-4f547c592767)
 
 Notes Record is a simple and efficient Flutter application for managing your notes. The app allows you to create, edit, delete, and search notes with an intuitive user interface designed to boost productivity.
 
@@ -15,9 +15,11 @@ Notes Record is a simple and efficient Flutter application for managing your not
 - **Modern UI Design**: Sleek design with smooth animations.
 
 ## Screenshots
-
-![Screenshot 1](path/to/screenshot1.png)
-![Screenshot 2](path/to/screenshot2.png)
+![Screenshot_2024-08-27-07-22-25-02_d7fa7c92ed55fd93f25ebf2c4172b33f](https://github.com/user-attachments/assets/ee9985f8-7130-45ab-8441-1421a0ab74ee)
+![Screenshot_2024-08-27-07-22-32-64_d7fa7c92ed55fd93f25ebf2c4172b33f](https://github.com/user-attachments/assets/b1fcd4b1-5511-4492-ab04-44d1f776bb5e)
+![Screenshot_2024-08-27-07-22-49-43_d7fa7c92ed55fd93f25ebf2c4172b33f](https://github.com/user-attachments/assets/84632faf-f504-413e-8bca-9ac57099a814)
+![Screenshot_2024-08-27-07-22-55-54_d7fa7c92ed55fd93f25ebf2c4172b33f](https://github.com/user-attachments/assets/7fd334c4-353c-4439-a7d5-0166c3a87a94)
+![Screenshot_2024-08-27-07-23-03-06_d7fa7c92ed55fd93f25ebf2c4172b33f](https://github.com/user-attachments/assets/44747989-d6c8-40d2-9131-65e9d83f1f7c)
 
 ## Getting Started
 
