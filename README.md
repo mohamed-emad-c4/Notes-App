@@ -1,7 +1,8 @@
 
 # Notes Record
 
-![Notes Record Banner](path/to/banner_image.png)
+![Notes Record Banner](![notes](https://github.com/user-attachments/assets/a29fc8c2-28af-4ceb-8eda-95f55e70661a)
+)
 
 Notes Record is a simple and efficient Flutter application for managing your notes. The app allows you to create, edit, delete, and search notes with an intuitive user interface designed to boost productivity.
 
