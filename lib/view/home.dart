@@ -3,7 +3,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:test1/DB/database.dart';
 import 'package:test1/cubit/cubit/change_lan_cubit.dart';
 import 'package:test1/cubit/cubit/cubit/archive_update_cubit.dart';
 import 'package:test1/cubit/cubit/cubit/deleted%20cubit/deleted_update_cubit.dart';
@@ -19,6 +18,7 @@ import 'package:test1/view/more_view/Favorite.dart';
 import 'package:test1/view/more_view/creat_PIN.dart';
 import 'package:test1/view/more_view/enter_PIN.dart';
 import 'package:test1/view/record_notes.dart';
+import 'package:test1/view/to-do/to-do.dart';
 import 'more_view/archive.dart';
 import 'more_view/deleted.dart';
 import 'more_view/setting.dart';
@@ -349,7 +349,51 @@ class Notes extends StatelessWidget {
             right: 16,
             child: FloatingActionButton(
               onPressed: () {
-                Get.to(AddNote(allNotes: allNotes));
+                Get.bottomSheet(
+                  Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16),
+                          topRight: Radius.circular(16),
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(height: 20),
+                          ListTile(
+                            leading: const Icon(Icons.article),
+                            title: Text("Add A New Note"),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Get.to(AddNote(
+                                allNotes: allNotes,
+                              ));
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.assignment_turned_in),
+                            title: Text("Add A New To Do List"),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Get.to(
+                                ToDo(),
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                        ],
+                      )),
+                  enableDrag: true,
+                  isScrollControlled: true,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                    ),
+                  ),
+                );
               },
               heroTag: 'addNoteButton',
               child: const Icon(Icons.add), // Unique tag for this button
