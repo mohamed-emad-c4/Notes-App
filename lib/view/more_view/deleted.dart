@@ -72,13 +72,13 @@ class DeletedNotes extends StatelessWidget {
                           color: Colors.green, // لون الاستعادة
                           alignment: Alignment.centerLeft,
                           padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Icon(Icons.restore, color: Colors.white),
+                          child: const Icon(Icons.restore, color: Colors.white),
                         ),
                         secondaryBackground: Container(
                           color: Colors.red, // لون الحذف
                           alignment: Alignment.centerRight,
                           padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Icon(Icons.delete, color: Colors.white),
+                          child: const Icon(Icons.delete, color: Colors.white),
                         ),
                         child: Card(
                           color: Colors.redAccent.withOpacity(0.7),
@@ -109,11 +109,11 @@ class DeletedNotes extends StatelessWidget {
                                             value: 'Premanent Delete',
                                             child: Row(
                                               children: [
-                                                Icon(
+                                                const Icon(
                                                   Icons.delete,
                                                   size: 20,
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 10,
                                                 ),
                                                 Text(S.of(context).Deletedf), // Text translated
@@ -124,11 +124,11 @@ class DeletedNotes extends StatelessWidget {
                                             value: 'Archived',
                                             child: Row(
                                               children: [
-                                                Icon(
+                                                const Icon(
                                                   Icons.archive,
                                                   size: 20,
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 10,
                                                 ),
                                                 Text(S.of(context).Archived), // Text translated
@@ -139,11 +139,11 @@ class DeletedNotes extends StatelessWidget {
                                             value: 'Favorites',
                                             child: Row(
                                               children: [
-                                                Icon(
+                                                const Icon(
                                                   Icons.favorite,
                                                   size: 20,
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 10,
                                                 ),
                                                 Text(S.of(context).Favorite), // Text translated
@@ -154,11 +154,11 @@ class DeletedNotes extends StatelessWidget {
                                             value: 'Restore',
                                             child: Row(
                                               children: [
-                                                Icon(
+                                                const Icon(
                                                   Icons.restart_alt,
                                                   size: 20,
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 10,
                                                 ),
                                                 Text(S.of(context).Restore), // Text translated

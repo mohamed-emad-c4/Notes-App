@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../generated/l10n.dart';
 
 class SaveNoteButton extends StatelessWidget {
@@ -13,13 +12,12 @@ class SaveNoteButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onSave,
         style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(
-            vertical: 14,
-            horizontal: 24,
-          ),
+          backgroundColor: Colors.teal,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(20),
           ),
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
+          elevation: 5,
         ),
         child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.5,
@@ -29,6 +27,7 @@ class SaveNoteButton extends StatelessWidget {
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
           ),
         ),
@@ -56,30 +55,48 @@ class NoteOptions extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: Row(
-            children: [
-              Checkbox(
-                value: isFavorite,
-                onChanged: onFavoriteChanged,
-                activeColor: Colors.teal,
-              ),
-              Text(S.of(context).Favorite,
-                  style: const TextStyle(fontSize: 16)),
-            ],
+          child: _OptionCheckbox(
+            label: S.of(context).Favorite,
+            value: isFavorite,
+            onChanged: onFavoriteChanged,
           ),
         ),
         Expanded(
-          child: Row(
-            children: [
-              Checkbox(
-                value: isArchived,
-                onChanged: onArchiveChanged,
-                activeColor: Colors.teal,
-              ),
-              Text(S.of(context).Archive, style: const TextStyle(fontSize: 16)),
-            ],
+          child: _OptionCheckbox(
+            label: S.of(context).Archive,
+            value: isArchived,
+            onChanged: onArchiveChanged,
           ),
         ),
+      ],
+    );
+  }
+}
+
+class _OptionCheckbox extends StatelessWidget {
+  const _OptionCheckbox({
+    required this.label,
+    required this.value,
+    required this.onChanged,
+  });
+
+  final String label;
+  final bool value;
+  final ValueChanged<bool?> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Checkbox(
+          value: value,
+          onChanged: onChanged,
+          activeColor: Colors.teal,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+        Text(label, style: const TextStyle(fontSize: 16)),
       ],
     );
   }
@@ -92,20 +109,23 @@ class NoteContentField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: S.of(context).LableContentAdd,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: 16,
-          horizontal: 12,
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      elevation: 3,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
+        child: TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            labelText: S.of(context).LableContentAdd,
+            border: InputBorder.none,
+          ),
+          maxLines: 6,
+          style: const TextStyle(fontSize: 16),
         ),
       ),
-      maxLines: 6,
-      style: const TextStyle(fontSize: 16),
     );
   }
 }
@@ -117,20 +137,23 @@ class NoteTitleField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: S.of(context).LableTittleAdd,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: 16,
-          horizontal: 12,
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      elevation: 3,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+        child: TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            labelText: S.of(context).LableTittleAdd,
+            border: InputBorder.none,
+          ),
+          maxLength: 100,
+          style: const TextStyle(fontSize: 18),
         ),
       ),
-      maxLength: 100,
-      style: const TextStyle(fontSize: 18),
     );
   }
 }

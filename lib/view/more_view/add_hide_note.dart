@@ -17,8 +17,8 @@ class AddHideNote extends StatefulWidget {
 class _AddHideNoteState extends State<AddHideNote> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
-  bool _isFavorite = false;
-  bool _isArchived = false;
+  final bool _isFavorite = false;
+  final bool _isArchived = false;
 
   @override
   Widget build(BuildContext context) {

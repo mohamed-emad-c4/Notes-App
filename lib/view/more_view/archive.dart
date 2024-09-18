@@ -92,7 +92,7 @@ class ArchivedList extends StatelessWidget {
                           ),
                           alignment: Alignment.centerLeft,
                           padding: const EdgeInsets.symmetric(horizontal: 3),
-                          child: Icon(Icons.favorite, color: Colors.white),
+                          child: const Icon(Icons.favorite, color: Colors.white),
                         ),
                         secondaryBackground: Container(
                           alignment: Alignment.centerRight,
@@ -101,7 +101,7 @@ class ArchivedList extends StatelessWidget {
                             color: Colors.red,
                           ),
                           padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: Icon(Icons.delete, color: Colors.white),
+                          child: const Icon(Icons.delete, color: Colors.white),
                         ),
                         child: Card(
                           color: Colors.green.withOpacity(0.7),
@@ -132,11 +132,11 @@ class ArchivedList extends StatelessWidget {
                                             value: 'Deleted',
                                             child: Row(
                                               children: [
-                                                Icon(
+                                                const Icon(
                                                   Icons.delete,
                                                   size: 20,
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 10,
                                                 ),
                                                 Text(S.of(context).Deleted), // Translated
@@ -147,11 +147,11 @@ class ArchivedList extends StatelessWidget {
                                             value: 'Favorites',
                                             child: Row(
                                               children: [
-                                                Icon(
+                                                const Icon(
                                                   Icons.favorite,
                                                   size: 20,
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 10,
                                                 ),
                                                 Text(S.of(context).Favorite), // Translated
@@ -162,11 +162,11 @@ class ArchivedList extends StatelessWidget {
                                             value: 'Unarchived',
                                             child: Row(
                                               children: [
-                                                Icon(
+                                                const Icon(
                                                   Icons.unarchive,
                                                   size: 20,
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 10,
                                                 ),
                                                 Text(S.of(context).Unarchived), // Translated

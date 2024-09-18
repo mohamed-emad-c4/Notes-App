@@ -200,7 +200,7 @@ class Notes extends StatelessWidget {
   }
 }
 class PopupMenu extends StatelessWidget {
-  const PopupMenu({required this.isDarkMode});
+  const PopupMenu({super.key, required this.isDarkMode});
 
   final bool isDarkMode;
 
@@ -264,7 +264,7 @@ class PopupMenu extends StatelessWidget {
   }
 }
 class NotesList extends StatelessWidget {
-  const NotesList({required this.allNotes});
+  const NotesList({super.key, required this.allNotes});
 
   final List<NoteModel> allNotes;
 

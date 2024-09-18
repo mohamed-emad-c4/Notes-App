@@ -51,11 +51,11 @@ class RecordNotes extends StatelessWidget {
                         value: 'Deleted',
                         child: Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.delete,
                               size: 20,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             Text(S.of(context).Deleted),
@@ -66,11 +66,11 @@ class RecordNotes extends StatelessWidget {
                         value: 'Archived',
                         child: Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.archive,
                               size: 20,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             Text(S.of(context).Archived),
@@ -81,12 +81,12 @@ class RecordNotes extends StatelessWidget {
                         value: 'Favorites',
                         child: Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.favorite,
                               color: Colors.red,
                               size: 20,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             Text(S.of(context).Favorites),
@@ -184,11 +184,11 @@ class RecordNotesHide extends StatelessWidget {
                         value: 'Deleted',
                         child: Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.delete,
                               size: 20,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             Text(S.of(context).Deletedf),
@@ -209,7 +209,7 @@ class RecordNotesHide extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 child: Text(
                   allNotes[index].content,
-                  maxLines: 4,
+                  maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(fontSize: 16, color: Colors.grey[200]),
                 ),

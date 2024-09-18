@@ -53,7 +53,7 @@ class HelpAndSupportPage extends StatelessWidget {
                 children: [
                   _buildCircleButton(
                     context,
-                    icon: FaIcon(FontAwesomeIcons.envelope),
+                    icon: const FaIcon(FontAwesomeIcons.envelope),
                     label: S.of(context).EmailUs,
                     onTap: _sendEmail,
                   ),
@@ -72,7 +72,7 @@ class HelpAndSupportPage extends StatelessWidget {
                   children: [
                     _buildSocialMediaButton(
                       context,
-                      icon:   FaIcon(FontAwesomeIcons.whatsapp),
+                      icon:   const FaIcon(FontAwesomeIcons.whatsapp),
                       label: S.of(context).WhatsApp,
                       color: Colors.green,
                       onTap: _contactViaWhatsApp,
@@ -80,7 +80,7 @@ class HelpAndSupportPage extends StatelessWidget {
                     const SizedBox(width: 20),
                     _buildSocialMediaButton(
                       context,
-                      icon: FaIcon(FontAwesomeIcons.facebook),
+                      icon: const FaIcon(FontAwesomeIcons.facebook),
                       label: S.of(context).Messenger,
                       color: Colors.blue,
                       onTap: _contactViaMessenger,
@@ -88,7 +88,7 @@ class HelpAndSupportPage extends StatelessWidget {
                     const SizedBox(width: 20),
                     _buildSocialMediaButton(
                       context,
-                      icon: FaIcon(FontAwesomeIcons.twitter),
+                      icon: const FaIcon(FontAwesomeIcons.twitter),
                       label: S.of(context).Twitter,
                       color: Colors.lightBlue,
                       onTap: _contactViaTwitter,
@@ -96,7 +96,7 @@ class HelpAndSupportPage extends StatelessWidget {
                     const SizedBox(width: 20),
                     _buildSocialMediaButton(
                       context,
-                      icon: FaIcon(FontAwesomeIcons.instagram),
+                      icon: const FaIcon(FontAwesomeIcons.instagram),
                       label: S.of(context).Instagram,
                       color: Colors.purple,
                       onTap: _contactViaInstagram,

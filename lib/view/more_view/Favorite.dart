@@ -76,7 +76,7 @@ class FavoriteList extends StatelessWidget {
                         ),
                         alignment: Alignment.centerLeft,
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Icon(Icons.archive, color: Colors.white),
+                        child: const Icon(Icons.archive, color: Colors.white),
                       ),
                       secondaryBackground: Container(
                         alignment: Alignment.centerRight,
@@ -85,7 +85,7 @@ class FavoriteList extends StatelessWidget {
                           color: Colors.red,
                         ),
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Icon(Icons.delete, color: Colors.white),
+                        child: const Icon(Icons.delete, color: Colors.white),
                       ),
                       child: Card(
                         color: const Color.fromARGB(255, 172, 41, 54),
@@ -115,11 +115,11 @@ class FavoriteList extends StatelessWidget {
                                           value: 'Deleted',
                                           child: Row(
                                             children: [
-                                              Icon(
+                                              const Icon(
                                                 Icons.delete,
                                                 size: 20,
                                               ),
-                                              SizedBox(
+                                              const SizedBox(
                                                 width: 10,
                                               ),
                                               Text(S.of(context).Deleted), // Text translated
@@ -130,11 +130,11 @@ class FavoriteList extends StatelessWidget {
                                           value: 'Archived',
                                           child: Row(
                                             children: [
-                                              Icon(
+                                              const Icon(
                                                 Icons.archive,
                                                 size: 20,
                                               ),
-                                              SizedBox(
+                                              const SizedBox(
                                                 width: 10,
                                               ),
                                               Text(S.of(context).Archived), // Text translated
@@ -145,9 +145,9 @@ class FavoriteList extends StatelessWidget {
                                           value: 'Disliked',
                                           child: Row(
                                             children: [
-                                              FaIcon(
+                                              const FaIcon(
                                                   FontAwesomeIcons.heartBroken),
-                                              SizedBox(
+                                              const SizedBox(
                                                 width: 10,
                                               ),
                                               Text(S.of(context).Dislike), // Text translated
