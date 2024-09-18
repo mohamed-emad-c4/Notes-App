@@ -12,10 +12,9 @@ void main() async {
   await NotesDatabase.instance.database;
   List<NoteModel> allNotes = await NotesDatabase.instance.readAllNotes();
   await Hide.instance.database;
-  SharePrefrenceClass pref=SharePrefrenceClass();
-  bool isDark =
-      await pref.getVlue(key: 'isDarkMode', defaultValue: false);
-      String SelectLang =
+  SharePrefrenceClass pref = SharePrefrenceClass();
+  bool isDark = await pref.getVlue(key: 'isDarkMode', defaultValue: false);
+  String SelectLang =
       await pref.getVlue(key: 'selectedLanguage', defaultValue: 'en');
   List<NoteModel> allHideNotes = await Hide.instance.readAllNotes();
 
