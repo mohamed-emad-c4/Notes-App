@@ -4,12 +4,17 @@ import 'package:get/get.dart';
 import 'package:test1/cubit/update_cubit.dart';
 import 'package:test1/generated/l10n.dart';
 import 'package:test1/models/note.dart';
-
+import 'package:test1/widgets/AddNote.dart';
 import '../DB/database.dart';
 
 class AddNote extends StatefulWidget {
-  AddNote({super.key, required this.allNotes});
-  List<NoteModel> allNotes;
+  const AddNote({
+    super.key,
+    required this.allNotes,
+  });
+
+  final List<NoteModel> allNotes;
+
   @override
   _AddNoteState createState() => _AddNoteState();
 }
@@ -36,103 +41,31 @@ class _AddNoteState extends State<AddNote> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              TextField(
-                controller: _titleController,
-                decoration: InputDecoration(
-                  labelText: S.of(context).LableTittleAdd,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 16, 
-                    horizontal: 12,
-                  ),
-                ),
-                maxLength: 100,
-                style: const TextStyle(fontSize: 18),
-              ),
+              NoteTitleField(controller: _titleController),
               const SizedBox(height: 16),
-              TextField(
-                controller: _contentController,
-                decoration: InputDecoration(
-                  labelText: S.of(context).LableContentAdd,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 16, 
-                    horizontal: 12,
-                  ),
-                ),
-                maxLines: 6,
-                style: const TextStyle(fontSize: 16),
+              NoteContentField(controller: _contentController),
+              const SizedBox(height: 24),
+              NoteOptions(
+                isFavorite: _isFavorite,
+                isArchived: _isArchived,
+                onFavoriteChanged: (value) {
+                  setState(() {
+                    _isFavorite = value ?? false;
+                  });
+                },
+                onArchiveChanged: (value) {
+                  setState(() {
+                    _isArchived = value ?? false;
+                  });
+                },
               ),
               const SizedBox(height: 24),
-              // Row(
-              //   children: [
-              //     Expanded(
-              //       child: Row(
-              //         children: [
-              //           Checkbox(
-              //             value: _isFavorite,
-              //             onChanged: (value) {
-              //               setState(() {
-              //                 _isFavorite = value ?? false;
-              //               });
-              //             },
-              //             activeColor: Colors.teal,
-              //           ),
-              //           Text(S.of(context).Favorite, style: const TextStyle(fontSize: 16)),
-              //         ],
-              //       ),
-              //     ),
-              //     Expanded(
-              //       child: Row(
-              //         children: [
-              //           Checkbox(
-              //             value: _isArchived,
-              //             onChanged: (value) {
-              //               setState(() {
-              //                 _isArchived = value ?? false;
-              //               });
-              //             },
-              //             activeColor: Colors.teal,
-              //           ),
-              //           Text(S.of(context).Archive, style: const TextStyle(fontSize: 16)),
-              //         ],
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              const SizedBox(height: 24),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    _saveNote();
-                    BlocProvider.of<UpdateCubit>(context).updateNotes();
-                    Get.back();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 14, 
-                      horizontal: 24,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    child: Text(
-                      S.of(context).Save,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 20, 
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
+              SaveNoteButton(
+                onSave: () {
+                  _saveNote();
+                  BlocProvider.of<UpdateCubit>(context).updateNotes();
+                  Get.back();
+                },
               ),
             ],
           ),
@@ -171,3 +104,5 @@ class _AddNoteState extends State<AddNote> {
     }
   }
 }
+
+

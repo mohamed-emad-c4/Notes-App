@@ -199,3 +199,131 @@ class Notes extends StatelessWidget {
     );
   }
 }
+class PopupMenu extends StatelessWidget {
+  const PopupMenu({required this.isDarkMode});
+
+  final bool isDarkMode;
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<String>(
+      itemBuilder: (context) => [
+        PopupMenuItem<String>(
+          value: 'Deleted',
+          child: Row(
+            children: [
+              const Icon(Icons.delete, size: 20),
+              const SizedBox(width: 10),
+              Text(S.of(context).Deleted),
+            ],
+          ),
+        ),
+        PopupMenuItem<String>(
+          value: 'Archived',
+          child: Row(
+            children: [
+              const Icon(Icons.archive, size: 20),
+              const SizedBox(width: 10),
+              Text(S.of(context).Archived),
+            ],
+          ),
+        ),
+        PopupMenuItem<String>(
+          value: 'Favorites',
+          child: Row(
+            children: [
+              const Icon(Icons.favorite, color: Colors.red, size: 20),
+              const SizedBox(width: 10),
+              Text(S.of(context).Favorites),
+            ],
+          ),
+        ),
+        PopupMenuItem<String>(
+          value: 'Settings',
+          child: Row(
+            children: [
+              const Icon(Icons.settings, size: 20),
+              const SizedBox(width: 10),
+              Text(S.of(context).Settings),
+            ],
+          ),
+        )
+      ],
+      onSelected: (value) {
+        if (value == 'Deleted') {
+          Get.to(const DeletedNotes());
+        } else if (value == 'Archived') {
+          Get.to(const ArchivedList());
+        } else if (value == 'Favorites') {
+          Get.to(const FavoriteList());
+        } else if (value == 'Settings') {
+          Get.to(Setting(isDarkMode: isDarkMode));
+        }
+      },
+    );
+  }
+}
+class NotesList extends StatelessWidget {
+  const NotesList({required this.allNotes});
+
+  final List<NoteModel> allNotes;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: allNotes.length,
+      itemBuilder: (context, index) {
+        return Dismissible(
+          key: Key("$index"),
+          direction: DismissDirection.horizontal,
+          onDismissed: (direction) {
+            if (direction == DismissDirection.startToEnd) {
+              try {
+                BlocProvider.of<UpdateCubit>(context)
+                    .AddNoteToArchive(allNotes: allNotes, index: index);
+                BlocProvider.of<UpdateCubit>(context).updateNotes();
+                Get.snackbar("Done", "Added to archive");
+                BlocProvider.of<UpdateCubit>(context).updateNotes();
+              } catch (e) {
+                Get.snackbar("Error", "Failed to add note");
+              }
+            } else if (direction == DismissDirection.endToStart) {
+              try {
+                BlocProvider.of<UpdateCubit>(context)
+                    .AddNoteToDeleted(allNotes: allNotes, index: index);
+                BlocProvider.of<UpdateCubit>(context).updateNotes();
+                Get.snackbar("Done", "Deleted");
+              } catch (e) {
+                Get.snackbar("Error", "Failed to delete note");
+              }
+            }
+          },
+          background: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              color: Colors.green,
+            ),
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: const Icon(Icons.archive, color: Colors.white),
+          ),
+          secondaryBackground: Container(
+            alignment: Alignment.centerRight,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              color: Colors.red,
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: const Icon(Icons.delete, color: Colors.white),
+          ),
+          child: RecordNotes(
+            allNotes: allNotes,
+            index: index,
+          ),
+        );
+      },
+    );
+  }
+}
