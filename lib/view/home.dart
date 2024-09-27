@@ -18,6 +18,7 @@ import 'package:test1/view/more_view/creat_PIN.dart';
 import 'package:test1/view/more_view/enter_PIN.dart';
 import 'package:test1/widgets/Notes.dart';
 
+import 'to-do/to-do.dart';
 
 class Home extends StatelessWidget {
   Home({
@@ -189,7 +190,51 @@ class _FloatingAddButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
-        Get.to(AddNote(allNotes: allNotes));
+        Get.bottomSheet(
+          Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 20),
+                  ListTile(
+                    leading: const Icon(Icons.article),
+                    title: Text("Add A New Note"),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Get.to(AddNote(
+                        allNotes: allNotes,
+                      ));
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.assignment_turned_in),
+                    title: Text("Add A New To Do List"),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Get.to(
+                        ToDo(),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              )),
+          enableDrag: true,
+          isScrollControlled: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
+          ),
+        );
       },
       child: const Icon(Icons.add),
     );
