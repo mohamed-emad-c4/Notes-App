@@ -4,171 +4,438 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:test1/generated/l10n.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:test1/shared/app_theme.dart';
 
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-class HelpAndSupportPage extends StatelessWidget {
+class HelpAndSupportPage extends StatefulWidget {
   const HelpAndSupportPage({super.key});
+
+  @override
+  State<HelpAndSupportPage> createState() => _HelpAndSupportPageState();
+}
+
+class _HelpAndSupportPageState extends State<HelpAndSupportPage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+
+  final List<FAQItem> _faqItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeOut,
+      ),
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.1),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeOut,
+      ),
+    );
+
+    _animationController.forward();
+
+    // Initialize FAQ items
+    _faqItems.addAll([
+      FAQItem(
+        question: "How do I reset my PIN?",
+        answer:
+            "To reset your PIN, go to Settings > Privacy & Security > PIN Protection and tap on 'Reset PIN'. You'll need to verify your identity before setting a new PIN.",
+      ),
+      FAQItem(
+        question: "Can I recover deleted notes?",
+        answer:
+            "Yes, deleted notes are moved to the Trash for 30 days before being permanently deleted. You can access them from the menu and restore them if needed.",
+      ),
+      FAQItem(
+        question: "How do I sync my notes across devices?",
+        answer:
+            "Currently, notes are stored locally on your device. We're working on a cloud sync feature that will be available in a future update.",
+      ),
+      FAQItem(
+        question: "Is my data encrypted?",
+        answer:
+            "Yes, all your notes are encrypted on your device. Hidden notes have an additional layer of protection with PIN access.",
+      ),
+    ]);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).HelpSupport),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                S.of(context).HelpSupport,
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+      appBar: AppTheme.getGradientAppBar(S.of(context).HelpSupport),
+      body: SafeArea(
+        child: AnimatedBuilder(
+          animation: _animationController,
+          builder: (context, child) {
+            return FadeTransition(
+              opacity: _fadeAnimation,
+              child: SlideTransition(
+                position: _slideAnimation,
+                child: child,
               ),
-              const SizedBox(height: 16),
-              Text(
-                S.of(context).WeAreHereToHelp,
-                style: const TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                S.of(context).FAQ,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              BulletPoint(text: S.of(context).ResetPassword),
-              BulletPoint(text: S.of(context).ChangeEmail),
-              BulletPoint(text: S.of(context).ContactSupport),
-              const SizedBox(height: 20),
-              Text(
-                S.of(context).DidntFindAnswer,
-                style: const TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildCircleButton(
-                    context,
-                    icon: const FaIcon(FontAwesomeIcons.envelope),
-                    label: S.of(context).EmailUs,
-                    onTap: _sendEmail,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 30),
-              Text(
-                S.of(context).ConnectWithUs,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _buildSocialMediaButton(
-                      context,
-                      icon:   const FaIcon(FontAwesomeIcons.whatsapp),
-                      label: S.of(context).WhatsApp,
-                      color: Colors.green,
-                      onTap: _contactViaWhatsApp,
-                    ),
-                    const SizedBox(width: 20),
-                    _buildSocialMediaButton(
-                      context,
-                      icon: const FaIcon(FontAwesomeIcons.facebook),
-                      label: S.of(context).Messenger,
-                      color: Colors.blue,
-                      onTap: _contactViaMessenger,
-                    ),
-                    const SizedBox(width: 20),
-                    _buildSocialMediaButton(
-                      context,
-                      icon: const FaIcon(FontAwesomeIcons.twitter),
-                      label: S.of(context).Twitter,
-                      color: Colors.lightBlue,
-                      onTap: _contactViaTwitter,
-                    ),
-                    const SizedBox(width: 20),
-                    _buildSocialMediaButton(
-                      context,
-                      icon: const FaIcon(FontAwesomeIcons.instagram),
-                      label: S.of(context).Instagram,
-                      color: Colors.purple,
-                      onTap: _contactViaInstagram,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 30),
-              Text(
-                S.of(context).WeAppreciateFeedback,
-                style: const TextStyle(fontSize: 16),
-              ),
-            ],
+            );
+          },
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeader(context),
+                const SizedBox(height: 24),
+                _buildHelpCard(context),
+                const SizedBox(height: 24),
+                _buildFAQSection(context),
+                const SizedBox(height: 24),
+                _buildContactSection(context),
+                const SizedBox(height: 24),
+                _buildSocialSection(context),
+                const SizedBox(height: 40),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  // بقية الأكواد كما هي بدون تغيير
-}
+  Widget _buildHeader(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          S.of(context).HelpSupport,
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppTheme.primaryColor,
+              ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          S.of(context).WeAreHereToHelp,
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+      ],
+    );
+  }
 
-
-  // Widget for creating circular buttons
-  Widget _buildCircleButton(
-    BuildContext context, {
-    required FaIcon icon,
-    required String label,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: Theme.of(context).primaryColor,
-            child: icon,
+  Widget _buildHelpCard(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: AppTheme.primaryGradient,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: AppTheme.primaryColor.withOpacity(0.3),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: const TextStyle(fontSize: 14),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Row(
+          children: [
+            const CircleAvatar(
+              radius: 24,
+              backgroundColor: Colors.white24,
+              child: Icon(
+                Icons.support_agent,
+                color: Colors.white,
+                size: 28,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Need assistance?",
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "Our support team is ready to help you with any questions or issues.",
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Colors.white.withOpacity(0.9),
+                        ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFAQSection(BuildContext context) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.question_answer, color: AppTheme.primaryColor),
+                const SizedBox(width: 12),
+                Text(
+                  S.of(context).FAQ,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            ..._faqItems.map((item) => _buildFAQItem(context, item)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFAQItem(BuildContext context, FAQItem item) {
+    return Theme(
+      data: Theme.of(context).copyWith(
+        dividerColor: Colors.transparent,
+      ),
+      child: ExpansionTile(
+        title: Text(
+          item.question,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+        ),
+        tilePadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
+        childrenPadding: const EdgeInsets.only(bottom: 16.0),
+        expandedCrossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Text(
+              item.answer,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
           ),
         ],
       ),
     );
   }
 
-  // Widget for creating social media buttons
-  Widget _buildSocialMediaButton(
+  Widget _buildContactSection(BuildContext context) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.contact_support, color: AppTheme.primaryColor),
+                const SizedBox(width: 12),
+                Text(
+                  S.of(context).DidntFindAnswer,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Text(
+              "We're here to help you with any questions or issues you may have. Reach out to us through any of these channels.",
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 16),
+            Center(
+              child: InkWell(
+                onTap: _sendEmail,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 14,
+                    horizontal: 24,
+                  ),
+                  decoration: BoxDecoration(
+                    gradient: AppTheme.primaryGradient,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppTheme.primaryColor.withOpacity(0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const FaIcon(
+                        FontAwesomeIcons.envelope,
+                        color: Colors.white,
+                        size: 16,
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        S.of(context).EmailUs,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSocialSection(BuildContext context) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.people, color: AppTheme.primaryColor),
+                const SizedBox(width: 12),
+                Text(
+                  S.of(context).ConnectWithUs,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Text(
+              S.of(context).WeAppreciateFeedback,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 20),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              child: Row(
+                children: [
+                  _buildSocialConnectButton(
+                    context,
+                    icon: FontAwesomeIcons.whatsapp,
+                    label: S.of(context).WhatsApp,
+                    color: Colors.green.shade500,
+                    onTap: _contactViaWhatsApp,
+                  ),
+                  const SizedBox(width: 16),
+                  _buildSocialConnectButton(
+                    context,
+                    icon: FontAwesomeIcons.facebookMessenger,
+                    label: S.of(context).Messenger,
+                    color: Colors.blue.shade600,
+                    onTap: _contactViaMessenger,
+                  ),
+                  const SizedBox(width: 16),
+                  _buildSocialConnectButton(
+                    context,
+                    icon: FontAwesomeIcons.twitter,
+                    label: S.of(context).Twitter,
+                    color: Colors.lightBlue.shade400,
+                    onTap: _contactViaTwitter,
+                  ),
+                  const SizedBox(width: 16),
+                  _buildSocialConnectButton(
+                    context,
+                    icon: FontAwesomeIcons.instagram,
+                    label: S.of(context).Instagram,
+                    color: Colors.purple.shade600,
+                    onTap: _contactViaInstagram,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSocialConnectButton(
     BuildContext context, {
-    required FaIcon icon,
+    required IconData icon,
     required String label,
     required Color color,
     required VoidCallback onTap,
   }) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: color,
-            child: icon
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          vertical: 12,
+          horizontal: 16,
+        ),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: color.withOpacity(0.3),
+            width: 1,
           ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: const TextStyle(fontSize: 14),
-          ),
-        ],
+        ),
+        child: Row(
+          children: [
+            FaIcon(
+              icon,
+              color: color,
+              size: 16,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: TextStyle(
+                color: color,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -177,105 +444,173 @@ class HelpAndSupportPage extends StatelessWidget {
     final Uri emailUri = Uri(
       scheme: 'mailto',
       path: 'zemax.c4@gmail.com',
-      query:
-          'subject=Help%20Needed&body=Hi%20there,%0D%0A%0D%0A', // Add more query parameters as needed
+      query: 'subject=Help%20Needed&body=Hi%20there,%0D%0A%0D%0A',
     );
 
-    // استخدام canLaunchUrl و launchUrl بدلاً من canLaunch و launch
-    if (await canLaunchUrl(emailUri)) {
-      await launchUrl(emailUri);
-    } else {
-      // Could not launch the email app
-       Get.snackbar("Error", "'Could not launch Email \n $emailUri");
+    try {
+      if (await canLaunchUrl(emailUri)) {
+        await launchUrl(emailUri);
+      } else {
+        Get.snackbar(
+          "Error",
+          "Could not launch Email client",
+          snackPosition: SnackPosition.BOTTOM,
+          colorText: Colors.white,
+          backgroundColor: Colors.red.withOpacity(0.8),
+          margin: const EdgeInsets.all(8),
+          borderRadius: 8,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        "Could not launch Email: $e",
+        snackPosition: SnackPosition.BOTTOM,
+        colorText: Colors.white,
+        backgroundColor: Colors.red.withOpacity(0.8),
+        margin: const EdgeInsets.all(8),
+        borderRadius: 8,
+      );
     }
   }
 
+  void _contactViaWhatsApp() async {
+    const String phoneNumber = '201099312476';
+    const String message = 'Hello, I need some assistance.';
 
+    final Uri whatsappUri = Uri(
+      scheme: 'https',
+      host: 'wa.me',
+      path: '/$phoneNumber',
+      queryParameters: {
+        'text': message,
+      },
+    );
 
-void _contactViaWhatsApp() async {
-  const String phoneNumber = '201099312476'; // رقم الهاتف بدون +
-  const String message = 'Hello, I need some assistance.';
-
-  final Uri whatsappUri = Uri(
-    scheme: 'https',
-    host: 'wa.me',
-    path: '/$phoneNumber',
-    queryParameters: {
-      'text': message,
-    },
-  );
-
-  String whatsappLink = whatsappUri.toString();
-  print('WhatsApp Link: $whatsappLink');
-
-  try {
-    if (await canLaunch(whatsappLink)) {
-      await launch(whatsappLink);
-    } else {
-      print('Could not launch WhatsApp');
+    try {
+      if (await canLaunchUrl(whatsappUri)) {
+        await launchUrl(whatsappUri, mode: LaunchMode.externalApplication);
+      } else {
+        Get.snackbar(
+          "Error",
+          "Could not launch WhatsApp",
+          snackPosition: SnackPosition.BOTTOM,
+          colorText: Colors.white,
+          backgroundColor: Colors.red.withOpacity(0.8),
+          margin: const EdgeInsets.all(8),
+          borderRadius: 8,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        "Could not launch WhatsApp: $e",
+        snackPosition: SnackPosition.BOTTOM,
+        colorText: Colors.white,
+        backgroundColor: Colors.red.withOpacity(0.8),
+        margin: const EdgeInsets.all(8),
+        borderRadius: 8,
+      );
     }
-  } catch (e) {
-       Get.snackbar("Error", "'Could not launch Instagram \n $e");
   }
-}
-
-
 
   void _contactViaMessenger() async {
-    // Replace with your Facebook page URL or Messenger link
     final Uri messengerUri = Uri.parse('https://m.me/zemax.c4');
-    if (await canLaunch(messengerUri.toString())) {
-      await launch(messengerUri.toString());
-    } else {
-      // Could not launch Messenger
-       Get.snackbar("Error", "'Could not launch Messenger");
+
+    try {
+      if (await canLaunchUrl(messengerUri)) {
+        await launchUrl(messengerUri, mode: LaunchMode.externalApplication);
+      } else {
+        Get.snackbar(
+          "Error",
+          "Could not launch Messenger",
+          snackPosition: SnackPosition.BOTTOM,
+          colorText: Colors.white,
+          backgroundColor: Colors.red.withOpacity(0.8),
+          margin: const EdgeInsets.all(8),
+          borderRadius: 8,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        "Could not launch Messenger: $e",
+        snackPosition: SnackPosition.BOTTOM,
+        colorText: Colors.white,
+        backgroundColor: Colors.red.withOpacity(0.8),
+        margin: const EdgeInsets.all(8),
+        borderRadius: 8,
+      );
     }
   }
 
   void _contactViaTwitter() async {
-    // Replace with your Twitter handle
     final Uri twitterUri = Uri.parse('https://twitter.com/zemax_c4');
-    if (await canLaunch(twitterUri.toString())) {
-      await launch(twitterUri.toString());
-    } else {
-      // Could not launch Twitter
-             Get.snackbar("Error", "'Could not launch Twitter");
 
+    try {
+      if (await canLaunchUrl(twitterUri)) {
+        await launchUrl(twitterUri, mode: LaunchMode.externalApplication);
+      } else {
+        Get.snackbar(
+          "Error",
+          "Could not launch Twitter",
+          snackPosition: SnackPosition.BOTTOM,
+          colorText: Colors.white,
+          backgroundColor: Colors.red.withOpacity(0.8),
+          margin: const EdgeInsets.all(8),
+          borderRadius: 8,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        "Could not launch Twitter: $e",
+        snackPosition: SnackPosition.BOTTOM,
+        colorText: Colors.white,
+        backgroundColor: Colors.red.withOpacity(0.8),
+        margin: const EdgeInsets.all(8),
+        borderRadius: 8,
+      );
     }
   }
 
   void _contactViaInstagram() async {
     final Uri instagramUri = Uri.parse('https://instagram.com/mohamed_emad_c4');
-    if (await canLaunch(instagramUri.toString())) {
-      await launch(instagramUri.toString());
-    } else {
-       Get.snackbar("Error", "'Could not launch Instagram");
-     
+
+    try {
+      if (await canLaunchUrl(instagramUri)) {
+        await launchUrl(instagramUri, mode: LaunchMode.externalApplication);
+      } else {
+        Get.snackbar(
+          "Error",
+          "Could not launch Instagram",
+          snackPosition: SnackPosition.BOTTOM,
+          colorText: Colors.white,
+          backgroundColor: Colors.red.withOpacity(0.8),
+          margin: const EdgeInsets.all(8),
+          borderRadius: 8,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        "Could not launch Instagram: $e",
+        snackPosition: SnackPosition.BOTTOM,
+        colorText: Colors.white,
+        backgroundColor: Colors.red.withOpacity(0.8),
+        margin: const EdgeInsets.all(8),
+        borderRadius: 8,
+      );
     }
   }
+}
 
+class FAQItem {
+  final String question;
+  final String answer;
 
-class BulletPoint extends StatelessWidget {
-  final String text;
-
-  const BulletPoint({super.key, required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        children: [
-          const Icon(Icons.brightness_1, size: 6),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              text,
-              style: const TextStyle(fontSize: 16),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  FAQItem({
+    required this.question,
+    required this.answer,
+  });
 }
