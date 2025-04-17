@@ -14,7 +14,7 @@ import 'package:test1/cubit/update_cubit.dart';
 import 'package:test1/generated/l10n.dart';
 import 'package:test1/models/note.dart';
 import 'package:test1/shared/app_theme.dart';
-import 'package:test1/shared_prefrence.dart';
+import 'package:test1/shared/tutorial_screen.dart';
 import 'package:test1/view/add_note.dart';
 import 'package:test1/view/more_view/creat_PIN.dart';
 import 'package:test1/view/more_view/enter_PIN.dart';
@@ -99,22 +99,42 @@ class Home extends StatelessWidget {
       locale: Locale(lang),
       title: 'Notes Recorder',
       theme: AppTheme.getTheme(isDarkMode),
-      home: BlocBuilder<UpdateCubit, UpdateState>(
-        builder: (context, state) {
-          if (state is UpdateInitial) {
-            return Notes(allNotes: allNotes, isDarkMode: isDarkMode);
+      home: FutureBuilder<bool>(
+        future: TutorialHelper.shouldShowTutorial(),
+        builder: (context, snapshot) {
+          final notesScreen = BlocBuilder<UpdateCubit, UpdateState>(
+            builder: (context, state) {
+              if (state is UpdateInitial) {
+                return Notes(allNotes: allNotes, isDarkMode: isDarkMode);
+              }
+              if (state is AddNoteState) {
+                return AddNote(allNotes: allNotes);
+              } else if (state is UpdateNotes) {
+                return Notes(allNotes: state.allNotes, isDarkMode: isDarkMode);
+              } else {
+                return const Scaffold(
+                  body: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
+            },
+          );
+
+          // If we should show the tutorial (first time)
+          if (snapshot.hasData && snapshot.data == true) {
+            // Wait a bit before showing tutorial to allow UI to build
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              TutorialHelper.showTutorial(
+                context,
+                onComplete: () {
+                  Get.back(); // Close tutorial and return to app
+                },
+              );
+            });
           }
-          if (state is AddNoteState) {
-            return AddNote(allNotes: allNotes);
-          } else if (state is UpdateNotes) {
-            return Notes(allNotes: state.allNotes, isDarkMode: isDarkMode);
-          } else {
-            return const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
+
+          return notesScreen;
         },
       ),
     );
