@@ -13,10 +13,13 @@ import 'package:test1/cubit/hide_notes_cubit.dart';
 import 'package:test1/cubit/update_cubit.dart';
 import 'package:test1/generated/l10n.dart';
 import 'package:test1/models/note.dart';
+import 'package:test1/shared/app_theme.dart';
+import 'package:test1/shared_prefrence.dart';
 import 'package:test1/view/add_note.dart';
 import 'package:test1/view/more_view/creat_PIN.dart';
 import 'package:test1/view/more_view/enter_PIN.dart';
 import 'package:test1/widgets/Notes.dart';
+import 'package:test1/widgets/app_logo.dart';
 
 import 'to-do/to-do.dart';
 
@@ -95,7 +98,7 @@ class Home extends StatelessWidget {
       supportedLocales: S.delegate.supportedLocales,
       locale: Locale(lang),
       title: 'Notes Recorder',
-      theme: isDarkMode ? ThemeData.dark() : ThemeData.light(),
+      theme: AppTheme.getTheme(isDarkMode),
       home: BlocBuilder<UpdateCubit, UpdateState>(
         builder: (context, state) {
           if (state is UpdateInitial) {
@@ -137,7 +140,7 @@ class Notes extends StatelessWidget {
           child: Column(
             children: [
               _NotesHeader(isDarkMode: isDarkMode),
-              NotesList(allNotes: allNotes),
+              NotesList(allNotes: allNotes, isDarkMode: isDarkMode),
             ],
           ),
         ),
@@ -148,32 +151,76 @@ class Notes extends StatelessWidget {
 }
 
 class _NotesHeader extends StatelessWidget {
-  const _NotesHeader({required this.isDarkMode});
+  const _NotesHeader({
+    required this.isDarkMode,
+  });
 
   final bool isDarkMode;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 20, 16, 10),
       child: Row(
         children: [
-          GestureDetector(
-            onDoubleTap: () {
-              log('home');
-              BlocProvider.of<HideNotesCubit>(context).chechPIN();
-            },
-            child: Text(
-              S.of(context).Notes,
-              style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-            ),
-          ),
-          Text(
-            S.of(context).Recorder,
-            style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          const AppLogo(size: 32),
+          const SizedBox(width: 8),
+          Row(
+            children: [
+              GestureDetector(
+                onDoubleTap: () {
+                  log('Accessing hidden notes');
+                  // Show temporary indicator to let user know something is happening
+                  final scaffoldMessenger = ScaffoldMessenger.of(context);
+                  scaffoldMessenger.showSnackBar(
+                    SnackBar(
+                      content: const Row(
+                        children: [
+                          CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                          SizedBox(width: 16),
+                          Text("Accessing hidden notes..."),
+                        ],
+                      ),
+                      duration: const Duration(milliseconds: 800),
+                      backgroundColor: AppTheme.primaryColor,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  );
+
+                  // Slight delay to ensure feedback is shown before navigating
+                  Future.delayed(const Duration(milliseconds: 300), () {
+                    BlocProvider.of<HideNotesCubit>(context).chechPIN();
+                  });
+                },
+                child: Tooltip(
+                  message: 'Double-tap to access hidden notes',
+                  child: Text(
+                    S.of(context).Notes,
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          color: AppTheme.primaryColor,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ),
+              ),
+              Text(
+                S.of(context).Recorder,
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ],
           ),
           const Spacer(),
-          const SizedBox(width: 10),
           PopupMenu(isDarkMode: isDarkMode),
         ],
       ),
@@ -188,24 +235,37 @@ class _FloatingAddButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
+    return FloatingActionButton.extended(
       onPressed: () {
         Get.bottomSheet(
           Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
                 ),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  const SizedBox(height: 10),
+                  Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
                   const SizedBox(height: 20),
                   ListTile(
-                    leading: const Icon(Icons.article),
-                    title: Text("Add A New Note"),
+                    leading:
+                        const Icon(Icons.article, color: AppTheme.primaryColor),
+                    title: Text(
+                      "Add A New Note",
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                     onTap: () {
                       Navigator.pop(context);
                       Get.to(AddNote(
@@ -214,12 +274,16 @@ class _FloatingAddButton extends StatelessWidget {
                     },
                   ),
                   ListTile(
-                    leading: const Icon(Icons.assignment_turned_in),
-                    title: Text("Add A New To Do List"),
+                    leading: const Icon(Icons.assignment_turned_in,
+                        color: AppTheme.primaryColor),
+                    title: Text(
+                      "Add A New To Do List",
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                     onTap: () {
                       Navigator.pop(context);
                       Get.to(
-                        ToDo(),
+                        const ToDo(),
                       );
                     },
                   ),
@@ -230,13 +294,15 @@ class _FloatingAddButton extends StatelessWidget {
           isScrollControlled: true,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30),
-              topRight: Radius.circular(30),
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
             ),
           ),
         );
       },
-      child: const Icon(Icons.add),
+      icon: const Icon(Icons.add),
+      label: const Text("New"),
+      backgroundColor: AppTheme.primaryColor,
     );
   }
 }

@@ -114,68 +114,9 @@ class Notes extends StatelessWidget {
                   ],
                 ),
               ),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return Dismissible(
-                    key: Key("$index"), // مفتاح مميز لكل عنصر
-                    direction: DismissDirection.horizontal,
-                    onDismissed: (direction) {
-                      if (direction == DismissDirection.startToEnd) {
-                        try {
-                          BlocProvider.of<UpdateCubit>(context)
-                              .AddNoteToArchive(
-                                  allNotes: allNotes, index: index);
-                          BlocProvider.of<UpdateCubit>(context).updateNotes();
-                          Get.snackbar("Done", "Added to archive");
-                          BlocProvider.of<UpdateCubit>(context).updateNotes();
-                        } catch (e) {
-                          Get.snackbar("Error", "Failed to add note");
-                        }
-                      } else if (direction == DismissDirection.endToStart) {
-                        try {
-                          BlocProvider.of<UpdateCubit>(context)
-                              .AddNoteToDeleted(
-                                  allNotes: allNotes, index: index);
-                          BlocProvider.of<UpdateCubit>(context).updateNotes();
-                          Get.snackbar("Done", "Deleted ");
-                        } catch (e) {
-                          Get.snackbar("Error", "Failed to delete note");
-                        }
-                      }
-                    },
-                    background: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Colors.green,
-                      ), // لون الأرشفة
-                      alignment: Alignment.centerLeft,
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: const Icon(Icons.archive, color: Colors.white),
-                    ),
-                    secondaryBackground: Container(
-                      // لون الحذف
-                      alignment: Alignment.centerRight,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Colors.red,
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: const Icon(Icons.delete, color: Colors.white),
-                    ),
-                    child: GestureDetector(
-                      onTap: () {
-                        log(allNotes[index].title);
-                      },
-                      child: RecordNotes(
-                        allNotes: allNotes,
-                        index: index,
-                      ),
-                    ),
-                  );
-                },
-                itemCount: allNotes.length,
+              NotesList(
+                allNotes: allNotes,
+                isDarkMode: isDarkMode,
               ),
             ],
           ),
@@ -199,6 +140,7 @@ class Notes extends StatelessWidget {
     );
   }
 }
+
 class PopupMenu extends StatelessWidget {
   const PopupMenu({super.key, required this.isDarkMode});
 
@@ -263,67 +205,146 @@ class PopupMenu extends StatelessWidget {
     );
   }
 }
+
 class NotesList extends StatelessWidget {
-  const NotesList({super.key, required this.allNotes});
+  const NotesList({
+    super.key,
+    required this.allNotes,
+    required this.isDarkMode,
+  });
 
   final List<NoteModel> allNotes;
+  final bool isDarkMode;
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: allNotes.length,
-      itemBuilder: (context, index) {
-        return Dismissible(
-          key: Key("$index"),
-          direction: DismissDirection.horizontal,
-          onDismissed: (direction) {
-            if (direction == DismissDirection.startToEnd) {
-              try {
-                BlocProvider.of<UpdateCubit>(context)
-                    .AddNoteToArchive(allNotes: allNotes, index: index);
-                BlocProvider.of<UpdateCubit>(context).updateNotes();
-                Get.snackbar("Done", "Added to archive");
-                BlocProvider.of<UpdateCubit>(context).updateNotes();
-              } catch (e) {
-                Get.snackbar("Error", "Failed to add note");
-              }
-            } else if (direction == DismissDirection.endToStart) {
-              try {
-                BlocProvider.of<UpdateCubit>(context)
-                    .AddNoteToDeleted(allNotes: allNotes, index: index);
-                BlocProvider.of<UpdateCubit>(context).updateNotes();
-                Get.snackbar("Done", "Deleted");
-              } catch (e) {
-                Get.snackbar("Error", "Failed to delete note");
-              }
-            }
-          },
-          background: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-              color: Colors.green,
-            ),
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: const Icon(Icons.archive, color: Colors.white),
+    return allNotes.isEmpty
+        ? _buildEmptyState(context)
+        : ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return Dismissible(
+                key: Key("$index"),
+                direction: DismissDirection.horizontal,
+                onDismissed: (direction) {
+                  if (direction == DismissDirection.startToEnd) {
+                    try {
+                      BlocProvider.of<UpdateCubit>(context)
+                          .AddNoteToArchive(allNotes: allNotes, index: index);
+                      BlocProvider.of<UpdateCubit>(context).updateNotes();
+                      Get.snackbar(
+                        "Done",
+                        "Added to archive",
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.green.withOpacity(0.7),
+                        colorText: Colors.white,
+                        margin: const EdgeInsets.all(10),
+                        borderRadius: 10,
+                      );
+                      BlocProvider.of<UpdateCubit>(context).updateNotes();
+                    } catch (e) {
+                      Get.snackbar(
+                        "Error",
+                        "Failed to add note",
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.red.withOpacity(0.7),
+                        colorText: Colors.white,
+                        margin: const EdgeInsets.all(10),
+                        borderRadius: 10,
+                      );
+                    }
+                  } else if (direction == DismissDirection.endToStart) {
+                    try {
+                      BlocProvider.of<UpdateCubit>(context)
+                          .AddNoteToDeleted(allNotes: allNotes, index: index);
+                      BlocProvider.of<UpdateCubit>(context).updateNotes();
+                      Get.snackbar(
+                        "Done",
+                        "Deleted",
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.red.withOpacity(0.7),
+                        colorText: Colors.white,
+                        margin: const EdgeInsets.all(10),
+                        borderRadius: 10,
+                      );
+                    } catch (e) {
+                      Get.snackbar(
+                        "Error",
+                        "Failed to delete note",
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.red.withOpacity(0.7),
+                        colorText: Colors.white,
+                        margin: const EdgeInsets.all(10),
+                        borderRadius: 10,
+                      );
+                    }
+                  }
+                },
+                background: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: Colors.green,
+                  ),
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: const Icon(Icons.archive, color: Colors.white),
+                ),
+                secondaryBackground: Container(
+                  alignment: Alignment.centerRight,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: Colors.red,
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: const Icon(Icons.delete, color: Colors.white),
+                ),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  child: GestureDetector(
+                    onTap: () {
+                      log(allNotes[index].title);
+                    },
+                    child: RecordNotes(
+                      allNotes: allNotes,
+                      index: index,
+                      isDarkMode: isDarkMode,
+                    ),
+                  ),
+                ),
+              );
+            },
+            itemCount: allNotes.length,
+          );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(height: 100),
+          Icon(
+            Icons.note_alt_outlined,
+            size: 80,
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
           ),
-          secondaryBackground: Container(
-            alignment: Alignment.centerRight,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-              color: Colors.red,
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: const Icon(Icons.delete, color: Colors.white),
+          const SizedBox(height: 16),
+          Text(
+            "No notes yet",
+            style: Theme.of(context).textTheme.titleLarge,
           ),
-          child: RecordNotes(
-            allNotes: allNotes,
-            index: index,
+          const SizedBox(height: 8),
+          Text(
+            "Tap the + button to create a new note",
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color:
+                      Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                ),
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 }
