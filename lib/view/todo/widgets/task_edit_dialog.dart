@@ -110,6 +110,7 @@ class _TaskEditDialogState extends State<TaskEditDialog> {
         style: TextStyle(
           color: widget.primaryColor,
           fontWeight: FontWeight.bold,
+          fontSize: 22,
         ),
       ),
       contentPadding: EdgeInsets.all(isTablet ? 24 : 16),
@@ -125,7 +126,10 @@ class _TaskEditDialogState extends State<TaskEditDialog> {
                 controller: _taskController,
                 decoration: InputDecoration(
                   labelText: 'Task',
-                  labelStyle: TextStyle(color: widget.primaryColor),
+                  labelStyle: TextStyle(
+                    color: widget.primaryColor,
+                    fontSize: 18,
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -135,6 +139,7 @@ class _TaskEditDialogState extends State<TaskEditDialog> {
                         BorderSide(color: widget.primaryColor, width: 2),
                   ),
                 ),
+                style: const TextStyle(fontSize: 18),
                 maxLines: 2,
                 textCapitalization: TextCapitalization.sentences,
               ),
@@ -148,6 +153,7 @@ class _TaskEditDialogState extends State<TaskEditDialog> {
                   style: TextStyle(
                     fontWeight: _isDone ? FontWeight.bold : FontWeight.normal,
                     color: _isDone ? Colors.green : null,
+                    fontSize: 18,
                   ),
                 ),
                 value: _isDone,
@@ -168,7 +174,7 @@ class _TaskEditDialogState extends State<TaskEditDialog> {
               const Text(
                 'Category',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 19,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -187,7 +193,7 @@ class _TaskEditDialogState extends State<TaskEditDialog> {
                       children: [
                         Icon(
                           icon,
-                          size: 16,
+                          size: 18,
                           color: isSelected ? Colors.white : color,
                         ),
                         const SizedBox(width: 4),
@@ -195,6 +201,7 @@ class _TaskEditDialogState extends State<TaskEditDialog> {
                           name,
                           style: TextStyle(
                             color: isSelected ? Colors.white : null,
+                            fontSize: 16,
                           ),
                         ),
                       ],
@@ -228,7 +235,7 @@ class _TaskEditDialogState extends State<TaskEditDialog> {
               const Text(
                 'Priority',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 19,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -245,7 +252,7 @@ class _TaskEditDialogState extends State<TaskEditDialog> {
                       children: [
                         Icon(
                           Icons.flag,
-                          size: 16,
+                          size: 18,
                           color: isSelected ? Colors.white : priorityColor,
                         ),
                         const SizedBox(width: 4),
@@ -253,6 +260,7 @@ class _TaskEditDialogState extends State<TaskEditDialog> {
                           priority,
                           style: TextStyle(
                             color: isSelected ? Colors.white : null,
+                            fontSize: 16,
                           ),
                         ),
                       ],
@@ -286,7 +294,7 @@ class _TaskEditDialogState extends State<TaskEditDialog> {
               const Text(
                 'Due Date',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 19,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -311,7 +319,7 @@ class _TaskEditDialogState extends State<TaskEditDialog> {
                             ? TodoUtils.formatDate(_dueDate!)
                             : 'No due date',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 17,
                           color: _dueDate != null ? null : Colors.grey,
                         ),
                       ),
@@ -343,7 +351,7 @@ class _TaskEditDialogState extends State<TaskEditDialog> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Cancel'),
+          child: const Text('Cancel', style: TextStyle(fontSize: 16)),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
@@ -351,7 +359,7 @@ class _TaskEditDialogState extends State<TaskEditDialog> {
             backgroundColor: widget.primaryColor,
           ),
           onPressed: _saveChanges,
-          child: const Text('Save'),
+          child: const Text('Save', style: TextStyle(fontSize: 16)),
         ),
       ],
     );

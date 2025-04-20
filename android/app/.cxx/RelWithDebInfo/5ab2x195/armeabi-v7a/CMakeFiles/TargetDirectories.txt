@@ -1,0 +1,2 @@
+C:/Users/zemax/Desktop/projects/Notes-Record/android/app/.cxx/RelWithDebInfo/5ab2x195/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/zemax/Desktop/projects/Notes-Record/android/app/.cxx/RelWithDebInfo/5ab2x195/armeabi-v7a/CMakeFiles/rebuild_cache.dir
