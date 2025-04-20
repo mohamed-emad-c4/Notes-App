@@ -14,229 +14,339 @@ class DeletedNotes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DeletedUpdateCubit, DeletedUpdateState>(
-        builder: (context, state) {
-      if (state is DeletedUpdate || state is DeletedUpdateInitial) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(S.of(context).DeletedNotes), // Text translated
-            centerTitle: true,
-            backgroundColor: Colors.redAccent, // تغيير لون AppBar
-          ),
-          body: FutureBuilder<List<NoteModel>>(
-            future: NotesDatabase.instance
-                .getAllDeletedNotes(), // جلب الملاحظات المحذوفة
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    '${S.of(context).Error}: ${snapshot.error}', // Text translated
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                );
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(
-                  child: Text(
-                    S.of(context).NoDeletedNotesAvailable, // Text translated
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                );
-              } else {
-                final deletedNotes = snapshot.data!;
-                return ListView.builder(
-                  padding: const EdgeInsets.all(3),
-                  itemCount: deletedNotes.length,
-                  itemBuilder: (context, index) {
-                    final note = deletedNotes[index];
-                    return Dismissible(
-                        key: Key(note.title), // مفتاح مميز لكل عنصر
-                        direction: DismissDirection.horizontal,
-                        onDismissed: (direction) async {
-                          if (direction == DismissDirection.endToStart) {
-                            // حذف الملاحظة بشكل دائم
-                            BlocProvider.of<DeletedUpdateCubit>(context)
-                                .PremanentDelete(
-                                    allNotes: deletedNotes, index: index);
-                          } else if (direction == DismissDirection.startToEnd) {
-                            // استعادة الملاحظة
-                            BlocProvider.of<DeletedUpdateCubit>(context)
-                                .RemoveNoteFromDeleted(
-                                    allNotes: deletedNotes, index: index);
-                            BlocProvider.of<UpdateCubit>(context).updateNotes();
-                          }
-                        },
-                        background: Container(
-                          color: Colors.green, // لون الاستعادة
-                          alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: const Icon(Icons.restore, color: Colors.white),
-                        ),
-                        secondaryBackground: Container(
-                          color: Colors.red, // لون الحذف
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: const Icon(Icons.delete, color: Colors.white),
-                        ),
-                        child: Card(
-                          color: Colors.redAccent.withOpacity(0.7),
-                          child: SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.25,
-                            width: MediaQuery.of(context).size.width,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
+      builder: (context, state) {
+        if (state is DeletedUpdate || state is DeletedUpdateInitial) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                S.of(context).DeletedNotes,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
+                ),
+              ),
+              centerTitle: true,
+              backgroundColor: Colors.redAccent,
+              elevation: 0,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(20),
+                ),
+              ),
+            ),
+            body: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.redAccent.withAlpha(25),
+                    Colors.white,
+                  ],
+                ),
+              ),
+              child: FutureBuilder<List<NoteModel>>(
+                future: NotesDatabase.instance.getAllDeletedNotes(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.redAccent,
+                      ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.error_outline,
+                            size: 48,
+                            color: Colors.redAccent,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            '${S.of(context).Error}: ${snapshot.error}',
+                            style: const TextStyle(fontSize: 18),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    );
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.delete_outline,
+                            size: 64,
+                            color: Colors.grey,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            S.of(context).NoDeletedNotesAvailable,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.grey,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    final deletedNotes = snapshot.data!;
+                    return ListView.builder(
+                      padding: const EdgeInsets.all(12),
+                      itemCount: deletedNotes.length,
+                      itemBuilder: (context, index) {
+                        final note = deletedNotes[index];
+                        return Hero(
+                          tag: 'deleted_note_${note.id}',
+                          child: Dismissible(
+                            key: Key(note.title),
+                            direction: DismissDirection.horizontal,
+                            onDismissed: (direction) async {
+                              if (direction == DismissDirection.endToStart) {
+                                BlocProvider.of<DeletedUpdateCubit>(context)
+                                    .PremanentDelete(
+                                        allNotes: deletedNotes, index: index);
+                              } else if (direction ==
+                                  DismissDirection.startToEnd) {
+                                BlocProvider.of<DeletedUpdateCubit>(context)
+                                    .RemoveNoteFromDeleted(
+                                        allNotes: deletedNotes, index: index);
+                                BlocProvider.of<UpdateCubit>(context)
+                                    .updateNotes();
+                              }
+                            },
+                            background: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              alignment: Alignment.centerLeft,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: const Row(
                                 children: [
-                                  Row(
-                                    children: [
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.68,
-                                        child: Text(
-                                          note.title,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(fontSize: 18),
-                                        ),
-                                      ),
-                                      const Spacer(),
-                                      PopupMenuButton<String>(
-                                        itemBuilder: (context) => [
-                                          PopupMenuItem<String>(
-                                            value: 'Premanent Delete',
-                                            child: Row(
-                                              children: [
-                                                const Icon(
-                                                  Icons.delete,
-                                                  size: 20,
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(S.of(context).Deletedf), // Text translated
-                                              ],
-                                            ),
-                                          ),
-                                          PopupMenuItem<String>(
-                                            value: 'Archived',
-                                            child: Row(
-                                              children: [
-                                                const Icon(
-                                                  Icons.archive,
-                                                  size: 20,
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(S.of(context).Archived), // Text translated
-                                              ],
-                                            ),
-                                          ),
-                                          PopupMenuItem<String>(
-                                            value: 'Favorites',
-                                            child: Row(
-                                              children: [
-                                                const Icon(
-                                                  Icons.favorite,
-                                                  size: 20,
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(S.of(context).Favorite), // Text translated
-                                              ],
-                                            ),
-                                          ),
-                                          PopupMenuItem<String>(
-                                            value: 'Restore',
-                                            child: Row(
-                                              children: [
-                                                const Icon(
-                                                  Icons.restart_alt,
-                                                  size: 20,
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(S.of(context).Restore), // Text translated
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                        onSelected: (value) {
-                                          if (value == 'Premanent Delete') {
-                                            BlocProvider.of<DeletedUpdateCubit>(
-                                                    context)
-                                                .PremanentDelete(
-                                                    allNotes: deletedNotes,
-                                                    index: index);
-                                          } else if (value == 'Archived') {
-                                            BlocProvider.of<DeletedUpdateCubit>(
-                                                    context)
-                                                .AddNoteToArchived(
-                                                    allNotes: deletedNotes,
-                                                    index: index);
-                                          } else if (value == 'Favorites') {
-                                            BlocProvider.of<DeletedUpdateCubit>(
-                                                    context)
-                                                .AddNoteToFavorit(
-                                                    allNotes: deletedNotes,
-                                                    index: index);
-                                          } else if (value == 'Restore') {
-                                            BlocProvider.of<DeletedUpdateCubit>(
-                                                    context)
-                                                .RestoreNote(
-                                                    allNotes: deletedNotes,
-                                                    index: index);
-                                            BlocProvider.of<UpdateCubit>(
-                                                    context)
-                                                .updateNotes();
-                                          }
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      note.content,
-                                      maxLines: 4,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.grey[200]),
+                                  Icon(Icons.restore, color: Colors.white),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    'Restore',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  const Spacer(),
-                                  Align(
-                                    alignment: Alignment.bottomLeft,
-                                    child: Text(
-                                      BlocProvider.of<UpdateCubit>(context)
-                                          .formatDateTime(note.createdTime),
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.grey[300]),
-                                    ),
-                                  )
                                 ],
                               ),
                             ),
+                            secondaryBackground: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              alignment: Alignment.centerRight,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    'Delete',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Icon(Icons.delete_forever,
+                                      color: Colors.white),
+                                ],
+                              ),
+                            ),
+                            child: Card(
+                              elevation: 4,
+                              shadowColor: Colors.redAccent.withAlpha(50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      Colors.redAccent.withAlpha(204),
+                                      Colors.redAccent.withAlpha(153),
+                                    ],
+                                  ),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              note.title,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                          PopupMenuButton<String>(
+                                            icon: const Icon(
+                                              Icons.more_vert,
+                                              color: Colors.white,
+                                            ),
+                                            itemBuilder: (context) => [
+                                              PopupMenuItem<String>(
+                                                value: 'Premanent Delete',
+                                                child: Row(
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.delete,
+                                                      size: 20,
+                                                      color: Colors.red,
+                                                    ),
+                                                    const SizedBox(width: 10),
+                                                    Text(
+                                                        S.of(context).Deletedf),
+                                                  ],
+                                                ),
+                                              ),
+                                              PopupMenuItem<String>(
+                                                value: 'Archived',
+                                                child: Row(
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.archive,
+                                                      size: 20,
+                                                      color: Colors.blue,
+                                                    ),
+                                                    const SizedBox(width: 10),
+                                                    Text(
+                                                        S.of(context).Archived),
+                                                  ],
+                                                ),
+                                              ),
+                                              PopupMenuItem<String>(
+                                                value: 'Favorites',
+                                                child: Row(
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.favorite,
+                                                      size: 20,
+                                                      color: Colors.pink,
+                                                    ),
+                                                    const SizedBox(width: 10),
+                                                    Text(
+                                                        S.of(context).Favorite),
+                                                  ],
+                                                ),
+                                              ),
+                                              PopupMenuItem<String>(
+                                                value: 'Restore',
+                                                child: Row(
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.restart_alt,
+                                                      size: 20,
+                                                      color: Colors.green,
+                                                    ),
+                                                    const SizedBox(width: 10),
+                                                    Text(S.of(context).Restore),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                            onSelected: (value) {
+                                              if (value == 'Premanent Delete') {
+                                                BlocProvider.of<
+                                                            DeletedUpdateCubit>(
+                                                        context)
+                                                    .PremanentDelete(
+                                                        allNotes: deletedNotes,
+                                                        index: index);
+                                              } else if (value == 'Archived') {
+                                                BlocProvider.of<
+                                                            DeletedUpdateCubit>(
+                                                        context)
+                                                    .AddNoteToArchived(
+                                                        allNotes: deletedNotes,
+                                                        index: index);
+                                              } else if (value == 'Favorites') {
+                                                BlocProvider.of<
+                                                            DeletedUpdateCubit>(
+                                                        context)
+                                                    .AddNoteToFavorit(
+                                                        allNotes: deletedNotes,
+                                                        index: index);
+                                              } else if (value == 'Restore') {
+                                                BlocProvider.of<
+                                                            DeletedUpdateCubit>(
+                                                        context)
+                                                    .RestoreNote(
+                                                        allNotes: deletedNotes,
+                                                        index: index);
+                                                BlocProvider.of<UpdateCubit>(
+                                                        context)
+                                                    .updateNotes();
+                                              }
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        note.content,
+                                        maxLines: 4,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.white70,
+                                        ),
+                                      ),
+                                      const Spacer(),
+                                      Text(
+                                        BlocProvider.of<UpdateCubit>(context)
+                                            .formatDateTime(note.createdTime),
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.white70,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
-                        ));
-                  },
-                );
-              }
-            },
-          ),
-        );
-      } else {
-        return const Center(
-          child: Text('No Deleted Notes'),
-        );
-      }
-    });
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+            ),
+          );
+        } else {
+          return const Center(
+            child: Text('No Deleted Notes'),
+          );
+        }
+      },
+    );
   }
 }

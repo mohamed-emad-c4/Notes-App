@@ -112,6 +112,32 @@ class _AddNoteState extends State<AddNote> with SingleTickerProviderStateMixin {
                 topLeft: Radius.circular(30),
                 topRight: Radius.circular(30),
               ),
+              boxShadow: [
+                if (!isDark)
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 10,
+                    spreadRadius: 1,
+                    offset: const Offset(0, -5),
+                  )
+              ],
+              gradient: isDark
+                  ? const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xFF2C2C2E),
+                        Color(0xFF3A3A3C),
+                      ],
+                    )
+                  : const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Colors.white,
+                        Color(0xFFF8F9FA),
+                      ],
+                    ),
             ),
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
@@ -169,6 +195,27 @@ class _AddNoteState extends State<AddNote> with SingleTickerProviderStateMixin {
                         hintStyle: TextStyle(
                           color: isDark ? Colors.grey[400] : Colors.grey[500],
                         ),
+                        filled: true,
+                        fillColor: isDark
+                            ? Colors.grey[800]!.withOpacity(0.3)
+                            : Colors.white,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: isDark
+                                ? Colors.grey[700]!.withOpacity(0.2)
+                                : Colors.grey[300]!.withOpacity(0.3),
+                            width: 1,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                            color: AppTheme.primaryColor.withOpacity(0.5),
+                            width: 1.5,
+                          ),
+                        ),
+                        contentPadding: const EdgeInsets.all(16),
                       ),
                     ),
 
@@ -208,13 +255,20 @@ class _AddNoteState extends State<AddNote> with SingleTickerProviderStateMixin {
   }
 
   Widget _buildNoteOptions() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Card(
-      elevation: 0,
-      color: Colors.transparent,
+      elevation: 4,
+      shadowColor: isDark
+          ? Colors.black.withOpacity(0.4)
+          : Colors.black.withOpacity(0.1),
+      color: isDark ? const Color(0xFF2C2C2E) : Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(
-          color: Colors.grey.withOpacity(0.2),
+          color: isDark
+              ? Colors.grey[700]!.withOpacity(0.2)
+              : Colors.grey[300]!.withOpacity(0.5),
           width: 1,
         ),
       ),
@@ -227,6 +281,7 @@ class _AddNoteState extends State<AddNote> with SingleTickerProviderStateMixin {
               "Note Options",
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
+                    color: isDark ? Colors.grey[300] : Colors.grey[800],
                   ),
             ),
             const SizedBox(height: 16),

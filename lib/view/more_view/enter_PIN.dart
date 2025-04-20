@@ -61,11 +61,11 @@ class _EnterPinScreenState extends State<EnterPinScreen> {
 
     try {
       final enteredPin = _pin;
-      final savedPin = await _storage.read(key: 'user_pin');
+    final savedPin = await _storage.read(key: 'user_pin');
 
-      if (enteredPin == savedPin) {
-        Get.off(const HiddenNotesScreen());
-      } else {
+    if (enteredPin == savedPin) {
+      Get.off(const HiddenNotesScreen());
+    } else {
         setState(() {
           _errorText = "Incorrect PIN. Please try again.";
           _pin = '';
@@ -99,7 +99,7 @@ class _EnterPinScreenState extends State<EnterPinScreen> {
         ),
         child: Padding(
           padding: const EdgeInsets.all(24.0),
-          child: Column(
+        child: Column(
             children: [
               const SizedBox(height: 20),
               // PIN status indicator
@@ -111,8 +111,8 @@ class _EnterPinScreenState extends State<EnterPinScreen> {
                     padding:
                         EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
                         Icon(
                           Icons.lock_open,
                           color: Colors.white,
