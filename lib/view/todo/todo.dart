@@ -386,13 +386,49 @@ class _ToDoState extends State<ToDo> with SingleTickerProviderStateMixin {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final filteredTasks = _getFilteredTasks();
     final screenSize = MediaQuery.of(context).size;
-    final isTablet = screenSize.width > 600;
-    final isLandscape = screenSize.width > screenSize.height;
-    final isSmallScreen = screenSize.width < 360;
+    final screenWidth = screenSize.width;
+    final screenHeight = screenSize.height;
 
-    // Adjust UI based on screen size and orientation
-    final double cardMargin = isTablet ? 16.0 : (isSmallScreen ? 4.0 : 8.0);
-    final double taskItemHeight = isTablet ? 90.0 : 80.0;
+    // Use relative sizing based on screen dimensions
+    final isTablet = screenWidth > 600;
+    final isLandscape = screenWidth > screenHeight;
+    final isSmallScreen = screenWidth < 360;
+
+    // Calculate dynamic dimensions based on screen size
+    final double cardMargin = isTablet
+        ? screenWidth * 0.02 // 2% of screen width
+        : (isSmallScreen
+            ? screenWidth * 0.01
+            : screenWidth * 0.015); // 1-1.5% of screen width
+
+    final double taskItemHeight = isTablet
+        ? screenHeight * 0.12 // 12% of screen height
+        : screenHeight * 0.1; // 10% of screen height
+
+    final double standardPadding = screenWidth * 0.04; // 4% of screen width
+    final double smallPadding = screenWidth * 0.02; // 2% of screen width
+    final double tinyPadding = screenWidth * 0.01; // 1% of screen width
+
+    final double buttonHeight = isTablet
+        ? screenHeight * 0.06 // 6% of screen height
+        : screenHeight * 0.05; // 5% of screen height
+
+    final double iconSize = isTablet
+        ? screenWidth * 0.04 // 4% of screen width
+        : screenWidth * 0.05; // 5% of screen width for better tap targets
+
+    // Calculate font sizes based on screen dimensions
+    final double titleFontSize = isTablet
+        ? screenWidth * 0.038 // Increased from 0.03 to 0.038
+        : screenWidth * 0.048; // Increased from 0.04 to 0.048
+
+    final double bodyFontSize = isTablet
+        ? screenWidth * 0.026 // Increased from 0.02 to 0.026
+        : screenWidth * 0.036; // Increased from 0.03 to 0.036
+
+    final double smallFontSize = isTablet
+        ? screenWidth * 0.022 // Increased from 0.016 to 0.022
+        : screenWidth * 0.032; // Increased from 0.025 to 0.032
 
     return Scaffold(
       appBar: AppBar(
@@ -400,50 +436,54 @@ class _ToDoState extends State<ToDo> with SingleTickerProviderStateMixin {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.task_alt, color: Colors.white, size: isTablet ? 28 : 24),
-            const SizedBox(width: 12),
+            Icon(Icons.task_alt, color: Colors.white, size: iconSize),
+            SizedBox(width: standardPadding * 0.3),
             Text(
               'Tasks',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 letterSpacing: 0.5,
-                fontSize: isTablet ? 24 : 20,
+                fontSize: titleFontSize,
               ),
             ),
           ],
         ),
         backgroundColor: _primaryColor,
         elevation: 0,
-        shape: const RoundedRectangleBorder(
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(24),
+            bottom: Radius.circular(screenWidth * 0.06), // 6% of screen width
           ),
         ),
         actions: [
           // Task counter with improved contrast
           Padding(
-            padding: const EdgeInsets.only(right: 8.0),
+            padding: EdgeInsets.only(right: smallPadding),
             child: Center(
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: EdgeInsets.symmetric(
+                  horizontal: standardPadding * 0.3,
+                  vertical: smallPadding * 0.3,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white.withAlpha(60),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(
+                      screenWidth * 0.05), // 5% of screen width
                   border:
                       Border.all(color: Colors.white.withAlpha(80), width: 1),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.check_circle,
-                        size: 16, color: Colors.white),
-                    const SizedBox(width: 4),
+                    Icon(Icons.check_circle,
+                        size: iconSize * 0.6, color: Colors.white),
+                    SizedBox(width: tinyPadding),
                     Text(
                       '$completedTasks/${tasks.length}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
+                        fontSize: smallFontSize,
                       ),
                     ),
                   ],
@@ -453,16 +493,18 @@ class _ToDoState extends State<ToDo> with SingleTickerProviderStateMixin {
           ),
           // Sort and filter button with improved tap target
           Container(
-            margin: const EdgeInsets.only(right: 8.0),
+            margin: EdgeInsets.only(right: smallPadding),
             decoration: BoxDecoration(
               color: Colors.white.withAlpha(60),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(
+                  screenWidth * 0.03), // 3% of screen width
             ),
             child: Tooltip(
               message: 'Sort & Filter',
               child: IconButton(
                 icon: const Icon(Icons.filter_list, color: Colors.white),
                 onPressed: _showSortAndFilterMenu,
+                iconSize: iconSize * 0.9,
               ),
             ),
           ),
@@ -488,13 +530,13 @@ class _ToDoState extends State<ToDo> with SingleTickerProviderStateMixin {
                   children: [
                     CircularProgressIndicator(
                       color: _primaryColor,
-                      strokeWidth: 3,
+                      strokeWidth: screenWidth * 0.005, // 0.5% of screen width
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: standardPadding),
                     Text(
                       'Loading your tasks...',
                       style: TextStyle(
-                        fontSize: isTablet ? 18 : 16,
+                        fontSize: bodyFontSize,
                         fontWeight: FontWeight.w500,
                         color: isDarkMode ? Colors.white70 : Colors.black54,
                       ),
@@ -509,18 +551,33 @@ class _ToDoState extends State<ToDo> with SingleTickerProviderStateMixin {
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
                     height: _isAddingNewTask
-                        ? (isTablet ? 220 : 200)
-                        : (isTablet ? 90 : 80),
-                    padding: EdgeInsets.all(isTablet ? 20 : 16),
+                        ? (isTablet
+                            ? screenHeight * 0.26 // 26% of screen height
+                            : (isSmallScreen
+                                ? screenHeight *
+                                    0.32 // 32% of screen height for small screens
+                                : screenHeight *
+                                    0.28)) // 28% of screen height for normal screens
+                        : (isTablet
+                            ? screenHeight * 0.12 // 12% of screen height
+                            : screenHeight * 0.1), // 10% of screen height
+                    padding: EdgeInsets.all(isTablet
+                        ? standardPadding
+                        : (isSmallScreen
+                            ? smallPadding
+                            : standardPadding * 0.8)),
                     child: _isAddingNewTask
                         ? Card(
                             elevation: 8,
                             shadowColor: _primaryColor.withAlpha(100),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(
+                                  screenWidth * 0.05), // 5% of screen width
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.all(16.0),
+                              padding: EdgeInsets.all(isSmallScreen
+                                  ? smallPadding
+                                  : standardPadding * 0.8),
                               child: Column(
                                 children: [
                                   TextField(
@@ -528,8 +585,8 @@ class _ToDoState extends State<ToDo> with SingleTickerProviderStateMixin {
                                     autofocus: true,
                                     textCapitalization:
                                         TextCapitalization.sentences,
-                                    style: const TextStyle(
-                                      fontSize: 16,
+                                    style: TextStyle(
+                                      fontSize: bodyFontSize,
                                     ),
                                     decoration: InputDecoration(
                                       hintText: 'What needs to be done?',
@@ -540,21 +597,27 @@ class _ToDoState extends State<ToDo> with SingleTickerProviderStateMixin {
                                       prefixIcon: Icon(
                                         Icons.edit_note,
                                         color: _primaryColor.withAlpha(180),
+                                        size: iconSize,
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(height: 8),
-                                  Row(
-                                    children: [
-                                      // Category dropdown with improved styling
-                                      Expanded(
-                                        flex: 2,
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8),
+                                  SizedBox(height: smallPadding * 0.8),
+                                  // Use a responsive layout approach for small screens
+                                  if (isSmallScreen)
+                                    // Stacked layout for small screens
+                                    Column(
+                                      children: [
+                                        // Category dropdown
+                                        Container(
+                                          width: double.infinity,
+                                          margin: EdgeInsets.only(
+                                              bottom: smallPadding),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: smallPadding),
                                           decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(
+                                                screenWidth *
+                                                    0.03), // 3% of screen width
                                             border: Border.all(
                                               color: Colors.grey.withAlpha(100),
                                               width: 1,
@@ -564,9 +627,8 @@ class _ToDoState extends State<ToDo> with SingleTickerProviderStateMixin {
                                             value: _selectedCategory,
                                             isExpanded: true,
                                             underline: const SizedBox(),
-                                            icon: const Icon(
-                                                Icons.arrow_drop_down,
-                                                size: 20),
+                                            icon: Icon(Icons.arrow_drop_down,
+                                                size: iconSize * 0.7),
                                             items:
                                                 categories.map((categoryMap) {
                                               final name =
@@ -578,13 +640,26 @@ class _ToDoState extends State<ToDo> with SingleTickerProviderStateMixin {
 
                                               return DropdownMenuItem<String>(
                                                 value: name,
-                                                child: Row(
-                                                  children: [
-                                                    Icon(icon,
-                                                        color: color, size: 16),
-                                                    const SizedBox(width: 8),
-                                                    Text(name),
-                                                  ],
+                                                child: Container(
+                                                  constraints:
+                                                      const BoxConstraints(
+                                                    minHeight: 48.0,
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Icon(icon,
+                                                          color: color,
+                                                          size: iconSize * 0.6),
+                                                      SizedBox(
+                                                          width: smallPadding),
+                                                      Text(name,
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  smallFontSize)),
+                                                    ],
+                                                  ),
                                                 ),
                                               );
                                             }).toList(),
@@ -597,101 +672,379 @@ class _ToDoState extends State<ToDo> with SingleTickerProviderStateMixin {
                                             },
                                           ),
                                         ),
-                                      ),
 
-                                      const SizedBox(width: 12),
+                                        // Priority and action buttons row
+                                        Row(
+                                          children: [
+                                            // Priority dropdown
+                                            Expanded(
+                                              flex: 2,
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: smallPadding),
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius
+                                                      .circular(screenWidth *
+                                                          0.03), // 3% of screen width
+                                                  border: Border.all(
+                                                    color: Colors.grey
+                                                        .withAlpha(100),
+                                                    width: 1,
+                                                  ),
+                                                ),
+                                                child: DropdownButton<String>(
+                                                  value: _selectedPriority,
+                                                  isExpanded: true,
+                                                  underline: const SizedBox(),
+                                                  icon: Icon(
+                                                      Icons.arrow_drop_down,
+                                                      size: iconSize * 0.7),
+                                                  items: [
+                                                    'Low',
+                                                    'Medium',
+                                                    'High'
+                                                  ].map((priority) {
+                                                    return DropdownMenuItem<
+                                                        String>(
+                                                      value: priority,
+                                                      child: Container(
+                                                        constraints:
+                                                            const BoxConstraints(
+                                                          minHeight: 48.0,
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Icon(
+                                                              Icons.flag,
+                                                              color: TodoUtils
+                                                                  .getPriorityColor(
+                                                                      priority),
+                                                              size: iconSize *
+                                                                  0.6,
+                                                            ),
+                                                            SizedBox(
+                                                                width:
+                                                                    tinyPadding *
+                                                                        2),
+                                                            // On small screens, show priority text
+                                                            Text(
+                                                              priority,
+                                                              style: TextStyle(
+                                                                fontSize:
+                                                                    smallFontSize,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                            ),
+                                                            // Always show priority icon
+                                                            const SizedBox(
+                                                                width: 8),
+                                                            Icon(
+                                                              priority == 'High'
+                                                                  ? Icons
+                                                                      .arrow_upward
+                                                                  : (priority ==
+                                                                          'Medium'
+                                                                      ? Icons
+                                                                          .remove
+                                                                      : Icons
+                                                                          .arrow_downward),
+                                                              color: TodoUtils
+                                                                  .getPriorityColor(
+                                                                      priority),
+                                                              size: iconSize *
+                                                                  0.5,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }).toList(),
+                                                  onChanged: (value) {
+                                                    if (value != null) {
+                                                      setState(() {
+                                                        _selectedPriority =
+                                                            value;
+                                                      });
+                                                    }
+                                                  },
+                                                ),
+                                              ),
+                                            ),
 
-                                      // Priority dropdown with improved styling
-                                      Expanded(
-                                        flex: isTablet ? 2 : 1,
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            border: Border.all(
-                                              color: Colors.grey.withAlpha(100),
-                                              width: 1,
+                                            SizedBox(width: smallPadding),
+
+                                            // Action buttons
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: _primaryColor,
+                                                foregroundColor: Colors.white,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius
+                                                      .circular(screenWidth *
+                                                          0.03), // 3% of screen width
+                                                ),
+                                                elevation: 2,
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal:
+                                                      standardPadding * 0.3,
+                                                  vertical: smallPadding * 0.8,
+                                                ),
+                                              ),
+                                              onPressed: _addNewTask,
+                                              child: Text(
+                                                'Add',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: smallFontSize,
+                                                ),
+                                              ),
+                                            ),
+
+                                            IconButton(
+                                              icon: Icon(
+                                                Icons.close,
+                                                color: Colors.grey.shade600,
+                                                size: iconSize * 0.7,
+                                              ),
+                                              onPressed: () {
+                                                setState(() {
+                                                  _isAddingNewTask = false;
+                                                  _newTaskController.clear();
+                                                });
+                                              },
+                                              visualDensity:
+                                                  VisualDensity.compact,
+                                              constraints: BoxConstraints(
+                                                minWidth: screenWidth * 0.06,
+                                                minHeight: screenWidth * 0.06,
+                                              ),
+                                              padding: EdgeInsets.all(
+                                                  tinyPadding * 2),
+                                              tooltip: 'Cancel',
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    )
+                                  else
+                                    // Horizontal layout for normal/larger screens
+                                    Row(
+                                      children: [
+                                        // Category dropdown with improved styling
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: smallPadding),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius
+                                                  .circular(screenWidth *
+                                                      0.03), // 3% of screen width
+                                              border: Border.all(
+                                                color:
+                                                    Colors.grey.withAlpha(100),
+                                                width: 1,
+                                              ),
+                                            ),
+                                            child: DropdownButton<String>(
+                                              value: _selectedCategory,
+                                              isExpanded: true,
+                                              underline: const SizedBox(),
+                                              icon: Icon(Icons.arrow_drop_down,
+                                                  size: iconSize * 0.7),
+                                              items:
+                                                  categories.map((categoryMap) {
+                                                final name = categoryMap['name']
+                                                    as String;
+                                                final icon = categoryMap['icon']
+                                                    as IconData;
+                                                final color =
+                                                    categoryMap['color']
+                                                        as Color;
+
+                                                return DropdownMenuItem<String>(
+                                                  value: name,
+                                                  child: Container(
+                                                    constraints:
+                                                        const BoxConstraints(
+                                                      minHeight: 48.0,
+                                                    ),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Icon(icon,
+                                                            color: color,
+                                                            size:
+                                                                iconSize * 0.6),
+                                                        SizedBox(
+                                                            width:
+                                                                smallPadding),
+                                                        Text(name,
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    smallFontSize)),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              }).toList(),
+                                              onChanged: (value) {
+                                                if (value != null) {
+                                                  setState(() {
+                                                    _selectedCategory = value;
+                                                  });
+                                                }
+                                              },
                                             ),
                                           ),
-                                          child: DropdownButton<String>(
-                                            value: _selectedPriority,
-                                            isExpanded: true,
-                                            underline: const SizedBox(),
-                                            icon: const Icon(
-                                                Icons.arrow_drop_down,
-                                                size: 20),
-                                            items: ['Low', 'Medium', 'High']
-                                                .map((priority) {
-                                              return DropdownMenuItem<String>(
-                                                value: priority,
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.flag,
-                                                      color: TodoUtils
-                                                          .getPriorityColor(
-                                                              priority),
-                                                      size: 16,
+                                        ),
+
+                                        SizedBox(width: standardPadding * 0.3),
+
+                                        // Priority dropdown with improved styling
+                                        Expanded(
+                                          flex: isTablet ? 2 : 1,
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: smallPadding),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius
+                                                  .circular(screenWidth *
+                                                      0.03), // 3% of screen width
+                                              border: Border.all(
+                                                color:
+                                                    Colors.grey.withAlpha(100),
+                                                width: 1,
+                                              ),
+                                            ),
+                                            child: DropdownButton<String>(
+                                              value: _selectedPriority,
+                                              isExpanded: true,
+                                              underline: const SizedBox(),
+                                              icon: Icon(Icons.arrow_drop_down,
+                                                  size: iconSize * 0.7),
+                                              items: ['Low', 'Medium', 'High']
+                                                  .map((priority) {
+                                                return DropdownMenuItem<String>(
+                                                  value: priority,
+                                                  child: Container(
+                                                    constraints:
+                                                        const BoxConstraints(
+                                                      minHeight: 48.0,
                                                     ),
-                                                    if (isTablet || isLandscape)
-                                                      const SizedBox(width: 8),
-                                                    if (isTablet || isLandscape)
-                                                      Text(priority),
-                                                  ],
-                                                ),
-                                              );
-                                            }).toList(),
-                                            onChanged: (value) {
-                                              if (value != null) {
-                                                setState(() {
-                                                  _selectedPriority = value;
-                                                });
-                                              }
-                                            },
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Icon(
+                                                          Icons.flag,
+                                                          color: TodoUtils
+                                                              .getPriorityColor(
+                                                                  priority),
+                                                          size: iconSize * 0.6,
+                                                        ),
+                                                        if (isTablet ||
+                                                            isLandscape)
+                                                          SizedBox(
+                                                              width:
+                                                                  smallPadding),
+                                                        if (isTablet ||
+                                                            isLandscape)
+                                                          Text(
+                                                            priority,
+                                                            style: TextStyle(
+                                                              fontSize:
+                                                                  smallFontSize,
+                                                              color:
+                                                                  Colors.black,
+                                                            ),
+                                                          ),
+                                                        // Always show priority icon
+                                                        const SizedBox(
+                                                            width: 8),
+                                                        Icon(
+                                                          priority == 'High'
+                                                              ? Icons
+                                                                  .arrow_upward
+                                                              : (priority ==
+                                                                      'Medium'
+                                                                  ? Icons.remove
+                                                                  : Icons
+                                                                      .arrow_downward),
+                                                          color: TodoUtils
+                                                              .getPriorityColor(
+                                                                  priority),
+                                                          size: iconSize * 0.5,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              }).toList(),
+                                              onChanged: (value) {
+                                                if (value != null) {
+                                                  setState(() {
+                                                    _selectedPriority = value;
+                                                  });
+                                                }
+                                              },
+                                            ),
                                           ),
                                         ),
-                                      ),
 
-                                      const SizedBox(width: 12),
+                                        SizedBox(width: standardPadding * 0.3),
 
-                                      // Action buttons with improved styling
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: _primaryColor,
-                                          foregroundColor: Colors.white,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                        // Action buttons with improved styling
+                                        ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: _primaryColor,
+                                            foregroundColor: Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius
+                                                  .circular(screenWidth *
+                                                      0.03), // 3% of screen width
+                                            ),
+                                            elevation: 2,
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: standardPadding * 0.4,
+                                              vertical: smallPadding,
+                                            ),
+                                            minimumSize: Size(screenWidth * 0.1,
+                                                buttonHeight),
                                           ),
-                                          elevation: 2,
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 16, vertical: 12),
+                                          onPressed: _addNewTask,
+                                          child: Text(
+                                            'Add',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: smallFontSize,
+                                            ),
+                                          ),
                                         ),
-                                        onPressed: _addNewTask,
-                                        child: const Text(
-                                          'Add',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
 
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.close,
-                                          color: Colors.grey.shade600,
+                                        IconButton(
+                                          icon: Icon(
+                                            Icons.close,
+                                            color: Colors.grey.shade600,
+                                            size: iconSize * 0.8,
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              _isAddingNewTask = false;
+                                              _newTaskController.clear();
+                                            });
+                                          },
+                                          tooltip: 'Cancel',
                                         ),
-                                        onPressed: () {
-                                          setState(() {
-                                            _isAddingNewTask = false;
-                                            _newTaskController.clear();
-                                          });
-                                        },
-                                        tooltip: 'Cancel',
-                                      ),
-                                    ],
-                                  ),
+                                      ],
+                                    ),
                                 ],
                               ),
                             ),
@@ -702,25 +1055,32 @@ class _ToDoState extends State<ToDo> with SingleTickerProviderStateMixin {
                                 backgroundColor: _primaryColor,
                                 foregroundColor: Colors.white,
                                 padding: EdgeInsets.symmetric(
-                                  horizontal: isTablet ? 32 : 24,
-                                  vertical: isTablet ? 16 : 12,
+                                  horizontal: isTablet
+                                      ? standardPadding
+                                      : standardPadding * 0.6,
+                                  vertical: isTablet
+                                      ? smallPadding
+                                      : smallPadding * 0.8,
                                 ),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(
+                                      screenWidth * 0.04), // 4% of screen width
                                 ),
                                 elevation: 4,
+                                minimumSize:
+                                    Size(screenWidth * 0.2, buttonHeight),
                               ),
                               onPressed: () {
                                 setState(() {
                                   _isAddingNewTask = true;
                                 });
                               },
-                              icon: const Icon(Icons.add),
+                              icon: Icon(Icons.add, size: iconSize * 0.8),
                               label: Text(
                                 'Add New Task',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: isTablet ? 18 : 16,
+                                  fontSize: bodyFontSize,
                                 ),
                               ),
                             ),
@@ -749,8 +1109,15 @@ class _ToDoState extends State<ToDo> with SingleTickerProviderStateMixin {
                                 isTablet: isTablet,
                                 primaryColor: _primaryColor,
                               )
-                            : _buildTaskList(filteredTasks, isDarkMode,
-                                isTablet, cardMargin, taskItemHeight),
+                            : _buildTaskList(
+                                filteredTasks,
+                                isDarkMode,
+                                isTablet,
+                                cardMargin,
+                                taskItemHeight,
+                                screenWidth,
+                                screenHeight,
+                              ),
                   ),
                 ],
               ),
@@ -768,31 +1135,38 @@ class _ToDoState extends State<ToDo> with SingleTickerProviderStateMixin {
               },
               tooltip: 'Add new task',
               elevation: 8,
-              child: const Icon(Icons.add),
+              child: Icon(Icons.add, size: iconSize * 0.9),
             ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
   // Task list view with improved animations and styling
-  Widget _buildTaskList(List<TaskModel> filteredTasks, bool isDarkMode,
-      bool isTablet, double cardMargin, double taskItemHeight) {
+  Widget _buildTaskList(
+    List<TaskModel> filteredTasks,
+    bool isDarkMode,
+    bool isTablet,
+    double cardMargin,
+    double taskItemHeight,
+    double screenWidth,
+    double screenHeight,
+  ) {
     // Use a grid layout for tablets in landscape mode
     if (isTablet &&
         MediaQuery.of(context).orientation == Orientation.landscape) {
       return GridView.builder(
         controller: _scrollController,
-        padding: const EdgeInsets.only(
-          top: 16,
-          left: 16,
-          right: 16,
-          bottom: 100,
+        padding: EdgeInsets.only(
+          top: screenHeight * 0.02, // 2% of screen height
+          left: screenWidth * 0.02, // 2% of screen width
+          right: screenWidth * 0.02, // 2% of screen width
+          bottom: screenHeight * 0.12, // 12% of screen height
         ),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 2.5,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
+          crossAxisSpacing: screenWidth * 0.02, // 2% of screen width
+          mainAxisSpacing: screenHeight * 0.02, // 2% of screen height
         ),
         itemCount: filteredTasks.length,
         itemBuilder: (context, index) {
@@ -813,15 +1187,16 @@ class _ToDoState extends State<ToDo> with SingleTickerProviderStateMixin {
     }
 
     // Adjust padding for small screens
+    final bool isSmallScreen = screenWidth < 360;
     final double horizontalPadding =
-        MediaQuery.of(context).size.width < 360 ? 4.0 : 8.0;
+        screenWidth * (isSmallScreen ? 0.01 : 0.02); // 1-2% of screen width
 
     // Use list view for phones and tablets in portrait with improved animations
     return ListView.builder(
       controller: _scrollController,
       padding: EdgeInsets.only(
-          top: 16,
-          bottom: 100,
+          top: screenHeight * 0.02, // 2% of screen height
+          bottom: screenHeight * 0.12, // 12% of screen height
           left: horizontalPadding,
           right: horizontalPadding),
       itemCount: filteredTasks.length,
@@ -856,7 +1231,8 @@ class _ToDoState extends State<ToDo> with SingleTickerProviderStateMixin {
             );
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
+            padding: EdgeInsets.symmetric(
+                vertical: screenHeight * 0.005), // 0.5% of screen height
             child: TaskItem(
               task: task,
               index: taskIndex,

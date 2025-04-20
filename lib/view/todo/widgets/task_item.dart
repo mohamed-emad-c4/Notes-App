@@ -43,30 +43,53 @@ class TaskItem extends StatelessWidget {
     // Calculate content opacity based on completion status
     final contentOpacity = task.isDone ? 0.7 : 1.0;
 
-    // Determine screen width for responsive layout
-    final screenWidth = MediaQuery.of(context).size.width;
-    final compactLayout = screenWidth < 360; // Extra small screens
+    // Get screen dimensions for responsive sizing
+    final screenSize = MediaQuery.of(context).size;
+    final screenWidth = screenSize.width;
+    final screenHeight = screenSize.height;
+
+    // Calculate dynamic dimensions
+    final bool compactLayout = screenWidth < 360;
+
+    // Calculate dynamic padding and radius values
+    final double borderRadius = screenWidth * 0.05; // 5% of screen width
+    final double smallBorderRadius = screenWidth * 0.03; // 3% of screen width
+    final double iconSize = isTablet
+        ? screenWidth * 0.04
+        : (compactLayout ? screenWidth * 0.04 : screenWidth * 0.05);
+
+    final double smallIconSize = iconSize * 0.6;
+    final double standardPadding = screenWidth * 0.03; // 3% of screen width
+    final double smallPadding = screenWidth * 0.02; // 2% of screen width
+    final double tinyPadding = screenWidth * 0.01; // 1% of screen width
+
+    // Calculate font sizes
+    final double titleSize = isTablet
+        ? screenWidth * 0.032
+        : (compactLayout ? screenWidth * 0.042 : screenWidth * 0.048);
+    final double badgeTextSize =
+        isTablet ? screenWidth * 0.02 : screenWidth * 0.034;
 
     return Dismissible(
       key: Key(task.id),
       background: Container(
         margin: EdgeInsets.symmetric(
           horizontal: cardMargin,
-          vertical: 4,
+          vertical: screenHeight * 0.005, // 0.5% of screen height
         ),
         decoration: BoxDecoration(
           color: Colors.red.shade400,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(borderRadius),
           boxShadow: [
             BoxShadow(
               color: Colors.red.shade200.withOpacity(0.3),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
+              blurRadius: screenWidth * 0.02, // 2% of screen width
+              offset: Offset(0, screenHeight * 0.002), // 0.2% of screen height
             ),
           ],
         ),
         alignment: Alignment.centerRight,
-        padding: const EdgeInsets.only(right: 20),
+        padding: EdgeInsets.only(right: standardPadding * 1.5),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.end,
@@ -76,14 +99,14 @@ class TaskItem extends StatelessWidget {
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
-                fontSize: isTablet ? 16 : 14,
+                fontSize: isTablet ? screenWidth * 0.026 : screenWidth * 0.042,
               ),
             ),
-            const SizedBox(width: 8),
-            const Icon(
+            SizedBox(width: smallPadding),
+            Icon(
               Icons.delete_sweep,
               color: Colors.white,
-              size: 28,
+              size: iconSize * 1.2,
             ),
           ],
         ),
@@ -108,14 +131,14 @@ class TaskItem extends StatelessWidget {
                 : primaryColor.withAlpha(60),
         margin: EdgeInsets.symmetric(
           horizontal: cardMargin,
-          vertical: 4,
+          vertical: screenHeight * 0.005, // 0.5% of screen height
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(borderRadius),
         ),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(borderRadius),
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -147,21 +170,21 @@ class TaskItem extends StatelessWidget {
             ),
           ),
           child: InkWell(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(borderRadius),
             onTap: () => onEditTask(index),
             onLongPress: () {
               HapticFeedback.mediumImpact();
               onToggleCompletion(index, !task.isDone);
             },
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 6,
-                vertical: 6,
+              padding: EdgeInsets.symmetric(
+                horizontal: tinyPadding * 1.5,
+                vertical: tinyPadding * 1.5,
               ),
               child: LayoutBuilder(builder: (context, constraints) {
                 // Calculate available widths for responsive layout
                 final availableWidth = constraints.maxWidth;
-                final hasSpace = availableWidth > 320;
+                final hasSpace = availableWidth > screenWidth * 0.8;
 
                 return Row(
                   children: [
@@ -175,12 +198,13 @@ class TaskItem extends StatelessWidget {
                               ? Colors.green.withAlpha(30)
                               : Colors.transparent,
                         ),
-                        margin: const EdgeInsets.only(left: 8),
+                        margin: EdgeInsets.only(left: smallPadding),
                         child: Checkbox(
                           activeColor: primaryColor,
                           checkColor: Colors.white,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
+                            borderRadius:
+                                BorderRadius.circular(smallBorderRadius * 0.5),
                           ),
                           side: BorderSide(
                             color: task.isDone
@@ -200,7 +224,7 @@ class TaskItem extends StatelessWidget {
                     // Content
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        padding: EdgeInsets.symmetric(horizontal: smallPadding),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -210,18 +234,19 @@ class TaskItem extends StatelessWidget {
                               children: [
                                 if (task.priority == 'High')
                                   Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 6.0, top: 4),
+                                    padding: EdgeInsets.only(
+                                        right: tinyPadding * 1.5,
+                                        top: tinyPadding),
                                     child: Icon(
                                       Icons.priority_high,
-                                      size: 16,
+                                      size: smallIconSize,
                                       color: Colors.red
                                           .withOpacity(contentOpacity),
                                     ),
                                   ),
                                 Expanded(
                                   child: Padding(
-                                    padding: const EdgeInsets.only(top: 4),
+                                    padding: EdgeInsets.only(top: tinyPadding),
                                     child: Text(
                                       task.task,
                                       style: TextStyle(
@@ -234,7 +259,7 @@ class TaskItem extends StatelessWidget {
                                                 .textTheme
                                                 .bodyLarge
                                                 ?.color,
-                                        fontSize: isTablet ? 18 : 16,
+                                        fontSize: titleSize,
                                         fontWeight: task.priority == 'High'
                                             ? FontWeight.bold
                                             : FontWeight.normal,
@@ -248,22 +273,23 @@ class TaskItem extends StatelessWidget {
                               ],
                             ),
 
-                            const SizedBox(height: 8),
+                            SizedBox(height: smallPadding),
 
                             // Badges - wrap in a flexible flow widget for small screens
                             Wrap(
-                              spacing: 6,
-                              runSpacing: 6,
+                              spacing: tinyPadding * 1.5,
+                              runSpacing: tinyPadding * 1.5,
                               children: [
                                 // Category badge
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 3,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: smallPadding,
+                                    vertical: tinyPadding * 0.8,
                                   ),
                                   decoration: BoxDecoration(
                                     color: categoryColor.withAlpha(30),
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(
+                                        smallBorderRadius),
                                     border: Border.all(
                                       color: categoryColor.withAlpha(80),
                                       width: 1,
@@ -274,15 +300,15 @@ class TaskItem extends StatelessWidget {
                                     children: [
                                       Icon(
                                         categoryIcon,
-                                        size: 12,
+                                        size: smallIconSize * 0.8,
                                         color: categoryColor
                                             .withOpacity(contentOpacity),
                                       ),
-                                      const SizedBox(width: 4),
+                                      SizedBox(width: tinyPadding),
                                       Text(
                                         task.category,
                                         style: TextStyle(
-                                          fontSize: 11,
+                                          fontSize: badgeTextSize,
                                           fontWeight: FontWeight.w500,
                                           color: categoryColor
                                               .withOpacity(contentOpacity),
@@ -294,13 +320,14 @@ class TaskItem extends StatelessWidget {
 
                                 // Priority indicator
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 3,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: smallPadding,
+                                    vertical: tinyPadding * 0.8,
                                   ),
                                   decoration: BoxDecoration(
                                     color: priorityColor.withAlpha(30),
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(
+                                        smallBorderRadius),
                                     border: Border.all(
                                       color: priorityColor.withAlpha(80),
                                       width: 1,
@@ -311,15 +338,15 @@ class TaskItem extends StatelessWidget {
                                     children: [
                                       Icon(
                                         Icons.flag,
-                                        size: 12,
+                                        size: smallIconSize * 0.8,
                                         color: priorityColor
                                             .withOpacity(contentOpacity),
                                       ),
-                                      const SizedBox(width: 4),
+                                      SizedBox(width: tinyPadding),
                                       Text(
                                         task.priority,
                                         style: TextStyle(
-                                          fontSize: 11,
+                                          fontSize: badgeTextSize,
                                           fontWeight: FontWeight.w500,
                                           color: priorityColor
                                               .withOpacity(contentOpacity),
@@ -332,13 +359,14 @@ class TaskItem extends StatelessWidget {
                                 // Due date badge
                                 if (task.dueDate != null)
                                   Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 3,
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: smallPadding,
+                                      vertical: tinyPadding * 0.8,
                                     ),
                                     decoration: BoxDecoration(
                                       color: Colors.blueAccent.withAlpha(30),
-                                      borderRadius: BorderRadius.circular(12),
+                                      borderRadius: BorderRadius.circular(
+                                          smallBorderRadius),
                                       border: Border.all(
                                         color: Colors.blueAccent.withAlpha(80),
                                         width: 1,
@@ -349,15 +377,15 @@ class TaskItem extends StatelessWidget {
                                       children: [
                                         Icon(
                                           Icons.event,
-                                          size: 12,
+                                          size: smallIconSize * 0.8,
                                           color: Colors.blueAccent
                                               .withOpacity(contentOpacity),
                                         ),
-                                        const SizedBox(width: 4),
+                                        SizedBox(width: tinyPadding),
                                         Text(
                                           TodoUtils.formatDate(task.dueDate),
                                           style: TextStyle(
-                                            fontSize: 11,
+                                            fontSize: badgeTextSize,
                                             fontWeight: FontWeight.w500,
                                             color: Colors.blueAccent
                                                 .withOpacity(contentOpacity),
@@ -390,32 +418,45 @@ class TaskItem extends StatelessWidget {
                                 color: Colors.blueAccent,
                               ),
                               onPressed: () => onEditTask(index),
-                              constraints: const BoxConstraints(),
-                              padding: const EdgeInsets.all(8),
+                              constraints: BoxConstraints(
+                                minWidth: iconSize * 2.2,
+                                minHeight: iconSize * 2.2,
+                              ),
+                              padding: EdgeInsets.all(tinyPadding * 1.5),
                               visualDensity: VisualDensity.compact,
                               tooltip: 'Edit task',
-                              iconSize: compactLayout ? 18 : 20,
+                              iconSize: compactLayout
+                                  ? smallIconSize * 1.2
+                                  : smallIconSize * 1.4,
                             ),
                           ),
-                          SizedBox(width: compactLayout ? 2 : 4),
+                          SizedBox(
+                              width: compactLayout
+                                  ? tinyPadding * 0.5
+                                  : tinyPadding),
                           // Delete button
                           Container(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.red.withAlpha(20),
                             ),
-                            margin: const EdgeInsets.only(right: 8),
+                            margin: EdgeInsets.only(right: smallPadding),
                             child: IconButton(
                               icon: Icon(
                                 Icons.delete_outline,
                                 color: Colors.red.withAlpha(200),
                               ),
                               onPressed: () => onDeleteTask(index),
-                              constraints: const BoxConstraints(),
-                              padding: const EdgeInsets.all(8),
+                              constraints: BoxConstraints(
+                                minWidth: iconSize * 2.2,
+                                minHeight: iconSize * 2.2,
+                              ),
+                              padding: EdgeInsets.all(tinyPadding * 1.5),
                               visualDensity: VisualDensity.compact,
                               tooltip: 'Delete task',
-                              iconSize: compactLayout ? 18 : 20,
+                              iconSize: compactLayout
+                                  ? smallIconSize * 1.2
+                                  : smallIconSize * 1.4,
                             ),
                           ),
                         ],
@@ -424,14 +465,20 @@ class TaskItem extends StatelessWidget {
                     // On small screens, show a single menu button instead
                     if (!hasSpace && !isTablet)
                       Container(
-                        margin: const EdgeInsets.only(right: 4),
+                        margin: EdgeInsets.only(right: smallPadding * 0.5),
                         child: IconButton(
-                          icon: const Icon(Icons.more_vert),
+                          icon: Icon(
+                            Icons.more_vert,
+                            size: smallIconSize * 1.4,
+                          ),
                           onPressed: () {
                             _showActionMenu(context);
                           },
-                          constraints: const BoxConstraints(),
-                          padding: const EdgeInsets.all(8),
+                          constraints: BoxConstraints(
+                            minWidth: iconSize * 2.2,
+                            minHeight: iconSize * 2.2,
+                          ),
+                          padding: EdgeInsets.all(tinyPadding * 1.5),
                           visualDensity: VisualDensity.compact,
                           tooltip: 'Task actions',
                         ),
@@ -448,11 +495,14 @@ class TaskItem extends StatelessWidget {
 
   // Action menu for small screens
   void _showActionMenu(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double borderRadius = screenWidth * 0.05;
+
     showModalBottomSheet(
       context: context,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
+          top: Radius.circular(borderRadius),
         ),
       ),
       builder: (context) {

@@ -43,13 +43,13 @@ class SortFilterMenu extends StatelessWidget {
               Icon(
                 Icons.filter_list,
                 color: primaryColor,
-                size: isTablet ? 28 : 24,
+                size: isTablet ? 32 : 28,
               ),
               const SizedBox(width: 12),
               Text(
                 'Sort & Filter',
                 style: TextStyle(
-                  fontSize: isTablet ? 24 : 20,
+                  fontSize: isTablet ? 28 : 24,
                   fontWeight: FontWeight.bold,
                   color: primaryColor,
                 ),
@@ -70,7 +70,7 @@ class SortFilterMenu extends StatelessWidget {
           Text(
             'Sort by',
             style: TextStyle(
-              fontSize: isTablet ? 18 : 16,
+              fontSize: isTablet ? 22 : 19,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -98,7 +98,7 @@ class SortFilterMenu extends StatelessWidget {
               Text(
                 'Show completed tasks',
                 style: TextStyle(
-                  fontSize: isTablet ? 18 : 16,
+                  fontSize: isTablet ? 22 : 19,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -116,7 +116,8 @@ class SortFilterMenu extends StatelessWidget {
             ElevatedButton.icon(
               onPressed: onClearCompleted,
               icon: const Icon(Icons.cleaning_services),
-              label: Text('Clear all completed ($completedTasksCount)'),
+              label: Text('Clear all completed ($completedTasksCount)',
+                  style: const TextStyle(fontSize: 16)),
               style: ElevatedButton.styleFrom(
                 backgroundColor:
                     isDarkMode ? Colors.grey.shade800 : Colors.grey.shade200,
@@ -143,7 +144,7 @@ class SortFilterMenu extends StatelessWidget {
         children: [
           Icon(
             icon,
-            size: 16,
+            size: 19,
             color: isSelected ? Colors.white : primaryColor,
           ),
           const SizedBox(width: 4),
@@ -151,6 +152,7 @@ class SortFilterMenu extends StatelessWidget {
             label,
             style: TextStyle(
               color: isSelected ? Colors.white : null,
+              fontSize: 16,
             ),
           ),
         ],
