@@ -65,11 +65,17 @@
 
 <div align="center">
   <p float="left">
-    <img src="https://github.com/user-attachments/assets/ee9985f8-7130-45ab-8441-1421a0ab74ee" width="180" />
-    <img src="https://github.com/user-attachments/assets/b1fcd4b1-5511-4492-ab04-44d1f776bb5e" width="180" />
-    <img src="https://github.com/user-attachments/assets/84632faf-f504-413e-8bca-9ac57099a814" width="180" />
-    <img src="https://github.com/user-attachments/assets/7fd334c4-353c-4439-a7d5-0166c3a87a94" width="180" />
-    <img src="https://github.com/user-attachments/assets/44747989-d6c8-40d2-9131-65e9d83f1f7c" width="180" />
+## Samsung Galaxy S20+ Presentation
+
+![Slide 0](https://github.com/user-attachments/assets/cb203bfd-7359-4291-a305-0ec8b268daeb)
+![Slide 1](https://github.com/user-attachments/assets/f8b303b8-4e64-4cee-8321-96fc9ef037d1)
+![Slide 2](https://github.com/user-attachments/assets/b0867bb7-c7b1-44ff-8d19-8f70291312fe)
+![Slide 3](https://github.com/user-attachments/assets/aecdfe5a-5bc5-40b2-a065-7d3a821a380f)
+![Slide 4](https://github.com/user-attachments/assets/fb22f418-0370-4783-96c0-5b9d5468e1a5)
+
+
+
+
   </p>
 </div>
 
@@ -77,8 +83,7 @@
 
 <div align="center">
 
-[<img src="https://img.shields.io/badge/Get_It_On_Google_Play-414141?style=for-the-badge&logo=google-play&logoColor=white" height="75">](YOUR_GOOGLE_PLAY_LINK)
-[<img src="https://img.shields.io/badge/Download_APK-2088FF?style=for-the-badge&logo=github&logoColor=white" height="75">](YOUR_DIRECT_APK_DOWNLOAD_LINK)
+[<img src="https://img.shields.io/badge/Download_APK-2088FF?style=for-the-badge&logo=github&logoColor=white" height="75">]([YOUR_DIRECT_APK_DOWNLOAD_LINK](https://github.com/mohamed-emad-c4/Notes-App/releases))
 
 </div>
 
@@ -124,8 +129,8 @@ Watch a quick walkthrough of the app's features and usage:
 
 <div align="center">
 
-[![Watch the video](https://img.shields.io/badge/Watch_Video_Tutorial-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](YOUR_VIDEO_TUTORIAL_LINK_HERE)
-
+[![Watch the video](https://img.shields.io/badge/Watch_Video_Tutorial-FF0000?style=for-the-badge&logo=youtube&logoColor=white)]([YOUR_VIDEO_TUTORIAL_LINK_HERE](https://youtu.be/DWlbdaiyYe8?si=xgOVdqz4xvAqb4CK))
+https://youtu.be/DWlbdaiyYe8?si=xgOVdqz4xvAqb4CK
 </div>
 
 *Replace `YOUR_VIDEO_TUTORIAL_LINK_HERE` with the actual link to your video.*
@@ -152,7 +157,7 @@ You can also simply open an issue with the tag "enhancement" or "bug".
 
 ## 👨‍💻 Author
 
-<img src="https://github.com/zemaxc4.png" width="80" height="80" style="border-radius:50%">
+<img src="https://avatars.githubusercontent.com/u/132988274?v=4" width="80" height="80" style="border-radius:50%">
 
 **zemaxc4**
 
